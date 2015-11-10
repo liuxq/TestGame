@@ -28,7 +28,7 @@ public class loginSystem : MonoBehaviour {
     }
     public void onLoginFailed(UInt16 errorCode)
     {
-        print("连接失败" + KBEngineApp.app.serverErr(errorCode));
+        print("登陆失败" + KBEngineApp.app.serverErr(errorCode));
     }
     public void onLogin()
     {
