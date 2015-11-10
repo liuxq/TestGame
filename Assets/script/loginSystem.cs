@@ -2,6 +2,7 @@
 using System.Collections;
 using KBEngine;
 using UnityEngine.UI;
+using System;
 
 public class loginSystem : MonoBehaviour {
     public InputField if_userName;
@@ -12,10 +13,22 @@ public class loginSystem : MonoBehaviour {
 	void Start () {
         DontDestroyOnLoad(gameObject.transform);
         KBEngine.Event.registerOut("onConnectStatus", this, "onConnectStatus");
+        KBEngine.Event.registerOut("onLoginFailed", this, "onLoginFailed");
 	}
     public void onConnectStatus(bool beSuccess)
     {
-        
+        if (beSuccess)
+        {
+            print("连接成功，正在登陆");
+        }
+        else
+        {
+            print("连接错误");
+        }
+    }
+    public void onLoginFailed(UInt16 errorCode)
+    {
+        print("连接失败" + KBEngineApp.app.serverErr(errorCode));
     }
     public void onLogin()
     {
