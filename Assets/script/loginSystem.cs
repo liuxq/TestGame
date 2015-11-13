@@ -14,6 +14,7 @@ public class loginSystem : MonoBehaviour {
         DontDestroyOnLoad(gameObject.transform);
         KBEngine.Event.registerOut("onConnectStatus", this, "onConnectStatus");
         KBEngine.Event.registerOut("onLoginFailed", this, "onLoginFailed");
+        KBEngine.Event.registerOut("onLoginSuccessfully", this, "onLoginSuccessfully");
 	}
     public void onConnectStatus(bool beSuccess)
     {
@@ -29,6 +30,15 @@ public class loginSystem : MonoBehaviour {
     public void onLoginFailed(UInt16 errorCode)
     {
         print("登陆失败" + KBEngineApp.app.serverErr(errorCode));
+    }
+    public void onLoginSuccessfully(UInt64 uuuid, Int32 id, Account account)
+    {
+        if (account != null)
+        {
+            print("登录成功");
+            //跳转场景
+            Application.LoadLevel("02");
+        }
     }
     public void onLogin()
     {
