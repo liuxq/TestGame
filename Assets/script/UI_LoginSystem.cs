@@ -4,7 +4,7 @@ using KBEngine;
 using UnityEngine.UI;
 using System;
 
-public class loginSystem : MonoBehaviour {
+public class UI_LoginSystem : MonoBehaviour {
     public InputField if_userName;
     public InputField if_passWord;
     public Button bt_login;
@@ -37,7 +37,7 @@ public class loginSystem : MonoBehaviour {
         {
             print("登录成功");
             //跳转场景
-            Application.LoadLevel("02");
+            Application.LoadLevel("createAvatar");
         }
     }
     public void onLogin()

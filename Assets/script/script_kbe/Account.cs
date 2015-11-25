@@ -2,6 +2,7 @@
 {
     using UnityEngine;
     using System.Collections;
+    using System;
 
     public class Account : Entity
     {
@@ -13,9 +14,18 @@
         {
             baseCall("reqHello");
         }
+        public void reqCreateAvatar(string name, byte roleType)
+        {
+            baseCall("reqCreateAvatar", new object[]{name, roleType});
+        }
+
         public void onHello(string data)
         {
             Event.fireOut("onHello", new object[] { data });
+        }
+        public void onCreateAvatarResult(byte success, object data)
+        {
+            Event.fireOut("onCreateAvatarResult", new object[] { success, data });
         }
     }
 }
