@@ -37,7 +37,7 @@ public class UI_LoginSystem : MonoBehaviour {
         {
             print("登录成功");
             //跳转场景
-            Application.LoadLevel("createAvatar");
+            Application.LoadLevel("selectAvatar");
         }
     }
     public void onLogin()

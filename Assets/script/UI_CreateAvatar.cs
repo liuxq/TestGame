@@ -3,7 +3,6 @@ using System.Collections;
 using UnityEngine.UI;
 using KBEngine;
 using System;
-
 using System.Collections.Generic;
 
 public class UI_CreateAvatar : MonoBehaviour {
