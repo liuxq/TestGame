@@ -13,10 +13,6 @@
             Event.fireOut("onLoginSuccessfully", new object[] { KBEngineApp.app.entity_uuid, id, this });
             baseCall("reqAvatarList");
         }
-        public void reqHello()
-        {
-            baseCall("reqHello");
-        }
         public void reqCreateAvatar(string name, byte roleType)
         {
             baseCall("reqCreateAvatar", new object[]{name, roleType});
@@ -43,7 +39,7 @@
         {
             avatars.Clear();
 
-            List<object> listinfos = (List<object>)infos["values"];
+            List<object> listinfos = (List<object>)infos["value"];
 
             Dbg.DEBUG_MSG("Account::onReqAvatarList: avatarsize=" + listinfos.Count);
             for (int i = 0; i < listinfos.Count; i++)
@@ -75,6 +71,7 @@
             }
 
             // ui event
+            
             Event.fireOut("onCreateAvatarResult", new object[] { retcode, info, avatars });
         }
         public void onRemoveAvatar(UInt64 dbid)

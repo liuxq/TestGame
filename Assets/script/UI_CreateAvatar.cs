@@ -31,18 +31,16 @@ public class UI_CreateAvatar : MonoBehaviour {
             account.reqCreateAvatar(if_createAvatarName.text, roleType);
         }
     }
-    public void onCreateAvatarResult(byte success, object info)
+
+    public void onCreateAvatarResult(Byte retcode, object info, Dictionary<UInt64, Dictionary<string, object>> avatarList)
     {
-        if (success == 0)
+        if (retcode != 0)
         {
-            Dictionary<string, object> avatorInfo = (Dictionary<string, object>)info;
-            print("创建成功");
-            print("角色数据库id:" + (UInt64)avatorInfo["dbid"]);
-            print("角色名称:" + (string)avatorInfo["name"]);
-            print("角色类型:" + (byte)avatorInfo["roleType"]);
-            print("角色等级:" + (UInt16)avatorInfo["level"]);
+            print("创建失败！" + retcode);
+            return;
         }
-        else
-            print("创建失败");
+        Application.LoadLevel("selectAvatar");
+        //onReqAvatarList(avatarList);
+
     }
 }
