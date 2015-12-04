@@ -83,5 +83,11 @@
             // ui event
             Event.fireOut("onRemoveAvatar", new object[] { dbid, avatars });
         }
+
+        public void selectAvatarGame(UInt64 dbid)
+        {
+            Dbg.DEBUG_MSG("Account::selectAvatarGame: dbid=" + dbid);
+            baseCall("selectAvatarGame", dbid);
+        }
     }
 }

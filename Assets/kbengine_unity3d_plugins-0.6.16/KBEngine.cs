@@ -1605,10 +1605,10 @@
 			else
 				uentityType = stream.readUint8();
 			
-			sbyte isOnGound = 1;
+			sbyte isOnGround = 1;
 			
 			if(stream.length() > 0)
-				isOnGound = stream.readInt8();
+				isOnGround = stream.readInt8();
 			
 			string entityType = EntityDef.idmoduledefs[uentityType].name;
 			// Dbg.DEBUG_MSG("KBEngine::Client_onEntityEnterWorld: " + entityType + "(" + eid + "), spaceID(" + KBEngineApp.app.spaceID + ")!");
@@ -1648,7 +1648,7 @@
 				Client_onUpdatePropertys(entityMessage);
 				_bufferedCreateEntityMessage.Remove(eid);
 				
-				entity.isOnGound = isOnGound > 0;
+				entity.isOnGround = isOnGround > 0;
 				entity.set_direction(entity.getDefinedPropterty("direction"));
 				entity.set_position(entity.getDefinedPropterty("position"));
 								
@@ -1675,7 +1675,7 @@
 					entity.set_position(entity.getDefinedPropterty("position"));					
 
 					_entityServerPos = entity.position;
-					entity.isOnGound = isOnGound > 0;
+					entity.isOnGround = isOnGround > 0;
 					entity.enterWorld();
 				}
 			}
@@ -1727,10 +1727,10 @@
 			Int32 eid = stream.readInt32();
 			spaceID = stream.readUint32();
 			
-			sbyte isOnGound = 1;
+			sbyte isOnGround = 1;
 			
 			if(stream.length() > 0)
-				isOnGound = stream.readInt8();
+				isOnGround = stream.readInt8();
 			
 			Entity entity = null;
 			
@@ -1740,7 +1740,7 @@
 				return;
 			}
 			
-			entity.isOnGound = isOnGound > 0;
+			entity.isOnGround = isOnGround > 0;
 			_entityServerPos = entity.position;
 			entity.enterSpace();
 		}
@@ -1822,7 +1822,7 @@
 				bundle.writeFloat((float)((double)direction.x / 360 * 6.283185307179586));
 				bundle.writeFloat((float)((double)direction.y / 360 * 6.283185307179586));
 				bundle.writeFloat((float)((double)direction.z / 360 * 6.283185307179586));
-				bundle.writeUint8((Byte)(playerEntity.isOnGound == true ? 1 : 0));
+				bundle.writeUint8((Byte)(playerEntity.isOnGround == true ? 1 : 0));
 				bundle.writeUint32(spaceID);
 				bundle.send(_networkInterface);
 			}
@@ -2289,7 +2289,7 @@
 			_updateVolatileData(eid, xz[0], y, xz[1], KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, r, 0);
 		}
 		
-		private void _updateVolatileData(Int32 entityID, float x, float y, float z, float yaw, float pitch, float roll, sbyte isOnGound)
+		private void _updateVolatileData(Int32 entityID, float x, float y, float z, float yaw, float pitch, float roll, sbyte isOnGround)
 		{
 			Entity entity = null;
 
@@ -2303,9 +2303,9 @@
 			}
 			
 			// 小于0不设置
-			if(isOnGound >= 0)
+			if(isOnGround >= 0)
 			{
-				entity.isOnGound = (isOnGound > 0);
+				entity.isOnGround = (isOnGround > 0);
 			}
 		
 			bool changeDirection = false;

@@ -13,21 +13,24 @@ public class UI_CreateAvatar : MonoBehaviour {
 	void Start () {
         KBEngine.Event.registerOut("onCreateAvatarResult", this, "onCreateAvatarResult");
 	}
-	
+    void OnDestroy()
+    {
+        KBEngine.Event.deregisterOut(this);
+    }
 	// Update is called once per frame
 	void Update () {
 	
 	}
     public void onCreateAvatar()
     {
-        Account account = (Account)KBEngineApp.app.player();
+        Account account = KBEngineApp.app==null? null:(Account)KBEngineApp.app.player();
         if (account != null)
         {
-            byte roleType = 0;
+            byte roleType = 1;
             if(dd_createAvatarType.value == 0)
-                roleType = 0;
-            else
                 roleType = 1;
+            else
+                roleType = 2;
             account.reqCreateAvatar(if_createAvatarName.text, roleType);
         }
     }

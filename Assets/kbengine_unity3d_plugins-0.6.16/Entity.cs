@@ -17,7 +17,7 @@
 		public Vector3 direction = new Vector3(0.0f, 0.0f, 0.0f);
 		public float velocity = 0.0f;
 		
-		public bool isOnGound = true;
+		public bool isOnGround = true;
 		
 		public object renderObj = null;
 		

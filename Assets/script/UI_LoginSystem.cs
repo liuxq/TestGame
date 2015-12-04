@@ -11,11 +11,15 @@ public class UI_LoginSystem : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-        DontDestroyOnLoad(gameObject.transform);
+        //DontDestroyOnLoad(gameObject.transform);
         KBEngine.Event.registerOut("onConnectStatus", this, "onConnectStatus");
         KBEngine.Event.registerOut("onLoginFailed", this, "onLoginFailed");
         KBEngine.Event.registerOut("onLoginSuccessfully", this, "onLoginSuccessfully");
 	}
+    void OnDestroy()
+    {
+        KBEngine.Event.deregisterOut(this);
+    }
     public void onConnectStatus(bool beSuccess)
     {
         if (beSuccess)
