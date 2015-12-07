@@ -283,6 +283,8 @@ public class GameEntity : MonoBehaviour
                 pos.y = currY;
 
             position = pos;
+            //test 不用什么速度的
+            position = destPosition;
         }
         else
         {
