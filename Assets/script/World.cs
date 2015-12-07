@@ -6,18 +6,22 @@ using System;
 
 public class World : MonoBehaviour {
 
-    public UnityEngine.GameObject entityPerfab;
-    public UnityEngine.GameObject avatarPerfab;
+    private UnityEngine.GameObject terrain = null;
+    public UnityEngine.GameObject terrainPerfab;
 
     private UnityEngine.GameObject player = null;
+    public UnityEngine.GameObject entityPerfab;
+    public UnityEngine.GameObject avatarPerfab;
+    
 	// Use this for initialization
 	void Start () {
+        KBEngine.Event.registerOut("addSpaceGeometryMapping", this, "addSpaceGeometryMapping");
         KBEngine.Event.registerOut("onAvatarEnterWorld", this, "onAvatarEnterWorld");
         KBEngine.Event.registerOut("onEnterWorld", this, "onEnterWorld");
         KBEngine.Event.registerOut("onLeaveWorld", this, "onLeaveWorld");
         KBEngine.Event.registerOut("set_position", this, "set_position");
         KBEngine.Event.registerOut("set_direction", this, "set_direction");
-        KBEngine.Event.registerOut("updatePosition", this, "updatePosition");
+        KBEngine.Event.registerOut("update_position", this, "update_position");
 	}
     void OnDestroy()
     {
@@ -149,5 +153,25 @@ public class World : MonoBehaviour {
         player.GetComponent<GameEntity>().entityDisable();
         avatar.renderObj = player;
         ((UnityEngine.GameObject)avatar.renderObj).GetComponent<GameEntity>().isPlayer = true;
+    }
+
+    public void addSpaceGeometryMapping(string respath)
+    {
+        Debug.Log("loading scene(" + respath + ")...");
+        print("scene(" + respath + "), spaceID=" + KBEngineApp.app.spaceID);
+        if (terrain == null)
+            terrain = Instantiate(terrainPerfab) as UnityEngine.GameObject;
+
+        player.GetComponent<GameEntity>().entityEnable();
+    }
+
+    public void update_position(KBEngine.Entity entity)
+    {
+        if (entity.renderObj == null)
+            return;
+
+        GameEntity gameEntity = ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>();
+        gameEntity.destPosition = entity.position;
+        gameEntity.isOnGround = entity.isOnGround;
     }
 }

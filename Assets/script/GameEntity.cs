@@ -17,7 +17,7 @@ public class GameEntity : MonoBehaviour
     public Vector3 destPosition = Vector3.zero;
     public Vector3 destDirection = Vector3.zero;
 
-    private float _speed = 0f;
+    private float _speed = 50f;
     private byte jumpState = 0;
     private float currY = 1.0f;
 
