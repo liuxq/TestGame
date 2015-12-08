@@ -52,4 +52,8 @@ public class UI_LoginSystem : MonoBehaviour {
 	void Update () {
 	
 	}
+    public void onClose()
+    {
+        Application.Quit();
+    }
 }
