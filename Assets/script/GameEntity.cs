@@ -35,6 +35,19 @@ public class GameEntity : MonoBehaviour
 
     public bool entityEnabled = true;
 
+    private Animator animator;
+    private CharacterController controller;
+
+    private float last_angleY;
+    private Vector3 last_position;
+
+    private int hashHit = Animator.StringToHash("Base Layer.Hit");
+    private int hashDead = Animator.StringToHash("Base Layer.Dead");
+    private int hashWalk = Animator.StringToHash("Base Layer.Walk");
+    private int hashJump = Animator.StringToHash("Base Layer.Jump");
+    private int hashPick = Animator.StringToHash("Base Layer.Pick");
+    private int hashPunch = Animator.StringToHash("Base Layer.Punch");
+
     void Awake()
     {
     }
@@ -42,6 +55,8 @@ public class GameEntity : MonoBehaviour
     void Start()
     {
         characterController = ((UnityEngine.GameObject)gameObject).GetComponent<CharacterController>();
+        animator = GetComponent<Animator>();
+        controller = GetComponent<CharacterController>();
     }
 
     void OnGUI()
@@ -176,6 +191,7 @@ public class GameEntity : MonoBehaviour
 
         KBEngine.Event.fireIn("updatePlayer", gameObject.transform.position.x,
             gameObject.transform.position.y, gameObject.transform.position.z, gameObject.transform.rotation.eulerAngles.y);
+        
     }
 
     void Update()
@@ -185,6 +201,9 @@ public class GameEntity : MonoBehaviour
             position = destPosition;
             return;
         }
+
+        
+
 
         float deltaSpeed = (speed * Time.deltaTime);
 
@@ -199,7 +218,31 @@ public class GameEntity : MonoBehaviour
                 isOnGround = characterController.isGrounded;
             }
 
+            //主角的动作
+            if (Input.GetAxis("Vertical") != 0.0f || Input.GetAxis("Horizontal") != 0.0f || Input.GetMouseButton (1) && (Input.GetAxis("Mouse X") != 0.0f || Input.GetAxis("Mouse X") != 0.0f))
+            {
+                animator.speed = 2.0f;
+                animator.SetFloat("Speed", 1.0f);
+            }
+            else
+            {
+                animator.speed = 1.0f;
+                animator.SetFloat("Speed", 0.0f);
+            }
+
             return;
+        }
+
+        //配角的动作
+        if (Quaternion.Angle(rotation, Quaternion.Euler(destDirection)) > 1.0f || Vector3.Distance(destPosition, position) > 0.01f)
+        {
+            animator.speed = 2.0f;
+            animator.SetFloat("Speed", 1.0f);
+        }
+        else
+        {
+            animator.speed = 1.0f;
+            animator.SetFloat("Speed", 0.0f);
         }
 
         if (Vector3.Distance(eulerAngles, destDirection) > 0.0004f)

@@ -54,14 +54,14 @@ public class RabbitActionController : MonoBehaviour {
 
 	
 
-		float v  = Input.GetAxis ("Vertical");
-		float h = Input.GetAxis ("Horizontal");
-		bool move = (v != 0.0f || h != 0.0f);
+        //float v  = Input.GetAxis ("Vertical");
+        //float h = Input.GetAxis ("Horizontal");
+        //bool move = (v != 0.0f || h != 0.0f);
 
-		animator.speed = move ? 2.0f : 1.0f;
+        //animator.speed = move ? 2.0f : 1.0f;
 
 
-		animator.SetFloat("Speed", move ? 1.0f : 0.0f);
+		//animator.SetFloat("Speed", move ? 1.0f : 0.0f);
 
 
 	}
