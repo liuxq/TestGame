@@ -15,6 +15,7 @@ public class UI_LoginSystem : MonoBehaviour {
         KBEngine.Event.registerOut("onConnectStatus", this, "onConnectStatus");
         KBEngine.Event.registerOut("onLoginFailed", this, "onLoginFailed");
         KBEngine.Event.registerOut("onLoginSuccessfully", this, "onLoginSuccessfully");
+        KBEngine.Event.registerOut("onCreateAccountResult", this, "onCreateAccountResult");
 	}
     void OnDestroy()
     {
@@ -46,7 +47,22 @@ public class UI_LoginSystem : MonoBehaviour {
     }
     public void onLogin()
     {
-        KBEngine.Event.fireIn("login", if_userName.text, if_passWord.text, System.Text.Encoding.UTF8.GetBytes("2015.11.7"));
+        print("connect to server...(连接到服务端...)");
+        KBEngine.Event.fireIn("login", if_userName.text, if_passWord.text, System.Text.Encoding.UTF8.GetBytes("lxqLogin"));
+    }
+    public void onRegister()
+    {
+        print("connect to server...(连接到服务端...)");
+        KBEngine.Event.fireIn("createAccount", if_userName.text, if_passWord.text, System.Text.Encoding.UTF8.GetBytes("lxqRegister"));
+    }
+    public void onCreateAccountResult(UInt16 retcode, byte[] datas)
+    {
+        if (retcode != 0)
+        {
+            print("createAccount is error(注册账号错误)! err=" + KBEngineApp.app.serverErr(retcode));
+            return;
+        }
+        print("createAccount is successfully!(注册账号成功!)");
     }
 	// Update is called once per frame
 	void Update () {

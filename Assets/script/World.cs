@@ -22,6 +22,7 @@ public class World : MonoBehaviour {
         KBEngine.Event.registerOut("set_position", this, "set_position");
         KBEngine.Event.registerOut("set_direction", this, "set_direction");
         KBEngine.Event.registerOut("update_position", this, "update_position");
+        KBEngine.Event.registerOut("set_name", this, "set_entityName");
 	}
     void OnDestroy()
     {
@@ -54,9 +55,9 @@ public class World : MonoBehaviour {
         //if (modelScale != null)
         //    set_modelScale(avatar, modelScale);
 
-        //object name = avatar.getDefinedPropterty("name");
-        //if (name != null)
-        //    set_entityName(avatar, (string)name);
+        object name = avatar.getDefinedPropterty("name");
+        if (name != null)
+            set_entityName(avatar, (string)name);
 
         //object hp = avatar.getDefinedPropterty("HP");
         //if (hp != null)
@@ -92,9 +93,9 @@ public class World : MonoBehaviour {
         //if (modelScale != null)
         //    set_modelScale(entity, modelScale);
 
-        //object name = entity.getDefinedPropterty("name");
-        //if (name != null)
-        //    set_entityName(entity, (string)name);
+        object name = entity.getDefinedPropterty("name");
+        if (name != null)
+            set_entityName(entity, (string)name);
 
         //object hp = entity.getDefinedPropterty("HP");
         //if (hp != null)
@@ -109,7 +110,13 @@ public class World : MonoBehaviour {
         UnityEngine.GameObject.Destroy((UnityEngine.GameObject)entity.renderObj);
         entity.renderObj = null;
     }
-
+    public void set_entityName(KBEngine.Entity entity, object v)
+    {
+        if (entity.renderObj != null)
+        {
+            ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().entity_name = (string)v;
+        }
+    }
     public void set_position(KBEngine.Entity entity)
     {
         if (entity.renderObj == null)
@@ -152,6 +159,7 @@ public class World : MonoBehaviour {
 
         player.GetComponent<GameEntity>().entityDisable();
         avatar.renderObj = player;
+        Camera.main.GetComponent<SmoothFollow>().target = player.transform;
         ((UnityEngine.GameObject)avatar.renderObj).GetComponent<GameEntity>().isPlayer = true;
     }
 

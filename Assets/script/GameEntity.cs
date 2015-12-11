@@ -9,6 +9,7 @@ using System.Collections.Generic;
 public class GameEntity : MonoBehaviour
 {
     public bool isPlayer = false;
+    public bool isTestOffLine = false;
 
     private Vector3 _position = Vector3.zero;
     private Vector3 _eulerAngles = Vector3.zero;
@@ -27,7 +28,7 @@ public class GameEntity : MonoBehaviour
 
     public string hp = "100/100";
 
-    float npcHeight = 2.0f;
+    float npcHeight = 3.0f;
 
     public CharacterController characterController;
 
@@ -186,7 +187,7 @@ public class GameEntity : MonoBehaviour
         if (!entityEnabled)
             return;
 
-        if (isPlayer == false && KBEngineApp.app != null)
+        if (isPlayer == false && KBEngineApp.app != null || isTestOffLine)
             return;
 
         KBEngine.Event.fireIn("updatePlayer", gameObject.transform.position.x,
@@ -202,9 +203,6 @@ public class GameEntity : MonoBehaviour
             return;
         }
 
-        
-
-
         float deltaSpeed = (speed * Time.deltaTime);
 
         if (isPlayer == true)
@@ -217,19 +215,6 @@ public class GameEntity : MonoBehaviour
                 player.isOnGround = characterController.isGrounded;
                 isOnGround = characterController.isGrounded;
             }
-
-            //主角的动作
-            if (Input.GetAxis("Vertical") != 0.0f || Input.GetAxis("Horizontal") != 0.0f || Input.GetMouseButton (1) && (Input.GetAxis("Mouse X") != 0.0f || Input.GetAxis("Mouse X") != 0.0f))
-            {
-                animator.speed = 2.0f;
-                animator.SetFloat("Speed", 1.0f);
-            }
-            else
-            {
-                animator.speed = 1.0f;
-                animator.SetFloat("Speed", 0.0f);
-            }
-
             return;
         }
 
