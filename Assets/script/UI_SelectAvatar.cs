@@ -8,12 +8,13 @@ using System.Collections.Generic;
 public class UI_SelectAvatar : MonoBehaviour {
     public Button bt_createAvatar;
     public Button bt_removeAvatar;
-    public Toggle[] tg_avatars = new Toggle[5];
+    public Toggle[] tg_avatars = new Toggle[3];
 
     private Dictionary<UInt64, Dictionary<string, object>> ui_avatarList = null;
     private Dictionary<string, UInt64> dic_name_to_dbid = new Dictionary<string,ulong>();
 	// Use this for initialization
 	void Start () {
+        World.instance.init();
         //DontDestroyOnLoad(gameObject.transform);
         KBEngine.Event.registerOut("onReqAvatarList", this, "onReqAvatarList");
         KBEngine.Event.registerOut("onRemoveAvatar", this, "onRemoveAvatar");
@@ -52,11 +53,11 @@ public class UI_SelectAvatar : MonoBehaviour {
                     name = bt_Avatar.GetComponentInChildren<Text>().text;
                 }
             }
-            if (name.Length > 0)
-            {
+            //if (name.Length > 0)
+            //{
                 account.reqRemoveAvatar(name);
                 return;
-            }
+            //}
         }
     }
     public void onRemoveAvatar(UInt64 dbid, Dictionary<UInt64, Dictionary<string, object>> avatarList)

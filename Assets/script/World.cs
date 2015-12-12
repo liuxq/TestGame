@@ -5,6 +5,8 @@ using System.Linq;
 using System; 
 
 public class World : MonoBehaviour {
+    //单例模式
+    public static World instance;
 
     private UnityEngine.GameObject terrain = null;
     public UnityEngine.GameObject terrainPerfab;
@@ -13,6 +15,19 @@ public class World : MonoBehaviour {
     public UnityEngine.GameObject entityPerfab;
     public UnityEngine.GameObject avatarPerfab;
     
+    static World()
+    {
+        GameObject go = new GameObject("World");
+        DontDestroyOnLoad(go);
+        instance = go.AddComponent<World>();
+        instance.terrainPerfab = (GameObject)Resources.Load("Terrain");
+        instance.entityPerfab = (GameObject)Resources.Load("entity");
+        instance.avatarPerfab = (GameObject)Resources.Load("player");
+    }
+    //激活单例
+    public void init()
+    {
+    }
 	// Use this for initialization
 	void Start () {
         KBEngine.Event.registerOut("addSpaceGeometryMapping", this, "addSpaceGeometryMapping");

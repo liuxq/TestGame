@@ -207,7 +207,7 @@ public class GameEntity : MonoBehaviour
 
         if (isPlayer == true)
         {
-            characterController.stepOffset = deltaSpeed;
+            //characterController.stepOffset = deltaSpeed;
 
             if (isOnGround != characterController.isGrounded)
             {

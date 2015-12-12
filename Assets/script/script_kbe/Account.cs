@@ -68,6 +68,10 @@
             else
             {
                 Dbg.ERROR_MSG("Account::onCreateAvatarResult: retcode=" + retcode);
+                if (retcode == 3)
+                {
+                    Dbg.ERROR_MSG("角色数量不能超过三个！");
+                }
             }
 
             // ui event

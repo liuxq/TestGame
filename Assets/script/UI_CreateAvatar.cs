@@ -46,4 +46,8 @@ public class UI_CreateAvatar : MonoBehaviour {
         //onReqAvatarList(avatarList);
 
     }
+    public void onCancel()
+    {
+        Application.LoadLevel("selectAvatar");
+    }
 }
