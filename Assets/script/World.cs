@@ -38,6 +38,8 @@ public class World : MonoBehaviour {
         KBEngine.Event.registerOut("set_direction", this, "set_direction");
         KBEngine.Event.registerOut("update_position", this, "update_position");
         KBEngine.Event.registerOut("set_name", this, "set_entityName");
+        
+
 	}
     void OnDestroy()
     {

@@ -10,6 +10,7 @@
             if (isPlayer())
             {
                 Event.registerIn("updatePlayer", this, "updatePlayer");
+                Event.registerIn("sendChatMessage", this, "sendChatMessage");
             }	
         }
 
@@ -37,6 +38,15 @@
             {
                 Event.fireOut("onAvatarEnterWorld", new object[] { KBEngineApp.app.entity_uuid, id, this });
             }
+        }
+        public void sendChatMessage(string msg)
+        {
+            object name = getDefinedPropterty("name");
+            baseCall("sendChatMessage", (string)name + ": " + msg);
+        }
+        public void ReceiveChatMessage(string msg)
+        {
+            Event.fireOut("ReceiveChatMessage", msg);
         }
     }
 }
