@@ -5,7 +5,7 @@
     using System;
     using System.Collections.Generic;
 
-    public class Account : Entity
+    public class Account : KBEngine.GameObject
     {
         public Dictionary<UInt64, Dictionary<string, object>> avatars = new Dictionary<UInt64, Dictionary<string, object>>();
         public override void __init__()

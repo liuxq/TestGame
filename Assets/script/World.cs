@@ -18,13 +18,13 @@ public class World : MonoBehaviour {
     
     static World()
     {
-        GameObject go = new GameObject("World");
+        UnityEngine.GameObject go = new UnityEngine.GameObject("World");
         DontDestroyOnLoad(go);
         instance = go.AddComponent<World>();
-        instance.terrainPerfab = (GameObject)Resources.Load("Terrain");
-        instance.otherPlayerPerfab = (GameObject)Resources.Load("entity");
-        instance.gatePerfab = (GameObject)Resources.Load("entity");
-        instance.avatarPerfab = (GameObject)Resources.Load("player");
+        instance.terrainPerfab = (UnityEngine.GameObject)Resources.Load("Terrain");
+        instance.otherPlayerPerfab = (UnityEngine.GameObject)Resources.Load("entity");
+        instance.gatePerfab = (UnityEngine.GameObject)Resources.Load("entity");
+        instance.avatarPerfab = (UnityEngine.GameObject)Resources.Load("player");
     }
     //激活单例
     public void init()
@@ -40,8 +40,8 @@ public class World : MonoBehaviour {
         KBEngine.Event.registerOut("set_direction", this, "set_direction");
         KBEngine.Event.registerOut("update_position", this, "update_position");
         KBEngine.Event.registerOut("set_name", this, "set_entityName");
-        
-
+        KBEngine.Event.registerOut("set_state", this, "set_state");
+        KBEngine.Event.registerOut("set_HP", this, "set_HP");
 	}
     void OnDestroy()
     {
@@ -66,9 +66,9 @@ public class World : MonoBehaviour {
         //if (speed != null)
         //    set_moveSpeed(avatar, speed);
 
-        //object state = avatar.getDefinedPropterty("state");
-        //if (state != null)
-        //    set_state(avatar, state);
+        object state = avatar.getDefinedPropterty("state");
+        if (state != null)
+            set_state(avatar, state);
 
         //object modelScale = avatar.getDefinedPropterty("modelScale");
         //if (modelScale != null)
@@ -113,9 +113,9 @@ public class World : MonoBehaviour {
         //if (speed != null)
         //    set_moveSpeed(entity, speed);
 
-        //object state = entity.getDefinedPropterty("state");
-        //if (state != null)
-        //    set_state(entity, state);
+        object state = entity.getDefinedPropterty("state");
+        if (state != null)
+            set_state(entity, state);
 
         //object modelScale = entity.getDefinedPropterty("modelScale");
         //if (modelScale != null)
@@ -167,6 +167,27 @@ public class World : MonoBehaviour {
         if (entity.renderObj != null)
         {
             ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().hp = "" + (Int32)v + "/" + (Int32)entity.getDefinedPropterty("HP_Max");
+        }
+    }
+    public void set_state(KBEngine.Entity entity, object v)
+    {
+        //if (entity.renderObj != null)
+        //{
+        //    ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().set_state((SByte)v);
+        //}
+
+        if (entity.isPlayer())
+        {
+            Debug.Log("player->set_state: " + v);
+
+            UnityEngine.GameObject UIDie = UnityEngine.GameObject.FindGameObjectWithTag("UIDie");
+
+            if (((SByte)v) == 1)
+                UIDie.SetActive(true);
+            else
+                UIDie.SetActive(false);
+
+            return;
         }
     }
     public void createPlayer()

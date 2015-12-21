@@ -2,12 +2,14 @@
 using System.Collections;
 using KBEngine;
 using UnityEngine.UI;
+using System;
 
 public class UI_Game : MonoBehaviour {
     public InputField input_content;
     public Transform tran_text;
     public Scrollbar sb_vertical;
     public Text text_pos;
+    public Transform tran_relive;
 
     private Text text_content;
 	// Use this for initialization
@@ -48,6 +50,10 @@ public class UI_Game : MonoBehaviour {
     {
         if (input_content.text.Length > 0)
             KBEngine.Event.fireIn("sendChatMessage", input_content.text);
+    }
+    public void OnRelive()
+    {
+        KBEngine.Event.fireIn("relive", (Byte)1);
     }
     public void OnCloseGame()
     {
