@@ -30,11 +30,6 @@
         //    baseCall("selectAvatarGame", dbid);
         //}
 
-        public void onHello(string data)
-        {
-            Event.fireOut("onHello", new object[] { data });
-        }
-
         public void onReqAvatarList(Dictionary<string, object> infos)
         {
             avatars.Clear();

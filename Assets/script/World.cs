@@ -12,7 +12,8 @@ public class World : MonoBehaviour {
     public UnityEngine.GameObject terrainPerfab;
 
     private UnityEngine.GameObject player = null;
-    public UnityEngine.GameObject entityPerfab;
+    public UnityEngine.GameObject otherPlayerPerfab;
+    public UnityEngine.GameObject gatePerfab;
     public UnityEngine.GameObject avatarPerfab;
     
     static World()
@@ -21,7 +22,8 @@ public class World : MonoBehaviour {
         DontDestroyOnLoad(go);
         instance = go.AddComponent<World>();
         instance.terrainPerfab = (GameObject)Resources.Load("Terrain");
-        instance.entityPerfab = (GameObject)Resources.Load("entity");
+        instance.otherPlayerPerfab = (GameObject)Resources.Load("entity");
+        instance.gatePerfab = (GameObject)Resources.Load("entity");
         instance.avatarPerfab = (GameObject)Resources.Load("player");
     }
     //激活单例
@@ -76,9 +78,9 @@ public class World : MonoBehaviour {
         if (name != null)
             set_entityName(avatar, (string)name);
 
-        //object hp = avatar.getDefinedPropterty("HP");
-        //if (hp != null)
-        //    set_HP(avatar, hp);
+        object hp = avatar.getDefinedPropterty("HP");
+        if (hp != null)
+            set_HP(avatar, hp);
     }
 
     public void onEnterWorld(KBEngine.Entity entity)
@@ -88,10 +90,19 @@ public class World : MonoBehaviour {
 
         float y = entity.position.y;
         if (entity.isOnGround)
-            y = 1.3f;
+            y = 0.0f;
 
-        entity.renderObj = Instantiate(entityPerfab, new Vector3(entity.position.x, y, entity.position.z),
+        if (entity.className == "Gate")
+        {
+            entity.renderObj = Instantiate(otherPlayerPerfab, new Vector3(entity.position.x, y, entity.position.z),
             Quaternion.Euler(new Vector3(entity.direction.y, entity.direction.z, entity.direction.x))) as UnityEngine.GameObject;
+
+        }
+        else {
+            entity.renderObj = Instantiate(otherPlayerPerfab, new Vector3(entity.position.x, y, entity.position.z),
+            Quaternion.Euler(new Vector3(entity.direction.y, entity.direction.z, entity.direction.x))) as UnityEngine.GameObject;
+
+        }
 
         ((UnityEngine.GameObject)entity.renderObj).name = entity.className + "_" + entity.id;
 
@@ -114,9 +125,9 @@ public class World : MonoBehaviour {
         if (name != null)
             set_entityName(entity, (string)name);
 
-        //object hp = entity.getDefinedPropterty("HP");
-        //if (hp != null)
-        //    set_HP(entity, hp);
+        object hp = entity.getDefinedPropterty("HP");
+        if (hp != null)
+            set_HP(entity, hp);
     }
 
     public void onLeaveWorld(KBEngine.Entity entity)
@@ -139,8 +150,9 @@ public class World : MonoBehaviour {
         if (entity.renderObj == null)
             return;
 
-        ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().destPosition = entity.position;
-        ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().position = entity.position;
+        Vector3 v = (Vector3)entity.getDefinedPropterty("position");
+        ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().destPosition = v;
+        ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().position = v;
     }
     public void set_direction(KBEngine.Entity entity)
     {
@@ -149,6 +161,13 @@ public class World : MonoBehaviour {
 
         ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().destDirection =
             new Vector3(entity.direction.y, entity.direction.z, entity.direction.x);
+    }
+    public void set_HP(KBEngine.Entity entity, object v)
+    {
+        if (entity.renderObj != null)
+        {
+            ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().hp = "" + (Int32)v + "/" + (Int32)entity.getDefinedPropterty("HP_Max");
+        }
     }
     public void createPlayer()
     {
