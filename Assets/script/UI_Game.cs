@@ -22,10 +22,27 @@ public class UI_Game : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        Entity avatar = KBEngineApp.app.player();
+        KBEngine.Avatar avatar = (KBEngine.Avatar)KBEngineApp.app.player();
         if (avatar != null)
         {
             text_pos.text = "位置：" + avatar.position.x + "," + avatar.position.z;
+            SkillBox.inst.get(1).updateTimer(Time.deltaTime);//更新一号技能的冷却时间
+        }
+        if(Input.GetMouseButton (0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, 100.0f, 1 << LayerMask.NameToLayer("CanAttack"))) 
+            {
+                string name = hit.collider.GetComponent<GameEntity>().name;
+                Int32 entityId = Int32.Parse(name.Substring(name.IndexOf('_')+1));
+                
+                if (avatar != null)
+                {
+                    avatar.useTargetSkill(1, entityId);
+                }
+            }  
+     
         }
 	}
     public void ReceiveChatMessage(string msg)

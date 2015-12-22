@@ -12,9 +12,11 @@ public class World : MonoBehaviour {
     public UnityEngine.GameObject terrainPerfab;
 
     private UnityEngine.GameObject player = null;
+    //private UnityEngine.GameObject snowBalls = new Dictionary;
     public UnityEngine.GameObject otherPlayerPerfab;
     public UnityEngine.GameObject gatePerfab;
     public UnityEngine.GameObject avatarPerfab;
+    public UnityEngine.GameObject snowBallPerfab;
     
     static World()
     {
@@ -25,6 +27,7 @@ public class World : MonoBehaviour {
         instance.otherPlayerPerfab = (UnityEngine.GameObject)Resources.Load("entity");
         instance.gatePerfab = (UnityEngine.GameObject)Resources.Load("entity");
         instance.avatarPerfab = (UnityEngine.GameObject)Resources.Load("player");
+        instance.snowBallPerfab = (UnityEngine.GameObject)Resources.Load("snowBall");
     }
     //激活单例
     public void init()
@@ -42,6 +45,7 @@ public class World : MonoBehaviour {
         KBEngine.Event.registerOut("set_name", this, "set_entityName");
         KBEngine.Event.registerOut("set_state", this, "set_state");
         KBEngine.Event.registerOut("set_HP", this, "set_HP");
+        KBEngine.Event.registerOut("recvDamage", this, "recvDamage");
 	}
     void OnDestroy()
     {
@@ -180,12 +184,13 @@ public class World : MonoBehaviour {
         {
             Debug.Log("player->set_state: " + v);
 
-            UnityEngine.GameObject UIDie = UnityEngine.GameObject.FindGameObjectWithTag("UIDie");
+            UnityEngine.GameObject UIGame = UnityEngine.GameObject.FindGameObjectWithTag("UIGame");
+            
 
             if (((SByte)v) == 1)
-                UIDie.SetActive(true);
+                UIGame.GetComponent<UI_Game>().tran_relive.gameObject.SetActive(true);
             else
-                UIDie.SetActive(false);
+                UIGame.GetComponent<UI_Game>().tran_relive.gameObject.SetActive(false);
 
             return;
         }
@@ -238,5 +243,10 @@ public class World : MonoBehaviour {
         GameEntity gameEntity = ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>();
         gameEntity.destPosition = entity.position;
         gameEntity.isOnGround = entity.isOnGround;
+    }
+
+    public void recvDamage(KBEngine.Entity entity, KBEngine.Entity attacker, Int32 skillID, Int32 damageType, Int32 damage)
+    {
+        
     }
 }
