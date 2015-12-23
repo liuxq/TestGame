@@ -233,6 +233,7 @@ public class World : MonoBehaviour {
         player.GetComponent<GameEntity>().entityDisable();
         avatar.renderObj = player;
         Camera.main.GetComponent<SmoothFollow>().target = player.transform;
+        Camera.allCameras[1].GetComponent<MapFollow>().target = player.transform;
         ((UnityEngine.GameObject)avatar.renderObj).GetComponent<GameEntity>().isPlayer = true;
     }
 
