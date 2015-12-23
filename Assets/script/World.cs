@@ -180,15 +180,26 @@ public class World : MonoBehaviour {
         //    ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().set_state((SByte)v);
         //}
 
+        if (((SByte)v) == 1)//死亡
+        {
+            ((UnityEngine.GameObject)(entity.renderObj)).GetComponent<Animator>().Play("Dead");
+        }
+        else {
+            ((UnityEngine.GameObject)(entity.renderObj)).GetComponent<Animator>().Play("Idle");
+        }
+
         if (entity.isPlayer())
         {
             Debug.Log("player->set_state: " + v);
 
             UnityEngine.GameObject UIGame = UnityEngine.GameObject.FindGameObjectWithTag("UIGame");
-            
+
 
             if (((SByte)v) == 1)
+            {
                 UIGame.GetComponent<UI_Game>().tran_relive.gameObject.SetActive(true);
+
+            }
             else
                 UIGame.GetComponent<UI_Game>().tran_relive.gameObject.SetActive(false);
 
@@ -247,6 +258,23 @@ public class World : MonoBehaviour {
 
     public void recvDamage(KBEngine.Entity entity, KBEngine.Entity attacker, Int32 skillID, Int32 damageType, Int32 damage)
     {
-        
+        Skill sk = SkillBox.inst.get(skillID);
+        if (sk != null)
+        {
+            Vector3 dir = entity.position - attacker.position;
+            object renderObj = Instantiate(snowBallPerfab, new Vector3(attacker.position.x, 2.0f, attacker.position.z),
+            Quaternion.LookRotation(dir)) as UnityEngine.GameObject;
+            sk.cast(renderObj, Vector3.Distance(entity.position, attacker.position));
+
+            UnityEngine.GameObject renderEntity = (UnityEngine.GameObject)attacker.renderObj;
+            renderEntity.GetComponent<Animator>().Play("Punch");
+
+            if (attacker.isPlayer())
+            {
+                
+                renderEntity.transform.LookAt(new Vector3(renderEntity.transform.position.x + dir.x, renderEntity.transform.position.y, renderEntity.transform.position.z + dir.z));
+                
+            }
+        }
     }
 }

@@ -22,11 +22,19 @@ public class UI_Game : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        KBEngine.Avatar avatar = (KBEngine.Avatar)KBEngineApp.app.player();
+        KBEngine.Entity entity = KBEngineApp.app.player();
+        KBEngine.Avatar avatar = null;
+        if (entity != null && entity.className == "Avatar")
+            avatar = (KBEngine.Avatar)entity;
+        
         if (avatar != null)
         {
             text_pos.text = "位置：" + avatar.position.x + "," + avatar.position.z;
-            SkillBox.inst.get(1).updateTimer(Time.deltaTime);//更新一号技能的冷却时间
+            Skill sk = SkillBox.inst.get(1);
+            if( sk != null )
+            {
+                sk.updateTimer(Time.deltaTime);//更新一号技能的冷却时间
+            }
         }
         if(Input.GetMouseButton (0))
         {
