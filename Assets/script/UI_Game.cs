@@ -68,7 +68,7 @@ public class UI_Game : MonoBehaviour {
             tran_text.GetComponent<RectTransform>().sizeDelta = new Vector2(0, text_content.preferredHeight);
 
         sb_vertical.value = 0;
-
+        input_content.text = "";
        
     }
     public void OnSendMessage()

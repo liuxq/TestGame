@@ -25,7 +25,7 @@ public class World : MonoBehaviour {
         instance = go.AddComponent<World>();
         instance.terrainPerfab = (UnityEngine.GameObject)Resources.Load("Terrain");
         instance.otherPlayerPerfab = (UnityEngine.GameObject)Resources.Load("entity");
-        instance.gatePerfab = (UnityEngine.GameObject)Resources.Load("entity");
+        instance.gatePerfab = (UnityEngine.GameObject)Resources.Load("Gate");
         instance.avatarPerfab = (UnityEngine.GameObject)Resources.Load("player");
         instance.snowBallPerfab = (UnityEngine.GameObject)Resources.Load("snowBall");
     }
@@ -98,9 +98,9 @@ public class World : MonoBehaviour {
 
         if (entity.className == "Gate")
         {
-            entity.renderObj = Instantiate(otherPlayerPerfab, new Vector3(entity.position.x, y, entity.position.z),
+            entity.renderObj = Instantiate(gatePerfab, new Vector3(entity.position.x, y, entity.position.z),
             Quaternion.Euler(new Vector3(entity.direction.y, entity.direction.z, entity.direction.x))) as UnityEngine.GameObject;
-
+            ((UnityEngine.GameObject)(entity.renderObj)).GetComponent<GameEntity>().entityDisable();
         }
         else {
             entity.renderObj = Instantiate(otherPlayerPerfab, new Vector3(entity.position.x, y, entity.position.z),
