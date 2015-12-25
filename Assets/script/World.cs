@@ -230,7 +230,7 @@ public class World : MonoBehaviour {
         player = Instantiate(avatarPerfab, new Vector3(avatar.position.x, y, avatar.position.z),
                              Quaternion.Euler(new Vector3(avatar.direction.y, avatar.direction.z, avatar.direction.x))) as UnityEngine.GameObject;
 
-        player.GetComponent<GameEntity>().entityDisable();
+        //player.GetComponent<GameEntity>().entityDisable();
         avatar.renderObj = player;
         Camera.main.GetComponent<SmoothFollow>().target = player.transform;
         Camera.allCameras[1].GetComponent<MapFollow>().target = player.transform;

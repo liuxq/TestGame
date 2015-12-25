@@ -82,7 +82,7 @@
         public virtual void onAddSkill(Int32 skillID)
         {
             Dbg.DEBUG_MSG(className + "::onAddSkill(" + skillID + ")");
-            Event.fireOut("onAddSkill", new object[] { this });
+            //Event.fireOut("onAddSkill", new object[] { this });
 
             Skill skill = new Skill();
             skill.id = skillID;

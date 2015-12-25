@@ -62,8 +62,9 @@ public class GameEntity : MonoBehaviour
 
     void OnGUI()
     {
-        //if (!gameObject.transform.FindChild("rabbit").GetComponent<SkinnedMeshRenderer>().GetComponent<Renderer>().isVisible)
-        //    return;
+        if (gameObject.transform.FindChild("rabbit") != null && 
+        !gameObject.transform.FindChild("rabbit").GetComponent<SkinnedMeshRenderer>().GetComponent<Renderer>().isVisible)
+            return;
 
         Vector3 worldPosition = new Vector3(transform.position.x, transform.position.y + npcHeight, transform.position.z);
 

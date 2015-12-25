@@ -10,6 +10,7 @@ public class UI_Game : MonoBehaviour {
     public Scrollbar sb_vertical;
     public Text text_pos;
     public Transform tran_relive;
+    public Text text_error;
 
     private Text text_content;
 	// Use this for initialization
