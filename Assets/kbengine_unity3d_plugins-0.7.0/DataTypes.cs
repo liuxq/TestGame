@@ -21,7 +21,8 @@
 		        v is long || v is ulong ||
 		        v is char || v is decimal || v is float ||
 		        v is double || v is Int16 || v is Int64 ||
-		        v is UInt16 || v is UInt64;
+				v is UInt16 || v is UInt64 || 
+				v is Boolean || v is bool;
 		}
 		
 		public static float KBE_FLT_MAX = float.MaxValue;

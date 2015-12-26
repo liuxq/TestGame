@@ -85,7 +85,7 @@
 				Dbg.ERROR_MSG(string.Format("NetworkInterface::_onConnectStatus(), connect is error! ip: {0}:{1}, err: {2}", state.connectIP, state.connectPort, state.error));
 			}
 			
-			Event.fireAll("onConnectStatus", new object[]{success});
+			Event.fireOut("onConnectStatus", new object[]{success});
 			
 			if (state.connectCB != null)
 				state.connectCB(state.connectIP, state.connectPort, success, state.userData);

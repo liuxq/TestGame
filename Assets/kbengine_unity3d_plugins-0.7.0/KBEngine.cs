@@ -37,20 +37,23 @@
 			// Mobile(Phone, Pad)
 			CLIENT_TYPE_MOBILE				= 1,
 
-			// Windows/Linux/Mac Application program
-			// Contains the Python-scripts, entitydefs parsing and check entitydefs-MD5, Native
-			CLIENT_TYPE_PC					= 2,
+			// Windows Application program
+			CLIENT_TYPE_WIN					= 2,
 
+			// Linux Application program
+			CLIENT_TYPE_LINUX				= 3,
+				
+			// Mac Application program
+			CLIENT_TYPE_MAC					= 4,
+				
 			// Web，HTML5，Flash
-			// not contain Python-scripts and entitydefs analysis, can be imported protocol from network
-			CLIENT_TYPE_BROWSER				= 3,
+			CLIENT_TYPE_BROWSER				= 5,
 
-			// bots(Contains the Python-scripts, entitydefs parsing and check entitydefs-MD5, Native)
-			CLIENT_TYPE_BOTS				= 4,
+			// bots
+			CLIENT_TYPE_BOTS				= 6,
 
 			// Mini-Client
-			// Allowing does not contain Python-scripts and entitydefs analysis, can be imported protocol from network
-			CLIENT_TYPE_MINI				= 5,
+			CLIENT_TYPE_MINI				= 7,
 		};
 		
         public string username = "kbengine";
@@ -83,7 +86,7 @@
 		
 		// 服务端与客户端的版本号以及协议MD5
 		public string serverVersion = "";
-		public string clientVersion = "0.6.15";
+		public string clientVersion = "0.7.0";
 		public string serverScriptVersion = "";
 		public string clientScriptVersion = "0.1.0";
 		public string serverProtocolMD5 = "";
@@ -176,10 +179,15 @@
 		{
 			Event.registerIn("createAccount", this, "createAccount");
 			Event.registerIn("login", this, "login");
-			Event.registerIn("relogin_baseapp", this, "relogin_baseapp");
+			Event.registerIn("reLoginBaseapp", this, "reLoginBaseapp");
+			Event.registerIn("resetPassword", this, "resetPassword");
+			Event.registerIn("bindAccountEmail", this, "bindAccountEmail");
+			Event.registerIn("newPassword", this, "newPassword");
+			
+			// 内部事件
 			Event.registerIn("_closeNetwork", this, "_closeNetwork");
 		}
-	
+
 		public KBEngineArgs getInitArgs()
 		{
 			return _args;
@@ -485,7 +493,7 @@
 				Dbg.DEBUG_MSG("KBEngine::login_loginapp(): send login! username=" + username);
 				Bundle bundle = new Bundle();
 				bundle.newMessage(Message.messages["Loginapp_login"]);
-				bundle.writeInt8((sbyte)_args.clientType); // clientType
+				bundle.writeInt8((sbyte)_args.clientType);
 				bundle.writeBlob(KBEngineApp.app._clientdatas);
 				bundle.writeString(username);
 				bundle.writeString(password);
@@ -517,7 +525,7 @@
 				bundle.newMessage(Message.messages["Loginapp_importClientMessages"]);
 				bundle.send(_networkInterface);
 				Dbg.DEBUG_MSG("KBEngine::onLogin_loginapp: send importClientMessages ...");
-				Event.fireAll("Loginapp_importClientMessages", new object[]{});
+				Event.fireOut("Loginapp_importClientMessages", new object[]{});
 			}
 			else
 			{
@@ -532,7 +540,7 @@
 		{  
 			if(noconnect)
 			{
-				Event.fireAll("login_baseapp", new object[]{});
+				Event.fireOut("onLoginBaseapp", new object[]{});
 				
 				_networkInterface.reset();
 				_networkInterface = new NetworkInterface();
@@ -541,7 +549,7 @@
 			else
 			{
 				Bundle bundle = new Bundle();
-				bundle.newMessage(Message.messages["Baseapp_loginGateway"]);
+				bundle.newMessage(Message.messages["Baseapp_loginBaseapp"]);
 				bundle.writeString(username);
 				bundle.writeString(password);
 				bundle.send(_networkInterface);
@@ -572,7 +580,7 @@
 				bundle.newMessage(Message.messages["Baseapp_importClientMessages"]);
 				bundle.send(_networkInterface);
 				Dbg.DEBUG_MSG("KBEngine::onLogin_baseapp: send importClientMessages ...");
-				Event.fireAll("Baseapp_importClientMessages", new object[]{});
+				Event.fireOut("Baseapp_importClientMessages", new object[]{});
 			}
 			else
 			{
@@ -584,9 +592,9 @@
 			重登录到网关(baseapp)
 			一些移动类应用容易掉线，可以使用该功能快速的重新与服务端建立通信
 		*/
-		public void relogin_baseapp()
+		public void reLoginBaseapp()
 		{  
-			Event.fireAll("onRelogin_baseapp", new object[]{});
+			Event.fireAll("onReLoginBaseapp", new object[]{});
 			_networkInterface.connectTo(baseappIP, baseappPort, onReConnectTo_baseapp_callback, null);
 		}
 
@@ -594,7 +602,7 @@
 		{
 			if(!success)
 			{
-				Dbg.ERROR_MSG(string.Format("KBEngine::relogin_baseapp(): connect {0}:{1} is error!", ip, port));
+				Dbg.ERROR_MSG(string.Format("KBEngine::reLoginBaseapp(): connect {0}:{1} is error!", ip, port));
 				return;
 			}
 			
@@ -602,7 +610,7 @@
 			Dbg.DEBUG_MSG(string.Format("KBEngine::relogin_baseapp(): connect {0}:{1} is successfully!", ip, port));
 
 			Bundle bundle = new Bundle();
-			bundle.newMessage(Message.messages["Baseapp_reLoginGateway"]);
+			bundle.newMessage(Message.messages["Baseapp_reLoginBaseapp"]);
 			bundle.writeString(username);
 			bundle.writeString(password);
 			bundle.writeUint64(entity_uuid);
@@ -697,7 +705,7 @@
 					Bundle bundle = new Bundle();
 					bundle.newMessage(Message.messages["Baseapp_importClientEntityDef"]);
 					bundle.send(_networkInterface);
-					Event.fireAll("Baseapp_importClientEntityDef", new object[]{});
+					Event.fireOut("Baseapp_importClientEntityDef", new object[]{});
 				}
 				else
 				{
@@ -734,7 +742,7 @@
 			UInt16 utype = stream.readUint16();
 			string name = stream.readString();
 			string valname = stream.readString();
-			
+
 			/* 有一些匿名类型，我们需要提供一个唯一名称放到datatypes中
 				如：
 				<onRemoveAvatar>
@@ -1137,7 +1145,7 @@
 		/*
 			重置密码, 通过loginapp
 		*/
-		public void reset_password(string username)
+		public void resetPassword(string username)
 		{
 			KBEngineApp.app.username = username;
 			resetpassword_loginapp(true);
@@ -1188,13 +1196,13 @@
 		/*
 			绑定Email，通过baseapp
 		*/
-		public void bind_email(string emailaddress)
+		public void bindAccountEmail(string emailAddress)
 		{  
 			Bundle bundle = new Bundle();
 			bundle.newMessage(Message.messages["Baseapp_reqAccountBindEmail"]);
 			bundle.writeInt32(entity_id);
 			bundle.writeString(password);
-			bundle.writeString(emailaddress);
+			bundle.writeString(emailAddress);
 			bundle.send(_networkInterface);
 		}
 
@@ -1212,13 +1220,13 @@
 		/*
 			设置新密码，通过baseapp， 必须玩家登录在线操作所以是baseapp。
 		*/
-		public void new_password(string oldpassword, string newpassword)
+		public void newPassword(string old_password, string new_password)
 		{
 			Bundle bundle = new Bundle();
 			bundle.newMessage(Message.messages["Baseapp_reqAccountNewPassword"]);
 			bundle.writeInt32(entity_id);
-			bundle.writeString(oldpassword);
-			bundle.writeString(newpassword);
+			bundle.writeString(old_password);
+			bundle.writeString(new_password);
 			bundle.send(_networkInterface);
 		}
 
@@ -1334,29 +1342,29 @@
 		/*
 			登录baseapp失败了
 		*/
-		public void Client_onLoginGatewayFailed(UInt16 failedcode)
+		public void Client_onLoginBaseappFailed(UInt16 failedcode)
 		{
-			Dbg.ERROR_MSG("KBEngine::Client_onLoginGatewayFailed: failedcode(" + failedcode + ")!");
-			Event.fireAll("onLoginGatewayFailed", new object[]{failedcode});
+			Dbg.ERROR_MSG("KBEngine::Client_onLoginBaseappFailed: failedcode(" + failedcode + ")!");
+			Event.fireAll("onLoginBaseappFailed", new object[]{failedcode});
 		}
 
 		/*
 			重登录baseapp失败了
 		*/
-		public void Client_onReLoginGatewayFailed(UInt16 failedcode)
+		public void Client_onReLoginBaseappFailed(UInt16 failedcode)
 		{
-			Dbg.ERROR_MSG("KBEngine::Client_onReLoginGatewayFailed: failedcode(" + failedcode + ")!");
-			Event.fireAll("onReLoginGatewayFailed", new object[]{failedcode});
+			Dbg.ERROR_MSG("KBEngine::Client_onReLoginBaseappFailed: failedcode(" + failedcode + ")!");
+			Event.fireAll("onReLoginBaseappFailed", new object[]{failedcode});
 		}
 		
 		/*
 			登录baseapp成功了
 		*/
-		public void Client_onReLoginGatewaySuccessfully(MemoryStream stream)
+		public void Client_onReLoginBaseappSuccessfully(MemoryStream stream)
 		{
 			entity_uuid = stream.readUint64();
-			Dbg.DEBUG_MSG("KBEngine::Client_onReLoginGatewaySuccessfully: name(" + username + ")!");
-			Event.fireAll("onReLoginGatewaySuccessfully", new object[]{});
+			Dbg.DEBUG_MSG("KBEngine::Client_onReLoginBaseappSuccessfully: name(" + username + ")!");
+			Event.fireAll("onReLoginBaseappSuccessfully", new object[]{});
 		}
 
 		/*
@@ -1426,6 +1434,9 @@
 		*/
 		public Int32 getAoiEntityIDFromStream(MemoryStream stream)
 		{
+			if (!_args.useAliasEntityID)
+				return stream.readInt32();
+
 			Int32 id = 0;
 			if(_entityIDAliasIDList.Count > 255)
 			{
@@ -1955,7 +1966,12 @@
 			}
 			
 			if(entity.inWorld)
+			{
+				if(entity_id == eid)
+					clearSpace(false);
+				
 				entity.leaveWorld();
+			}
 			
 			entities.Remove(eid);
 			entity.onDestroy();
@@ -2341,7 +2357,7 @@
 				
 				entity.position = pos;
 				done = true;
-				Event.fireOut("update_position", new object[]{entity});
+				Event.fireOut("updatePosition", new object[]{entity});
 			}
 			
 			if(done)

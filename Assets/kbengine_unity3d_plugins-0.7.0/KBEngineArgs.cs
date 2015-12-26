@@ -27,7 +27,10 @@
 		// 是否开启自动同步玩家信息到服务端，信息包括位置与方向
 		// 非高实时类游戏不需要开放这个选项
 		public bool syncPlayer = true;
-		
+
+		// 是否使用别名机制
+		// 这个参数的选择必须与kbengine_defs.xml::cellapp/aliasEntityID的参数保持一致
+		public bool useAliasEntityID = true;
 		
 		// 发送缓冲大小
 		public MessageLengthEx SEND_BUFFER_MAX = NetworkInterface.TCP_PACKET_MAX;

@@ -23,6 +23,7 @@ public class KBEMain : MonoBehaviour
 	public int threadUpdateHZ = 10;
 	public int SEND_BUFFER_MAX = (int)KBEngine.NetworkInterface.TCP_PACKET_MAX;
 	public int RECV_BUFFER_MAX = (int)KBEngine.NetworkInterface.TCP_PACKET_MAX;
+	public bool useAliasEntityID = true;
 	
 	void Awake() 
 	 {
@@ -60,6 +61,7 @@ public class KBEMain : MonoBehaviour
 		
 		args.syncPlayer = syncPlayer;
 		args.threadUpdateHZ = threadUpdateHZ;
+		args.useAliasEntityID = useAliasEntityID;
 		
 		args.SEND_BUFFER_MAX = (UInt32)SEND_BUFFER_MAX;
 		args.RECV_BUFFER_MAX = (UInt32)RECV_BUFFER_MAX;
