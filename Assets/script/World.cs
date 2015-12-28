@@ -175,17 +175,16 @@ public class World : MonoBehaviour {
     }
     public void set_state(KBEngine.Entity entity, object v)
     {
-        //if (entity.renderObj != null)
-        //{
-        //    ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().set_state((SByte)v);
-        //}
-
-        if (((SByte)v) == 1)//死亡
+        if (entity.renderObj != null)
         {
-            ((UnityEngine.GameObject)(entity.renderObj)).GetComponent<Animator>().Play("Dead");
-        }
-        else {
-            ((UnityEngine.GameObject)(entity.renderObj)).GetComponent<Animator>().Play("Idle");
+            if (((SByte)v) == 1)//死亡
+            {
+                ((UnityEngine.GameObject)(entity.renderObj)).GetComponent<Animator>().Play("Dead");
+            }
+            else
+            {
+                ((UnityEngine.GameObject)(entity.renderObj)).GetComponent<Animator>().Play("Idle");
+            }
         }
 
         if (entity.isPlayer())
@@ -244,7 +243,7 @@ public class World : MonoBehaviour {
         if (terrain == null)
             terrain = Instantiate(terrainPerfab) as UnityEngine.GameObject;
 
-        player.GetComponent<GameEntity>().entityEnable();
+        //player.GetComponent<GameEntity>().entityEnable();
     }
 
     public void updatePosition(KBEngine.Entity entity)
