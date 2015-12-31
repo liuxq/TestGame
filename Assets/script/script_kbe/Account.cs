@@ -34,7 +34,7 @@
         {
             avatars.Clear();
 
-            List<object> listinfos = (List<object>)infos["value"];
+            List<object> listinfos = (List<object>)infos["values"];
 
             Dbg.DEBUG_MSG("Account::onReqAvatarList: avatarsize=" + listinfos.Count);
             for (int i = 0; i < listinfos.Count; i++)
