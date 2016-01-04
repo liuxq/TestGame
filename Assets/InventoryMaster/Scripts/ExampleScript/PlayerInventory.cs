@@ -176,6 +176,10 @@ public class PlayerInventory : MonoBehaviour
         if (craftSystem != null)
             cS = craftSystem.GetComponent<CraftSystem>();
 
+        GameObject canvas = GameObject.FindGameObjectWithTag("Canvas");
+        if (canvas.transform.Find("Panel - Inventory(Clone)") != null)
+            inventory = canvas.transform.Find("Panel - Inventory(Clone)").gameObject;
+
         if (GameObject.FindGameObjectWithTag("Tooltip") != null)
             toolTip = GameObject.FindGameObjectWithTag("Tooltip").GetComponent<Tooltip>();
         if (inventory != null)
