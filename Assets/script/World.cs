@@ -17,6 +17,7 @@ public class World : MonoBehaviour {
     public UnityEngine.GameObject gatePerfab;
     public UnityEngine.GameObject avatarPerfab;
     public UnityEngine.GameObject snowBallPerfab;
+    public UnityEngine.GameObject droppedItemPerfab;
     
     static World()
     {
@@ -28,6 +29,7 @@ public class World : MonoBehaviour {
         instance.gatePerfab = (UnityEngine.GameObject)Resources.Load("Gate");
         instance.avatarPerfab = (UnityEngine.GameObject)Resources.Load("player");
         instance.snowBallPerfab = (UnityEngine.GameObject)Resources.Load("snowBall");
+        instance.droppedItemPerfab = (UnityEngine.GameObject)Resources.Load("droppedItem");
     }
     //激活单例
     public void init()
@@ -102,10 +104,16 @@ public class World : MonoBehaviour {
             Quaternion.Euler(new Vector3(entity.direction.y, entity.direction.z, entity.direction.x))) as UnityEngine.GameObject;
             ((UnityEngine.GameObject)(entity.renderObj)).GetComponent<GameEntity>().entityDisable();
         }
-        else {
+        else if (entity.className == "Monster")
+        {
             entity.renderObj = Instantiate(otherPlayerPerfab, new Vector3(entity.position.x, y, entity.position.z),
             Quaternion.Euler(new Vector3(entity.direction.y, entity.direction.z, entity.direction.x))) as UnityEngine.GameObject;
 
+        }
+        else if (entity.className == "DroppedItem")
+        {
+            entity.renderObj = Instantiate(droppedItemPerfab, new Vector3(entity.position.x, y, entity.position.z),
+            Quaternion.Euler(new Vector3(entity.direction.y, entity.direction.z, entity.direction.x))) as UnityEngine.GameObject;
         }
 
         ((UnityEngine.GameObject)entity.renderObj).name = entity.className + "_" + entity.id;
