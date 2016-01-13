@@ -123,5 +123,10 @@
             Event.fireOut("onRemoveSkill", new object[] { this });
             SkillBox.inst.remove(skillID);
         }
+
+        public void pickUpResponse(byte success, Int32 entityId, UInt64 itemUUId)
+        {
+            int a = 0;
+        }
     }
 }

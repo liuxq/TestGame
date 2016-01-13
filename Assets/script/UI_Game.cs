@@ -44,8 +44,8 @@ public class UI_Game : MonoBehaviour {
             if (Physics.Raycast(ray, out hit, 100.0f, 1 << LayerMask.NameToLayer("CanAttack"))) 
             {
                 string name = hit.collider.GetComponent<GameEntity>().name;
-                Int32 entityId = Int32.Parse(name.Substring(name.IndexOf('_')+1));
-                
+                Int32 entityId = Utility.getPostInt(name);
+                            
                 if (avatar != null)
                 {
                     avatar.useTargetSkill(1, entityId);
