@@ -2,7 +2,8 @@
 using UnityEngine;
 using System.Collections;
 using System.Linq;
-using System; 
+using System;
+using System.Collections.Generic;
 
 public class World : MonoBehaviour {
     //单例模式
@@ -48,6 +49,8 @@ public class World : MonoBehaviour {
         KBEngine.Event.registerOut("set_state", this, "set_state");
         KBEngine.Event.registerOut("set_HP", this, "set_HP");
         KBEngine.Event.registerOut("recvDamage", this, "recvDamage");
+        KBEngine.Event.registerOut("pickUpResponse", this, "pickUpResponse");
+        KBEngine.Event.registerOut("onReqItemList", this, "onReqItemList");
 	}
     void OnDestroy()
     {
@@ -282,6 +285,47 @@ public class World : MonoBehaviour {
                 
                 renderEntity.transform.LookAt(new Vector3(renderEntity.transform.position.x + dir.x, renderEntity.transform.position.y, renderEntity.transform.position.z + dir.z));
                 
+            }
+        }
+    }
+
+    public void pickUpResponse(byte success, Int32 droppedItemEntityId, UInt64 itemUUId)
+    {
+        DroppedItem item = (DroppedItem)KBEngineApp.app.findEntity(droppedItemEntityId);
+        Int32 itemId = (Int32)item.getDefinedPropterty("itemId");
+
+        UnityEngine.GameObject _player = UnityEngine.GameObject.FindGameObjectWithTag("Player");
+        Inventory _inventory = null;
+        if (_player != null)
+        {
+            _inventory = _player.GetComponent<PlayerInventory>().inventory.GetComponent<Inventory>();
+        }
+        if (_inventory != null)
+        {
+            _inventory.addItemToInventory(itemId,itemUUId,1);
+            _inventory.updateItemList();
+            _inventory.stackableSettings();
+        }
+    }
+
+    public void onReqItemList(Dictionary<UInt64, Dictionary<string, object>> itemList)
+    {
+        UnityEngine.GameObject _player = UnityEngine.GameObject.FindGameObjectWithTag("Player");
+        Inventory _inventory = null;
+        if (_player != null)
+        {
+            _inventory = _player.GetComponent<PlayerInventory>().inventory.GetComponent<Inventory>();
+        }
+        if (_inventory != null)
+        {
+            foreach (UInt64 dbid in itemList.Keys)
+            {
+                Dictionary<string, object> info = itemList[dbid];
+                Int32 id = (Int32)info["itemId"];
+                UInt64 uid = (UInt64)info["UUID"];
+                _inventory.addItemToInventory(id, uid, 1);
+                _inventory.updateItemList();
+                _inventory.stackableSettings();
             }
         }
     }

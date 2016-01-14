@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using KBEngine;
 
 public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHandler
 {
@@ -9,7 +10,7 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
     private RectTransform rectTransform;
     private RectTransform rectTransformSlot;
     private CanvasGroup canvasGroup;
-    private GameObject oldSlot;
+    private UnityEngine.GameObject oldSlot;
     private Inventory inventory;
     private Transform draggedItemBox;
 
@@ -19,9 +20,9 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
     {
         rectTransform = GetComponent<RectTransform>();
         canvasGroup = GetComponent<CanvasGroup>();
-        rectTransformSlot = GameObject.FindGameObjectWithTag("DraggingItem").GetComponent<RectTransform>();
+        rectTransformSlot = UnityEngine.GameObject.FindGameObjectWithTag("DraggingItem").GetComponent<RectTransform>();
         inventory = transform.parent.parent.parent.GetComponent<Inventory>();
-        draggedItemBox = GameObject.FindGameObjectWithTag("DraggingItem").transform;
+        draggedItemBox = UnityEngine.GameObject.FindGameObjectWithTag("DraggingItem").transform;
     }
 
 
@@ -60,10 +61,10 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
             updateInventoryList();
     }
 
-    public void createDuplication(GameObject Item)
+    public void createDuplication(UnityEngine.GameObject Item)
     {
         Item item = Item.GetComponent<ItemOnObject>().item;
-        GameObject duplication = GameObject.FindGameObjectWithTag("MainInventory").GetComponent<Inventory>().addItemToInventory(item.itemID, item.itemValue);
+        UnityEngine.GameObject duplication = UnityEngine.GameObject.FindGameObjectWithTag("MainInventory").GetComponent<Inventory>().addItemToInventory(item.itemID, item.itemValue);
         duplication.transform.parent.parent.parent.GetComponent<Inventory>().stackableSettings();
         Item.GetComponent<ConsumeItem>().duplication = duplication;
         duplication.GetComponent<ConsumeItem>().duplication = Item;
@@ -81,8 +82,8 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
             if (newSlot != null)
             {
                 //getting the items from the slots, GameObjects and RectTransform
-                GameObject firstItemGameObject = this.gameObject;
-                GameObject secondItemGameObject = newSlot.parent.gameObject;
+                UnityEngine.GameObject firstItemGameObject = this.gameObject;
+                UnityEngine.GameObject secondItemGameObject = newSlot.parent.gameObject;
                 RectTransform firstItemRectTransform = this.gameObject.GetComponent<RectTransform>();
                 RectTransform secondItemRectTransform = newSlot.parent.GetComponent<RectTransform>();
                 Item firstItem = rectTransform.GetComponent<ItemOnObject>().item;
@@ -101,7 +102,7 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                     secondItemStack = secondItem.itemValue < secondItem.maxStack;
                 }
 
-                GameObject Inventory = secondItemRectTransform.parent.gameObject;
+                UnityEngine.GameObject Inventory = secondItemRectTransform.parent.gameObject;
                 if (Inventory.tag == "Slot")
                     Inventory = secondItemRectTransform.parent.parent.parent.gameObject;
 
@@ -141,7 +142,7 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                                     secondItemRectTransform.localPosition = Vector3.zero;
                                     if (secondItemGameObject.GetComponent<ConsumeItem>().duplication != null)
                                     {
-                                        GameObject dup = secondItemGameObject.GetComponent<ConsumeItem>().duplication;
+                                        UnityEngine.GameObject dup = secondItemGameObject.GetComponent<ConsumeItem>().duplication;
                                         dup.GetComponent<ItemOnObject>().item.itemValue = secondItem.itemValue;
                                         dup.GetComponent<SplitItem>().inv.stackableSettings();
                                         dup.transform.parent.parent.parent.GetComponent<Inventory>().updateItemList();
@@ -273,7 +274,7 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                                 secondItemRectTransform.localPosition = Vector3.zero;
                                 if (secondItemGameObject.GetComponent<ConsumeItem>().duplication != null)
                                 {
-                                    GameObject dup = secondItemGameObject.GetComponent<ConsumeItem>().duplication;
+                                    UnityEngine.GameObject dup = secondItemGameObject.GetComponent<ConsumeItem>().duplication;
                                     dup.GetComponent<ItemOnObject>().item.itemValue = secondItem.itemValue;
                                     Inventory.GetComponent<Inventory>().stackableSettings();
                                     dup.transform.parent.parent.parent.GetComponent<Inventory>().updateItemList();
@@ -340,7 +341,7 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                                     secondItemRectTransform.localPosition = Vector3.zero;
                                     firstItemRectTransform.localPosition = Vector3.zero;
 
-                                    if (oldSlot.transform.parent.parent.gameObject.Equals(GameObject.FindGameObjectWithTag("MainInventory")))
+                                    if (oldSlot.transform.parent.parent.gameObject.Equals(UnityEngine.GameObject.FindGameObjectWithTag("MainInventory")))
                                     {
                                         Destroy(secondItemGameObject.GetComponent<ConsumeItem>().duplication);
                                         createDuplication(firstItemGameObject);
@@ -384,7 +385,7 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                 //dragging into a equipmentsystem/charactersystem
                 if (Inventory.GetComponent<EquipmentSystem>() != null)
                 {
-                    ItemType[] itemTypeOfSlots = GameObject.FindGameObjectWithTag("EquipmentSystem").GetComponent<EquipmentSystem>().itemTypeOfSlots;
+                    ItemType[] itemTypeOfSlots = UnityEngine.GameObject.FindGameObjectWithTag("EquipmentSystem").GetComponent<EquipmentSystem>().itemTypeOfSlots;
                     int newSlotChildCount = newSlot.transform.parent.childCount;
                     bool isOnSlot = newSlot.transform.parent.GetChild(0).tag == "ItemIcon";
                     bool sameItemType = firstItem.itemType == secondItem.itemType;
@@ -494,7 +495,7 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
 
                                 if (secondItemGameObject.GetComponent<ConsumeItem>().duplication != null)
                                 {
-                                    GameObject dup = secondItemGameObject.GetComponent<ConsumeItem>().duplication;
+                                    UnityEngine.GameObject dup = secondItemGameObject.GetComponent<ConsumeItem>().duplication;
                                     dup.GetComponent<ItemOnObject>().item.itemValue = secondItem.itemValue;
                                     dup.GetComponent<SplitItem>().inv.stackableSettings();
                                     dup.transform.parent.parent.parent.GetComponent<Inventory>().updateItemList();
@@ -604,14 +605,20 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
 
             else
             {
-                GameObject dropItem = (GameObject)Instantiate(GetComponent<ItemOnObject>().item.itemModel);
-                dropItem.AddComponent<PickUpItem>();
-                dropItem.GetComponent<PickUpItem>().item = this.gameObject.GetComponent<ItemOnObject>().item;               
-                dropItem.transform.localPosition = GameObject.FindGameObjectWithTag("Player").transform.localPosition;
-                inventory.OnUpdateItemList();
-                if (oldSlot.transform.parent.parent.GetComponent<EquipmentSystem>() != null)
-                    inventory.GetComponent<Inventory>().UnEquipItem1(dropItem.GetComponent<PickUpItem>().item);
-                Destroy(this.gameObject);
+                KBEngine.Avatar p = (KBEngine.Avatar)KBEngineApp.app.player();
+                if (p != null)
+                {
+                    p.dropRequest(this.gameObject.GetComponent<ItemOnObject>().item.itemUUID);
+                    Destroy(this.gameObject);
+                }
+                //GameObject dropItem = (GameObject)Instantiate(GetComponent<ItemOnObject>().item.itemModel);
+                //dropItem.AddComponent<PickUpItem>();
+                //dropItem.GetComponent<PickUpItem>().item = this.gameObject.GetComponent<ItemOnObject>().item;               
+                //dropItem.transform.localPosition = GameObject.FindGameObjectWithTag("Player").transform.localPosition;
+                //inventory.OnUpdateItemList();
+                //if (oldSlot.transform.parent.parent.GetComponent<EquipmentSystem>() != null)
+                //    inventory.GetComponent<Inventory>().UnEquipItem1(dropItem.GetComponent<PickUpItem>().item);
+                //Destroy(this.gameObject);
 
             }
         }

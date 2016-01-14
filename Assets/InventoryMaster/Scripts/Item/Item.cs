@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 [System.Serializable]
 public class Item
 {
     public string itemName;                                     //itemName of the item
     public int itemID;                                          //itemID of the item
+    public UInt64 itemUUID;
     public string itemDesc;                                     //itemDesc of the item
     public Sprite itemIcon;                                     //itemIcon of the item
     public GameObject itemModel;                                //itemModel of the item

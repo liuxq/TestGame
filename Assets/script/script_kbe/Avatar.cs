@@ -9,6 +9,7 @@
     {
         public Combat combat = null;
         public static SkillBox skillbox = new SkillBox();
+        public Dictionary<UInt64, Dictionary<string, object>> itemDict = new Dictionary<UInt64, Dictionary<string, object>>();
 
         public override void __init__()
         {
@@ -18,6 +19,8 @@
                 Event.registerIn("relive", this, "relive");
                 Event.registerIn("updatePlayer", this, "updatePlayer");
                 Event.registerIn("sendChatMessage", this, "sendChatMessage");
+
+                reqItemList();
             }	
         }
 
@@ -124,9 +127,35 @@
             SkillBox.inst.remove(skillID);
         }
 
-        public void pickUpResponse(byte success, Int32 entityId, UInt64 itemUUId)
+        
+        public void reqItemList()
         {
-            int a = 0;
+            baseCall("reqItemList");
+        }
+        public void dropRequest(UInt64 itemUUID)
+        {
+            baseCall("dropRequest", itemUUID);
+        }
+
+        //-----------------------response-------------------------
+
+        public void pickUpResponse(byte success, Int32 droppedItemEntityId, UInt64 itemUUId)
+        {
+            Event.fireOut("pickUpResponse", new object[] { success, droppedItemEntityId, itemUUId });
+        }
+        public void onReqItemList(Dictionary<string, object> infos)
+        {
+            itemDict.Clear();
+            List<object> listinfos = (List<object>)infos["values"];
+            for (int i = 0; i < listinfos.Count; i++)
+            {
+                Dictionary<string, object> info = (Dictionary<string, object>)listinfos[i];
+                itemDict.Add((UInt64)info["UUID"], info);
+            }
+
+            // ui event
+            Dictionary<UInt64, Dictionary<string, object>> itemDicttmp = new Dictionary<ulong, Dictionary<string, object>>(itemDict);
+            Event.fireOut("onReqItemList", new object[] { itemDicttmp });
         }
     }
 }

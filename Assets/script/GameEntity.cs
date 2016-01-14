@@ -93,7 +93,8 @@ public class GameEntity : MonoBehaviour
         GUI.color = Color.red;
 
         //绘制HP
-        GUI.Label(new Rect(uiposition.x - (hpSize.x / 2), uiposition.y - hpSize.y - 30.0f, hpSize.x, hpSize.y), hp);
+        if(entityEnabled)
+            GUI.Label(new Rect(uiposition.x - (hpSize.x / 2), uiposition.y - hpSize.y - 30.0f, hpSize.x, hpSize.y), hp);
     }
 
     public Vector3 position

@@ -48,9 +48,6 @@
             Dictionary<UInt64, Dictionary<string, object>> avatarList = new Dictionary<ulong, Dictionary<string, object>>(avatars);
             Event.fireOut("onReqAvatarList", new object[] { avatarList });
 
-            if (listinfos.Count == 0)
-                return;
-
             // selectAvatarGame(avatars.Keys.ToList()[0]);
         }
         public void onCreateAvatarResult(byte retcode, object info)
