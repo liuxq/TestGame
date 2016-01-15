@@ -16,8 +16,16 @@ public class PickUpItem : MonoBehaviour
             _inventory = _player.GetComponent<PlayerInventory>().inventory.GetComponent<Inventory>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnEnable()
+    {
+        UI_Game.ItemPick += OnItemPick;
+    }
+
+    public void OnDisable()
+    {
+        UI_Game.ItemPick -= OnItemPick;
+    }
+    void OnItemPick()
     {
         if (_player == null)
         {
@@ -27,7 +35,7 @@ public class PickUpItem : MonoBehaviour
         {
             _inventory = _player.GetComponent<PlayerInventory>().inventory.GetComponent<Inventory>();
         }
-        if (_inventory != null && Input.GetKeyDown(KeyCode.E))
+        if (_inventory != null)
         {
             float distance = Vector3.Distance(this.gameObject.transform.position, _player.transform.position);
 
@@ -52,5 +60,4 @@ public class PickUpItem : MonoBehaviour
             }
         }
     }
-
 }

@@ -13,12 +13,38 @@ public class UI_Game : MonoBehaviour {
     public Text text_error;
 
     private Text text_content;
+
+    public UnityEngine.GameObject inventory;
+    public UnityEngine.GameObject characterSystem;
+    public UnityEngine.GameObject craftSystem;
+    private Inventory craftSystemInventory;
+    private Inventory mainInventory;
+    private Inventory characterSystemInventory;
+    private Tooltip toolTip;
+
+    //event delegates for consuming, gearing
+    public delegate void PickDelegate();
+    public static event PickDelegate ItemPick;
+
 	// Use this for initialization
 	void Start () {
         text_content = tran_text.GetComponent<Text>();
-        
-
+      
         KBEngine.Event.registerOut("ReceiveChatMessage", this, "ReceiveChatMessage");
+
+        //inventory
+        UnityEngine.GameObject canvas = UnityEngine.GameObject.FindGameObjectWithTag("Canvas");
+        if (canvas.transform.Find("Panel - Inventory(Clone)") != null)
+            inventory = canvas.transform.Find("Panel - Inventory(Clone)").gameObject;
+
+        if (UnityEngine.GameObject.FindGameObjectWithTag("Tooltip") != null)
+            toolTip = UnityEngine.GameObject.FindGameObjectWithTag("Tooltip").GetComponent<Tooltip>();
+        if (inventory != null)
+            mainInventory = inventory.GetComponent<Inventory>();
+        if (characterSystem != null)
+            characterSystemInventory = characterSystem.GetComponent<Inventory>();
+        if (craftSystem != null)
+            craftSystemInventory = craftSystem.GetComponent<Inventory>();
 	}
 	
 	// Update is called once per frame
@@ -84,5 +110,23 @@ public class UI_Game : MonoBehaviour {
     public void OnCloseGame()
     {
         Application.Quit();
+    }
+    public void OnInventory()
+    {
+        if (!inventory.activeSelf)
+        {
+            mainInventory.openInventory();
+        }
+        else
+        {
+            if (toolTip != null)
+                toolTip.deactivateTooltip();
+            mainInventory.closeInventory();
+        }
+    }
+    public void OnPick()
+    {
+        if (ItemPick != null)
+            ItemPick();
     }
 }

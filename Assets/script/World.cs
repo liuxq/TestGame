@@ -118,6 +118,11 @@ public class World : MonoBehaviour {
             entity.renderObj = Instantiate(droppedItemPerfab, new Vector3(entity.position.x, y, entity.position.z),
             Quaternion.Euler(new Vector3(entity.direction.y, entity.direction.z, entity.direction.x))) as UnityEngine.GameObject;
         }
+        else if (entity.className == "Avatar")
+        {
+            entity.renderObj = Instantiate(otherPlayerPerfab, new Vector3(entity.position.x, y, entity.position.z),
+            Quaternion.Euler(new Vector3(entity.direction.y, entity.direction.z, entity.direction.x))) as UnityEngine.GameObject;
+        }
 
         ((UnityEngine.GameObject)entity.renderObj).name = entity.className + "_" + entity.id;
 
@@ -289,11 +294,8 @@ public class World : MonoBehaviour {
         }
     }
 
-    public void pickUpResponse(byte success, Int32 droppedItemEntityId, UInt64 itemUUId)
+    public void pickUpResponse(byte success, Int32 itemId, UInt64 itemUUId)
     {
-        DroppedItem item = (DroppedItem)KBEngineApp.app.findEntity(droppedItemEntityId);
-        Int32 itemId = (Int32)item.getDefinedPropterty("itemId");
-
         UnityEngine.GameObject _player = UnityEngine.GameObject.FindGameObjectWithTag("Player");
         Inventory _inventory = null;
         if (_player != null)

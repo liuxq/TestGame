@@ -139,9 +139,9 @@
 
         //-----------------------response-------------------------
 
-        public void pickUpResponse(byte success, Int32 droppedItemEntityId, UInt64 itemUUId)
+        public void pickUpResponse(byte success, Int32 itemId, UInt64 itemUUId)
         {
-            Event.fireOut("pickUpResponse", new object[] { success, droppedItemEntityId, itemUUId });
+            Event.fireOut("pickUpResponse", new object[] { success, itemId, itemUUId });
         }
         public void onReqItemList(Dictionary<string, object> infos)
         {
