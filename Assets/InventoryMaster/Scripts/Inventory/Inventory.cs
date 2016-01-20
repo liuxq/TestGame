@@ -660,6 +660,32 @@ public class Inventory : MonoBehaviour
         return null;
 
     }
+    public GameObject addItemToInventory(int itemId, UInt64 itemUUID, int value, int itemIndex)
+    {
+        if (itemIndex < 0 || itemIndex >= SlotContainer.transform.childCount || SlotContainer.transform.GetChild(itemIndex).childCount != 0)
+            return null;
+        
+        GameObject item = (GameObject)Instantiate(prefabItem);
+        ItemOnObject itemOnObject = item.GetComponent<ItemOnObject>();
+        itemOnObject.item = itemDatabase.getItemByID(itemId);
+        itemOnObject.item.itemUUID = itemUUID;
+        if (itemOnObject.item.itemValue <= itemOnObject.item.maxStack && value <= itemOnObject.item.maxStack)
+            itemOnObject.item.itemValue = value;
+        else
+            itemOnObject.item.itemValue = 1;
+        item.transform.SetParent(SlotContainer.transform.GetChild(itemIndex));
+        item.GetComponent<RectTransform>().localPosition = Vector3.zero;
+        item.transform.GetChild(0).GetComponent<Image>().sprite = itemOnObject.item.itemIcon;
+        itemOnObject.item.indexItemInList = ItemsInInventory.Count - 1;
+        if (inputManagerDatabase == null)
+            inputManagerDatabase = (InputManager)Resources.Load("InputManager");
+        return item;
+            
+        //stackableSettings();
+        //updateItemList();
+        //return null;
+
+    }
 
     public void addItemToInventoryStorage(int itemID, int value)
     {
@@ -889,7 +915,6 @@ public class Inventory : MonoBehaviour
 
     public void addItemToInventory(int ignoreSlot, int itemID, int itemValue)
     {
-
         for (int i = 0; i < SlotContainer.transform.childCount; i++)
         {
             if (SlotContainer.transform.GetChild(i).childCount == 0 && i != ignoreSlot)

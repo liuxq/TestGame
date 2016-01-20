@@ -244,14 +244,29 @@ public class World : MonoBehaviour {
 
         player = Instantiate(avatarPerfab, new Vector3(avatar.position.x, y, avatar.position.z),
                              Quaternion.Euler(new Vector3(avatar.direction.y, avatar.direction.z, avatar.direction.x))) as UnityEngine.GameObject;
-
+        
+        initPlayer(player);
         //player.GetComponent<GameEntity>().entityDisable();
         avatar.renderObj = player;
         Camera.main.GetComponent<SmoothFollow>().target = player.transform;
         Camera.allCameras[1].GetComponent<MapFollow>().target = player.transform;
         ((UnityEngine.GameObject)avatar.renderObj).GetComponent<GameEntity>().isPlayer = true;
     }
+    private void initPlayer(UnityEngine.GameObject player)
+    {
+        if (player == null)
+            return;
 
+        KBEngine.Avatar avatar = (KBEngine.Avatar)KBEngineApp.app.player();
+        if (avatar == null)
+        {
+            Debug.Log("wait create(palyer)!");
+            return;
+        }
+
+        //初始化物品栏
+        avatar.reqItemList();
+    }
     public void addSpaceGeometryMapping(string respath)
     {
         Debug.Log("loading scene(" + respath + ")...");
@@ -294,7 +309,7 @@ public class World : MonoBehaviour {
         }
     }
 
-    public void pickUpResponse(byte success, Int32 itemId, UInt64 itemUUId)
+    public void pickUpResponse(byte success, Int32 itemId, UInt64 itemUUId, Int32 itemIndex)
     {
         UnityEngine.GameObject _player = UnityEngine.GameObject.FindGameObjectWithTag("Player");
         Inventory _inventory = null;
@@ -304,7 +319,7 @@ public class World : MonoBehaviour {
         }
         if (_inventory != null)
         {
-            _inventory.addItemToInventory(itemId,itemUUId,1);
+            _inventory.addItemToInventory(itemId, itemUUId, 1, itemIndex);
             _inventory.updateItemList();
             _inventory.stackableSettings();
         }
@@ -325,7 +340,8 @@ public class World : MonoBehaviour {
                 Dictionary<string, object> info = itemList[dbid];
                 Int32 id = (Int32)info["itemId"];
                 UInt64 uid = (UInt64)info["UUID"];
-                _inventory.addItemToInventory(id, uid, 1);
+                Int32 index = (Int32)info["itemIndex"];
+                _inventory.addItemToInventory(id, uid, 1, index);
                 _inventory.updateItemList();
                 _inventory.stackableSettings();
             }

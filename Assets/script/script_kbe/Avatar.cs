@@ -19,8 +19,6 @@
                 Event.registerIn("relive", this, "relive");
                 Event.registerIn("updatePlayer", this, "updatePlayer");
                 Event.registerIn("sendChatMessage", this, "sendChatMessage");
-
-                reqItemList();
             }	
         }
 
@@ -136,12 +134,16 @@
         {
             baseCall("dropRequest", itemUUID);
         }
+        public void swapItemRequest(Int32 srcIndex, Int32 dstIndex)
+        {
+            baseCall("swapItemRequest", new object[] { srcIndex, dstIndex });
+        }
 
         //-----------------------response-------------------------
 
-        public void pickUpResponse(byte success, Int32 itemId, UInt64 itemUUId)
+        public void pickUpResponse(byte success, Int32 itemId, UInt64 itemUUId, Int32 itemIndex)
         {
-            Event.fireOut("pickUpResponse", new object[] { success, itemId, itemUUId });
+            Event.fireOut("pickUpResponse", new object[] { success, itemId, itemUUId, itemIndex });
         }
         public void onReqItemList(Dictionary<string, object> infos)
         {

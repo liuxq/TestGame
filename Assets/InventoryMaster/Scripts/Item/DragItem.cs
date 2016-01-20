@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using KBEngine;
+using System;
 
 public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDragHandler
 {
@@ -216,10 +217,19 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                                     //swapping for the rest of the inventorys
                                     else if (oldSlot.transform.parent.parent.GetComponent<EquipmentSystem>() == null)
                                     {
+                                        Int32 srcIndex = Int32.Parse(oldSlot.name) - 1;
+                                        Int32 dstIndex = Int32.Parse(secondItemGameObject.transform.parent.name) - 1;
+
                                         firstItemGameObject.transform.SetParent(secondItemGameObject.transform.parent);
                                         secondItemGameObject.transform.SetParent(oldSlot.transform);
                                         secondItemRectTransform.localPosition = Vector3.zero;
                                         firstItemRectTransform.localPosition = Vector3.zero;
+
+                                        KBEngine.Avatar p = (KBEngine.Avatar)KBEngineApp.app.player();
+                                        if (p != null)
+                                        {
+                                            p.swapItemRequest(srcIndex, dstIndex);
+                                        }
                                     }
                                 }
 
@@ -239,6 +249,15 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                             {                                
                                 firstItemGameObject.transform.SetParent(newSlot.transform);
                                 firstItemRectTransform.localPosition = Vector3.zero;
+
+                                Int32 srcIndex = Int32.Parse(oldSlot.name) - 1;
+                                Int32 dstIndex = Int32.Parse(newSlot.name) - 1;
+
+                                KBEngine.Avatar p = (KBEngine.Avatar)KBEngineApp.app.player();
+                                if (p != null)
+                                {
+                                    p.swapItemRequest(srcIndex, dstIndex);
+                                }
 
                                 if (newSlot.transform.parent.parent.GetComponent<EquipmentSystem>() == null && oldSlot.transform.parent.parent.GetComponent<EquipmentSystem>() != null)
                                     oldSlot.transform.parent.parent.GetComponent<Inventory>().UnEquipItem1(firstItem);
