@@ -10,6 +10,7 @@
         public Combat combat = null;
         public static SkillBox skillbox = new SkillBox();
         public Dictionary<UInt64, Dictionary<string, object>> itemDict = new Dictionary<UInt64, Dictionary<string, object>>();
+        public Dictionary<UInt64, Dictionary<string, object>> equipItemDict = new Dictionary<UInt64, Dictionary<string, object>>();
 
         public override void __init__()
         {
@@ -145,7 +146,7 @@
         {
             Event.fireOut("pickUpResponse", new object[] { success, itemId, itemUUId, itemIndex });
         }
-        public void onReqItemList(Dictionary<string, object> infos)
+        public void onReqItemList(Dictionary<string, object> infos, Dictionary<string, object> equipInfos)
         {
             itemDict.Clear();
             List<object> listinfos = (List<object>)infos["values"];
@@ -154,10 +155,16 @@
                 Dictionary<string, object> info = (Dictionary<string, object>)listinfos[i];
                 itemDict.Add((UInt64)info["UUID"], info);
             }
-
+            equipItemDict.Clear();
+            List<object> elistinfos = (List<object>)equipInfos["values"];
+            for (int i = 0; i < elistinfos.Count; i++)
+            {
+                Dictionary<string, object> info = (Dictionary<string, object>)elistinfos[i];
+                equipItemDict.Add((UInt64)info["UUID"], info);
+            }
             // ui event
-            Dictionary<UInt64, Dictionary<string, object>> itemDicttmp = new Dictionary<ulong, Dictionary<string, object>>(itemDict);
-            Event.fireOut("onReqItemList", new object[] { itemDicttmp });
+            //Dictionary<UInt64, Dictionary<string, object>> itemDicttmp = new Dictionary<ulong, Dictionary<string, object>>(itemDict);
+            Event.fireOut("onReqItemList", new object[] { itemDict, equipItemDict });
         }
     }
 }

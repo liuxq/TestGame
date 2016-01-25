@@ -325,7 +325,7 @@ public class World : MonoBehaviour {
         }
     }
 
-    public void onReqItemList(Dictionary<UInt64, Dictionary<string, object>> itemList)
+    public void onReqItemList(Dictionary<UInt64, Dictionary<string, object>> itemList, Dictionary<UInt64, Dictionary<string, object>> equipItemDict)
     {
         UnityEngine.GameObject _player = UnityEngine.GameObject.FindGameObjectWithTag("Player");
         Inventory _inventory = null;
