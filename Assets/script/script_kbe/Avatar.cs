@@ -139,6 +139,10 @@
         {
             baseCall("swapItemRequest", new object[] { srcIndex, dstIndex });
         }
+        public void equipItemRequest(Int32 itemIndex, Int32 equipIndex)
+        {
+            baseCall("equipItemRequest", new object[] { itemIndex, equipIndex });
+        }
 
         //-----------------------response-------------------------
 
@@ -165,6 +169,10 @@
             // ui event
             //Dictionary<UInt64, Dictionary<string, object>> itemDicttmp = new Dictionary<ulong, Dictionary<string, object>>(itemDict);
             Event.fireOut("onReqItemList", new object[] { itemDict, equipItemDict });
+        }
+        public void errorInfo(Int32 errorCode)
+        {
+            Dbg.DEBUG_MSG("errorInfo(" + errorCode + ")");
         }
     }
 }

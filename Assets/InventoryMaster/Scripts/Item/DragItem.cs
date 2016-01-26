@@ -196,6 +196,14 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                                     //if you are dragging an item from equipmentsystem to the inventory and try to swap it with the same itemtype
                                     if (oldSlot.transform.parent.parent.GetComponent<EquipmentSystem>() != null && firstItem.itemType == secondItem.itemType)
                                     {
+                                        Int32 srcIndex = Int32.Parse(oldSlot.name) - 1;
+                                        Int32 dstIndex = Int32.Parse(secondItemGameObject.transform.parent.name) - 1;
+                                        KBEngine.Avatar p = (KBEngine.Avatar)KBEngineApp.app.player();
+                                        if (p != null)
+                                        {
+                                            p.equipItemRequest(dstIndex,srcIndex);
+                                        }
+
                                         newSlot.transform.parent.parent.parent.parent.GetComponent<Inventory>().UnEquipItem1(firstItem);
                                         oldSlot.transform.parent.parent.GetComponent<Inventory>().EquiptItem(secondItem);
 
@@ -256,7 +264,10 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                                 KBEngine.Avatar p = (KBEngine.Avatar)KBEngineApp.app.player();
                                 if (p != null)
                                 {
-                                    p.swapItemRequest(srcIndex, dstIndex);
+                                    if (newSlot.transform.parent.parent.GetComponent<EquipmentSystem>() == null && oldSlot.transform.parent.parent.GetComponent<EquipmentSystem>() != null)
+                                        p.equipItemRequest(dstIndex,srcIndex);//卸下装备
+                                    else
+                                        p.swapItemRequest(srcIndex, dstIndex);//交换物品
                                 }
 
                                 if (newSlot.transform.parent.parent.GetComponent<EquipmentSystem>() == null && oldSlot.transform.parent.parent.GetComponent<EquipmentSystem>() != null)
@@ -416,6 +427,9 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                         //items getting swapped if they are the same itemtype
                         if (sameItemType && !sameItemRerferenced) //
                         {
+                            Int32 srcIndex = Int32.Parse(oldSlot.name) - 1;
+                            Int32 dstIndex = Int32.Parse(secondItemGameObject.transform.parent.name) - 1;
+
                             Transform temp1 = secondItemGameObject.transform.parent.parent.parent;
                             Transform temp2 = oldSlot.transform.parent.parent;                            
 
@@ -442,6 +456,13 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                             if (fromHot)
                                 createDuplication(secondItemGameObject);
 
+                            //替换装备
+                            KBEngine.Avatar p = (KBEngine.Avatar)KBEngineApp.app.player();
+                            if (p != null)
+                            {
+                                p.equipItemRequest(srcIndex, dstIndex);
+                            }
+
                         }
                         //if they are not from the same Itemtype the dragged one getting placed back
                         else
@@ -466,9 +487,17 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                                 {
                                     transform.SetParent(newSlot);
                                     rectTransform.localPosition = Vector3.zero;
-
+                    
                                     if (!oldSlot.transform.parent.parent.Equals(newSlot.transform.parent.parent))
                                         Inventory.GetComponent<Inventory>().EquiptItem(firstItem);
+
+                                    KBEngine.Avatar p = (KBEngine.Avatar)KBEngineApp.app.player();
+                                    if (p != null)
+                                    {
+                                        Int32 srcIndex = Int32.Parse(oldSlot.name) - 1;
+                                        Int32 dstIndex = Int32.Parse(newSlot.name) - 1;
+                                        p.equipItemRequest(srcIndex, dstIndex);  
+                                    }
 
                                 }
                                 //else it get back to the old slot

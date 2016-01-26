@@ -329,9 +329,11 @@ public class World : MonoBehaviour {
     {
         UnityEngine.GameObject _player = UnityEngine.GameObject.FindGameObjectWithTag("Player");
         Inventory _inventory = null;
+        Inventory _equipInventory = null;
         if (_player != null)
         {
             _inventory = _player.GetComponent<PlayerInventory>().inventory.GetComponent<Inventory>();
+            _equipInventory = _player.GetComponent<PlayerInventory>().characterSystem.GetComponent<Inventory>();
         }
         if (_inventory != null)
         {
@@ -344,6 +346,19 @@ public class World : MonoBehaviour {
                 _inventory.addItemToInventory(id, uid, 1, index);
                 _inventory.updateItemList();
                 _inventory.stackableSettings();
+            }
+        }
+        if (_equipInventory != null)
+        {
+            foreach (UInt64 dbid in equipItemDict.Keys)
+            {
+                Dictionary<string, object> info = equipItemDict[dbid];
+                Int32 id = (Int32)info["itemId"];
+                UInt64 uid = (UInt64)info["UUID"];
+                Int32 index = (Int32)info["itemIndex"];
+                _equipInventory.addItemToInventory(id, uid, 1, index);
+                _equipInventory.updateItemList();
+                _equipInventory.stackableSettings();
             }
         }
     }
