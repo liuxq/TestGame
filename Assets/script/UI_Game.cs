@@ -16,6 +16,7 @@ public class UI_Game : MonoBehaviour {
 
     public UnityEngine.GameObject inventory;
     public UnityEngine.GameObject characterSystem;
+    public UnityEngine.GameObject statePanel;
     public UnityEngine.GameObject craftSystem;
     private Inventory craftSystemInventory;
     private Inventory mainInventory;
@@ -36,6 +37,10 @@ public class UI_Game : MonoBehaviour {
         UnityEngine.GameObject canvas = UnityEngine.GameObject.FindGameObjectWithTag("Canvas");
         if (canvas.transform.Find("Panel - Inventory(Clone)") != null)
             inventory = canvas.transform.Find("Panel - Inventory(Clone)").gameObject;
+        if (canvas.transform.Find("Panel - EquipmentSystem(Clone)") != null)
+            characterSystem = canvas.transform.Find("Panel - EquipmentSystem(Clone)").gameObject;
+        if (canvas.transform.Find("Panel - State") != null)
+            statePanel = canvas.transform.Find("Panel - State").gameObject;
 
         if (UnityEngine.GameObject.FindGameObjectWithTag("Tooltip") != null)
             toolTip = UnityEngine.GameObject.FindGameObjectWithTag("Tooltip").GetComponent<Tooltip>();
@@ -122,6 +127,19 @@ public class UI_Game : MonoBehaviour {
             if (toolTip != null)
                 toolTip.deactivateTooltip();
             mainInventory.closeInventory();
+        }
+    }
+    public void OnEquipInventory()
+    {
+        if (!characterSystem.activeSelf)
+        {
+            characterSystemInventory.openInventory();
+        }
+        else
+        {
+            if (toolTip != null)
+                toolTip.deactivateTooltip();
+            characterSystemInventory.closeInventory();
         }
     }
     public void OnPick()

@@ -1,6 +1,6 @@
 ﻿namespace KBEngine
 {
-    using UnityEngine;
+    //using UnityEngine;
     using System;
     using System.Collections;
     using System.Collections.Generic;
@@ -142,6 +142,13 @@
         public void equipItemRequest(Int32 itemIndex, Int32 equipIndex)
         {
             baseCall("equipItemRequest", new object[] { itemIndex, equipIndex });
+        }
+
+        //OWN_CLIENT
+        public virtual void set_attack_Max(object old)
+        {
+            object v = getDefinedPropterty("attack_Max"); 
+            Event.fireOut("set_attack_Max", new object[] { this, v });
         }
 
         //-----------------------response-------------------------
