@@ -21,6 +21,7 @@ public class UI_Game : MonoBehaviour {
     private Inventory craftSystemInventory;
     private Inventory mainInventory;
     private Inventory characterSystemInventory;
+    private UI_AvatarState avatarState;
     private Tooltip toolTip;
 
     //event delegates for consuming, gearing
@@ -50,6 +51,8 @@ public class UI_Game : MonoBehaviour {
             characterSystemInventory = characterSystem.GetComponent<Inventory>();
         if (craftSystem != null)
             craftSystemInventory = craftSystem.GetComponent<Inventory>();
+        if (statePanel != null)
+            avatarState = statePanel.GetComponent<UI_AvatarState>();
 	}
 	
 	// Update is called once per frame
@@ -140,6 +143,17 @@ public class UI_Game : MonoBehaviour {
             if (toolTip != null)
                 toolTip.deactivateTooltip();
             characterSystemInventory.closeInventory();
+        }
+    }
+    public void OnState()
+    {
+        if (!statePanel.activeSelf)
+        {
+            avatarState.openInventory();
+        }
+        else
+        {
+            avatarState.closeInventory();
         }
     }
     public void OnPick()

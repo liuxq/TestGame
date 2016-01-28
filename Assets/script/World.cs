@@ -90,6 +90,36 @@ public class World : MonoBehaviour {
         object hp = avatar.getDefinedPropterty("HP");
         if (hp != null)
             set_HP(avatar, hp);
+
+        UnityEngine.GameObject canvas = UnityEngine.GameObject.FindGameObjectWithTag("Canvas");
+        UnityEngine.GameObject panel_state = null;
+        if (canvas.transform.Find("Panel - State") != null)
+            panel_state = canvas.transform.Find("Panel - State").gameObject;
+        if (panel_state != null)
+        {
+            UI_AvatarState avaterState = panel_state.GetComponent<UI_AvatarState>();
+            object attack_max = avatar.getDefinedPropterty("attack_Max");
+            if (attack_max != null)
+                avaterState.setAttackMax((Int32)attack_max);
+
+            object attack_min = avatar.getDefinedPropterty("attack_Min");
+            if (attack_min != null)
+                avaterState.setAttackMin((Int32)attack_min);
+
+            object defence = avatar.getDefinedPropterty("defence");
+            if (defence != null)
+                avaterState.setDefence((Int32)defence);
+
+            object rating = avatar.getDefinedPropterty("rating");
+            if (rating != null)
+                avaterState.setRating((Int32)rating);
+
+            object dodge = avatar.getDefinedPropterty("dodge");
+            if (dodge != null)
+                avaterState.setDodge((Int32)dodge);
+        }
+
+        
     }
 
     public void onEnterWorld(KBEngine.Entity entity)
