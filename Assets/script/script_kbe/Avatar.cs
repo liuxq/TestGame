@@ -148,7 +148,27 @@
         public virtual void set_attack_Max(object old)
         {
             object v = getDefinedPropterty("attack_Max"); 
-            Event.fireOut("set_attack_Max", new object[] { this, v });
+            Event.fireOut("set_attack_Max", new object[] { v });
+        }
+        public virtual void set_attack_Min(object old)
+        {
+            object v = getDefinedPropterty("attack_Min");
+            Event.fireOut("set_attack_Min", new object[] { v });
+        }
+        public virtual void set_defence(object old)
+        {
+            object v = getDefinedPropterty("defence");
+            Event.fireOut("set_defence", new object[] { v });
+        }
+        public virtual void set_rating(object old)
+        {
+            object v = getDefinedPropterty("rating");
+            Event.fireOut("set_rating", new object[] { v });
+        }
+        public virtual void set_dodge(object old)
+        {
+            object v = getDefinedPropterty("dodge");
+            Event.fireOut("set_dodge", new object[] { v });
         }
 
         //-----------------------response-------------------------
