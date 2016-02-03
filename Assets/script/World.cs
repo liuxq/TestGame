@@ -51,6 +51,7 @@ public class World : MonoBehaviour {
         KBEngine.Event.registerOut("recvDamage", this, "recvDamage");
         KBEngine.Event.registerOut("pickUpResponse", this, "pickUpResponse");
         KBEngine.Event.registerOut("onReqItemList", this, "onReqItemList");
+        KBEngine.Event.registerOut("equipNotify", this, "equipNotify");
 	}
     void OnDestroy()
     {
@@ -386,10 +387,29 @@ public class World : MonoBehaviour {
                 Int32 id = (Int32)info["itemId"];
                 UInt64 uid = (UInt64)info["UUID"];
                 Int32 index = (Int32)info["itemIndex"];
+                if (index == 0)//如果是武器的话，做显示
+                { 
+                    
+                }
                 _equipInventory.addItemToInventory(id, uid, 1, index);
                 _equipInventory.updateItemList();
                 _equipInventory.stackableSettings();
             }
+        }
+    }
+
+    public void equipNotify(KBEngine.Avatar dst, Int32 itemId)
+    {
+        if (dst.renderObj == null)
+            return;
+
+        if (itemId == -1)
+        {
+            ((UnityEngine.GameObject)dst.renderObj).GetComponent<EquipWeapon>().clearWeapon();
+        }
+        else 
+        {
+            ((UnityEngine.GameObject)dst.renderObj).GetComponent<EquipWeapon>().equipWeapon(itemId);
         }
     }
 }

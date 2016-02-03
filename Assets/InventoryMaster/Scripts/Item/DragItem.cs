@@ -201,7 +201,7 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                                         KBEngine.Avatar p = (KBEngine.Avatar)KBEngineApp.app.player();
                                         if (p != null)
                                         {
-                                            p.equipItemRequest(dstIndex,srcIndex);
+                                            p.equipItemRequest(dstIndex,srcIndex);//交换装备
                                         }
 
                                         newSlot.transform.parent.parent.parent.parent.GetComponent<Inventory>().UnEquipItem1(firstItem);
@@ -460,7 +460,7 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                             KBEngine.Avatar p = (KBEngine.Avatar)KBEngineApp.app.player();
                             if (p != null)
                             {
-                                p.equipItemRequest(srcIndex, dstIndex);
+                                p.equipItemRequest(srcIndex, dstIndex);//替换装备
                             }
 
                         }
@@ -496,7 +496,7 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                                     {
                                         Int32 srcIndex = Int32.Parse(oldSlot.name) - 1;
                                         Int32 dstIndex = Int32.Parse(newSlot.name) - 1;
-                                        p.equipItemRequest(srcIndex, dstIndex);  
+                                        p.equipItemRequest(srcIndex, dstIndex);  //带上装备
                                     }
 
                                 }

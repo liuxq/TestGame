@@ -12,6 +12,8 @@
         public Dictionary<UInt64, Dictionary<string, object>> itemDict = new Dictionary<UInt64, Dictionary<string, object>>();
         public Dictionary<UInt64, Dictionary<string, object>> equipItemDict = new Dictionary<UInt64, Dictionary<string, object>>();
 
+        private UInt64[] itemIndex2Uids = new UInt64[12];
+        private UInt64[] equipIndex2Uids = new UInt64[4];
         public override void __init__()
         {
             combat = new Combat(this);
@@ -137,6 +139,16 @@
         }
         public void swapItemRequest(Int32 srcIndex, Int32 dstIndex)
         {
+            UInt64 srcUid = itemIndex2Uids[srcIndex];
+            UInt64 dstUid = itemIndex2Uids[dstIndex];
+		
+		    itemIndex2Uids[srcIndex] = dstUid;
+		    if (dstUid != 0)
+			    itemDict[dstUid]["itemIndex"] = srcIndex;
+		    itemIndex2Uids[dstIndex] = srcUid;
+            if (srcUid != 0)
+                itemDict[srcUid]["itemIndex"] = dstIndex;
+
             baseCall("swapItemRequest", new object[] { srcIndex, dstIndex });
         }
         public void equipItemRequest(Int32 itemIndex, Int32 equipIndex)
@@ -185,6 +197,7 @@
             {
                 Dictionary<string, object> info = (Dictionary<string, object>)listinfos[i];
                 itemDict.Add((UInt64)info["UUID"], info);
+                itemIndex2Uids[(Int32)info["itemIndex"]] = (UInt64)info["UUID"];
             }
             equipItemDict.Clear();
             List<object> elistinfos = (List<object>)equipInfos["values"];
@@ -192,6 +205,7 @@
             {
                 Dictionary<string, object> info = (Dictionary<string, object>)elistinfos[i];
                 equipItemDict.Add((UInt64)info["UUID"], info);
+                equipIndex2Uids[(Int32)info["itemIndex"]] = (UInt64)info["UUID"];
             }
             // ui event
             //Dictionary<UInt64, Dictionary<string, object>> itemDicttmp = new Dictionary<ulong, Dictionary<string, object>>(itemDict);
@@ -200,6 +214,11 @@
         public void errorInfo(Int32 errorCode)
         {
             Dbg.DEBUG_MSG("errorInfo(" + errorCode + ")");
+        }
+
+        public void equipNotify(Int32 itemId)
+        {
+            Event.fireOut("equipNotify", new object[] { this, itemId });
         }
     }
 }
