@@ -216,9 +216,11 @@
             Dbg.DEBUG_MSG("errorInfo(" + errorCode + ")");
         }
 
-        public void equipNotify(Int32 itemId)
+        //ALL_CLIENTS
+        public virtual void set_equipWeapon(object old)
         {
-            Event.fireOut("equipNotify", new object[] { this, itemId });
+            object v = getDefinedPropterty("equipWeapon");
+            Event.fireOut("set_equipWeapon", new object[] { this,(Int32)v });
         }
     }
 }

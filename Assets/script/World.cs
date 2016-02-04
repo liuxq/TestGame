@@ -51,7 +51,7 @@ public class World : MonoBehaviour {
         KBEngine.Event.registerOut("recvDamage", this, "recvDamage");
         KBEngine.Event.registerOut("pickUpResponse", this, "pickUpResponse");
         KBEngine.Event.registerOut("onReqItemList", this, "onReqItemList");
-        KBEngine.Event.registerOut("equipNotify", this, "equipNotify");
+        KBEngine.Event.registerOut("set_equipWeapon", this, "set_equipWeapon");
 	}
     void OnDestroy()
     {
@@ -120,7 +120,10 @@ public class World : MonoBehaviour {
                 avaterState.setDodge((Int32)dodge);
         }
 
-        
+        object equipWeapon = avatar.getDefinedPropterty("equipWeapon");
+        if (equipWeapon != null)
+            set_equipWeapon(avatar, (Int32)equipWeapon);
+
     }
 
     public void onEnterWorld(KBEngine.Entity entity)
@@ -179,6 +182,11 @@ public class World : MonoBehaviour {
         object hp = entity.getDefinedPropterty("HP");
         if (hp != null)
             set_HP(entity, hp);
+
+        object equipWeapon = entity.getDefinedPropterty("equipWeapon");
+        if (equipWeapon != null)
+            set_equipWeapon(entity, (Int32)equipWeapon);
+
     }
 
     public void onLeaveWorld(KBEngine.Entity entity)
@@ -398,7 +406,7 @@ public class World : MonoBehaviour {
         }
     }
 
-    public void equipNotify(KBEngine.Avatar dst, Int32 itemId)
+    public void set_equipWeapon(KBEngine.Entity dst, Int32 itemId)
     {
         if (dst.renderObj == null)
             return;

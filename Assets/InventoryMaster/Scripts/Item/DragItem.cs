@@ -102,7 +102,13 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                     firstItemStack = firstItem.itemValue < firstItem.maxStack;
                     secondItemStack = secondItem.itemValue < secondItem.maxStack;
                 }
-
+                if (secondItemRectTransform.parent == null)
+                {
+                    //跳回去
+                    this.gameObject.transform.SetParent(oldSlot.transform);
+                    this.gameObject.GetComponent<RectTransform>().localPosition = Vector3.zero;
+                    return;
+                }
                 UnityEngine.GameObject Inventory = secondItemRectTransform.parent.gameObject;
                 if (Inventory.tag == "Slot")
                     Inventory = secondItemRectTransform.parent.parent.parent.gameObject;
@@ -653,6 +659,12 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
 
             else
             {
+                if (oldSlot.transform.parent.parent.GetComponent<EquipmentSystem>() != null)
+                {
+                    this.gameObject.transform.SetParent(oldSlot.transform);
+                    this.gameObject.GetComponent<RectTransform>().localPosition = Vector3.zero;
+                    return;
+                }
                 KBEngine.Avatar p = (KBEngine.Avatar)KBEngineApp.app.player();
                 if (p != null)
                 {
