@@ -68,7 +68,7 @@ public class World : MonoBehaviour {
         {
             return;
         }
-
+        createPlayer();
         //UI.inst.info("loading scene...(加载场景中...)");
         Debug.Log("loading scene...");
 
