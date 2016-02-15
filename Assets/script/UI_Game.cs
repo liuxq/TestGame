@@ -161,4 +161,9 @@ public class UI_Game : MonoBehaviour {
         if (ItemPick != null)
             ItemPick();
     }
+
+    public void OnResetView()
+    {
+        Camera.main.GetComponent<SmoothFollow>().ResetView();
+    }
 }

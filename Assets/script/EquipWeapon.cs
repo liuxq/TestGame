@@ -37,7 +37,7 @@ public class EquipWeapon : MonoBehaviour {
         if (currentweapon != null)
         {
             currentweapon.parent = null;
-            Destroy(currentweapon.transform.gameObject);
+            Destroy(currentweapon.gameObject);
         }
     }
 

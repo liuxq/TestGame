@@ -118,6 +118,22 @@ public class World : MonoBehaviour {
             object dodge = avatar.getDefinedPropterty("dodge");
             if (dodge != null)
                 avaterState.setDodge((Int32)dodge);
+
+            object strength = avatar.getDefinedPropterty("strength");
+            if (strength != null)
+                avaterState.setStrength((Int32)strength);
+
+            object dexterity = avatar.getDefinedPropterty("dexterity");
+            if (dexterity != null)
+                avaterState.setDexterity((Int32)dexterity);
+
+            object exp = avatar.getDefinedPropterty("exp");
+            if (exp != null)
+                avaterState.setExp((UInt64)exp);
+
+            object level = avatar.getDefinedPropterty("level");
+            if (level != null)
+                avaterState.setLevel((UInt16)level);
         }
 
         object equipWeapon = avatar.getDefinedPropterty("equipWeapon");
@@ -288,6 +304,7 @@ public class World : MonoBehaviour {
         //player.GetComponent<GameEntity>().entityDisable();
         avatar.renderObj = player;
         Camera.main.GetComponent<SmoothFollow>().target = player.transform;
+        Camera.main.GetComponent<SmoothFollow>().FollowUpdate();
         Camera.allCameras[1].GetComponent<MapFollow>().target = player.transform;
         ((UnityEngine.GameObject)avatar.renderObj).GetComponent<GameEntity>().isPlayer = true;
     }

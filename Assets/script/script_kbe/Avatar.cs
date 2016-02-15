@@ -182,6 +182,26 @@
             object v = getDefinedPropterty("dodge");
             Event.fireOut("set_dodge", new object[] { v });
         }
+        public virtual void set_strength(object old)
+        {
+            object v = getDefinedPropterty("strength");
+            Event.fireOut("set_strength", new object[] { v });
+        }
+        public virtual void set_dexterity(object old)
+        {
+            object v = getDefinedPropterty("dexterity");
+            Event.fireOut("set_dexterity", new object[] { v });
+        }
+        public virtual void set_exp(object old)
+        {
+            object v = getDefinedPropterty("exp");
+            Event.fireOut("set_exp", new object[] { v });
+        }
+        public virtual void set_level(object old)
+        {
+            object v = getDefinedPropterty("level");
+            Event.fireOut("set_level", new object[] { v });
+        }
 
         //-----------------------response-------------------------
 

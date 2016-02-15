@@ -28,7 +28,7 @@ public class GUIEasyJoystickCallBack{
 		GameObject gameObject = EditorUtility.InstanceIDToObject(instanceID) as GameObject;
 		if (gameObject != null && gameObject.GetComponent<EasyJoystick>() != null)
 		{
-			Rect rect = new Rect(selectionRect.x + selectionRect.width - 16f, selectionRect.y, 16f, 16f);
+			//Rect rect = new Rect(selectionRect.x + selectionRect.width - 16f, selectionRect.y, 16f, 16f);
 			//GUI.DrawTexture( rect,GUIEasyJoystickCallBack.HierarchyIcon);
 		}
 	}

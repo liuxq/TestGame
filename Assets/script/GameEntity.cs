@@ -77,11 +77,12 @@ public class GameEntity : MonoBehaviour
         //得到真实NPC头顶的2D坐标
         uiposition = new Vector2(uiposition.x, Screen.height - uiposition.y);
 
+        GUI.skin.label.fontSize = 24;
         //计算NPC名称的宽高
         Vector2 nameSize = GUI.skin.label.CalcSize(new GUIContent(entity_name));
 
         //设置显示颜色为黄色
-        GUI.color = Color.yellow;
+        GUI.color = Color.blue;
 
         //绘制NPC名称
         GUI.Label(new Rect(uiposition.x - (nameSize.x / 2), uiposition.y - nameSize.y - 5.0f, nameSize.x, nameSize.y), entity_name);

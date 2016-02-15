@@ -12,6 +12,11 @@ public class UI_AvatarState : MonoBehaviour
     public Text text_rating;
     public Text text_dodge;
 
+    public Text text_strength;
+    public Text text_dexterity;
+    public Text text_exp;
+    public Text text_level;
+
     private int attack_max;
     private int attack_min;
 
@@ -22,6 +27,11 @@ public class UI_AvatarState : MonoBehaviour
         KBEngine.Event.registerOut("set_defence", this, "setDefence");
         KBEngine.Event.registerOut("set_rating", this, "setRating");
         KBEngine.Event.registerOut("set_dodge", this, "setDodge");
+
+        KBEngine.Event.registerOut("set_strength", this, "setStrength");
+        KBEngine.Event.registerOut("set_dexterity", this, "setDexterity");
+        KBEngine.Event.registerOut("set_exp", this, "setExp");
+        KBEngine.Event.registerOut("set_level", this, "setLevel");
     }
 
     public void closeInventory()
@@ -55,6 +65,23 @@ public class UI_AvatarState : MonoBehaviour
     public void setDodge(int v)
     {
         text_dodge.text = v + "";
+    }
+
+    public void setStrength(int v)
+    {
+        text_strength.text = v + "";
+    }
+    public void setDexterity(int v)
+    {
+        text_dexterity.text = v + "";
+    }
+    public void setExp(UInt64 v)
+    {
+        text_exp.text = v + "";
+    }
+    public void setLevel(UInt16 v)
+    {
+        text_level.text = v + "";
     }
 }
 
