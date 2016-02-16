@@ -19,6 +19,8 @@ public class World : MonoBehaviour {
     public UnityEngine.GameObject avatarPerfab;
     public UnityEngine.GameObject snowBallPerfab;
     public UnityEngine.GameObject droppedItemPerfab;
+
+    private bool isFirstPos = true;
     
     static World()
     {
@@ -228,6 +230,13 @@ public class World : MonoBehaviour {
         Vector3 v = (Vector3)entity.getDefinedPropterty("position");
         ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().destPosition = v;
         ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().position = v;
+
+        if (isFirstPos && entity.isPlayer())//第一次主角获取位置时，调整摄像头
+        {
+            Camera.main.GetComponent<SmoothFollow>().FollowUpdate();
+            Camera.main.GetComponent<SmoothFollow>().ResetView();
+            isFirstPos = false;
+        }
     }
     public void set_direction(KBEngine.Entity entity)
     {
@@ -304,7 +313,8 @@ public class World : MonoBehaviour {
         //player.GetComponent<GameEntity>().entityDisable();
         avatar.renderObj = player;
         Camera.main.GetComponent<SmoothFollow>().target = player.transform;
-        Camera.main.GetComponent<SmoothFollow>().FollowUpdate();
+        
+        
         Camera.allCameras[1].GetComponent<MapFollow>().target = player.transform;
         ((UnityEngine.GameObject)avatar.renderObj).GetComponent<GameEntity>().isPlayer = true;
     }

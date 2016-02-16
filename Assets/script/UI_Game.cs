@@ -71,22 +71,23 @@ public class UI_Game : MonoBehaviour {
                 sk.updateTimer(Time.deltaTime);//更新一号技能的冷却时间
             }
         }
-        if(Input.GetMouseButton (0))
+
+        if(Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, 100.0f, 1 << LayerMask.NameToLayer("CanAttack"))) 
+            if (Physics.Raycast(ray, out hit, 100.0f, 1 << LayerMask.NameToLayer("CanAttack")))
             {
                 string name = hit.collider.GetComponent<GameEntity>().name;
                 Int32 entityId = Utility.getPostInt(name);
-                            
+
                 if (avatar != null)
                 {
                     avatar.useTargetSkill(1, entityId);
                 }
-            }  
-     
+            }
         }
+        
 	}
     public void ReceiveChatMessage(string msg)
     {
@@ -165,5 +166,53 @@ public class UI_Game : MonoBehaviour {
     public void OnResetView()
     {
         Camera.main.GetComponent<SmoothFollow>().ResetView();
+    }
+    public UnityEngine.GameObject TabSelected()
+    { 
+        KBEngine.Entity entity = KBEngineApp.app.player();
+        KBEngine.Avatar avatar = null;
+        if (entity != null && entity.className == "Avatar")
+            avatar = (KBEngine.Avatar)entity;
+        if (avatar == null)
+            return null;
+
+        UnityEngine.GameObject[] objs = UnityEngine.GameObject.FindObjectsOfType<UnityEngine.GameObject>();
+        float mindis = 10000;
+        UnityEngine.GameObject minObj = null;
+        foreach (UnityEngine.GameObject obj in objs)
+        {
+            if (obj.layer != LayerMask.NameToLayer("CanAttack") || obj.GetComponent<GameEntity>() == null)
+                continue;
+            float dis = Vector3.Distance(avatar.position, obj.transform.position);
+            if (mindis > dis)
+            {
+                mindis = dis;
+                minObj = obj;
+            }
+        }
+        return minObj;
+
+        
+    }
+    public void OnAttackSkill1()
+    {
+        KBEngine.Entity entity = KBEngineApp.app.player();
+        KBEngine.Avatar avatar = null;
+        if (entity != null && entity.className == "Avatar")
+            avatar = (KBEngine.Avatar)entity;
+        if (avatar == null)
+            return;
+
+        UnityEngine.GameObject selectedObj = TabSelected();
+        if (selectedObj != null)
+        {
+            string name = selectedObj.GetComponent<GameEntity>().name;
+            Int32 entityId = Utility.getPostInt(name);
+
+            if (avatar != null)
+            {
+                avatar.useTargetSkill(1, entityId);
+            }
+        }
     }
 }

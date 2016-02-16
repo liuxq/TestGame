@@ -80,7 +80,7 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
             if (data.pointerEnter != null)
                 newSlot = data.pointerEnter.transform;
 
-            if (newSlot != null)
+            if (newSlot != null && newSlot.tag != "Untagged")
             {
                 //getting the items from the slots, GameObjects and RectTransform
                 UnityEngine.GameObject firstItemGameObject = this.gameObject;
@@ -102,7 +102,7 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
                     firstItemStack = firstItem.itemValue < firstItem.maxStack;
                     secondItemStack = secondItem.itemValue < secondItem.maxStack;
                 }
-                if (secondItemRectTransform.parent == null)
+                if (secondItemRectTransform.parent == null)//
                 {
                     //跳回去
                     this.gameObject.transform.SetParent(oldSlot.transform);
@@ -659,7 +659,7 @@ public class DragItem : MonoBehaviour, IDragHandler, IPointerDownHandler, IEndDr
 
             else
             {
-                if (oldSlot.transform.parent.parent.GetComponent<EquipmentSystem>() != null)
+                if (oldSlot.transform.parent.parent.GetComponent<EquipmentSystem>() != null)//如果是装备栏的要销毁物品，拒绝，弹回去
                 {
                     this.gameObject.transform.SetParent(oldSlot.transform);
                     this.gameObject.GetComponent<RectTransform>().localPosition = Vector3.zero;
