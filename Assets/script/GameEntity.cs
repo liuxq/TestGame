@@ -1,5 +1,6 @@
 ﻿
 using UnityEngine;
+using UnityEngine.UI;
 using KBEngine;
 using System.Collections;
 using System;
@@ -36,6 +37,8 @@ public class GameEntity : MonoBehaviour
 
     public bool entityEnabled = true;
 
+    public Text headName;
+
     private Animator animator;
     private CharacterController controller;
 
@@ -60,43 +63,43 @@ public class GameEntity : MonoBehaviour
         controller = GetComponent<CharacterController>();
     }
 
-    void OnGUI()
-    {
-        if (gameObject.transform.FindChild("rabbit") != null && 
-        !gameObject.transform.FindChild("rabbit").GetComponent<SkinnedMeshRenderer>().GetComponent<Renderer>().isVisible)
-            return;
+    //void OnGUI()
+    //{
+    //    if (gameObject.transform.FindChild("rabbit") != null && 
+    //    !gameObject.transform.FindChild("rabbit").GetComponent<SkinnedMeshRenderer>().GetComponent<Renderer>().isVisible)
+    //        return;
 
-        Vector3 worldPosition = new Vector3(transform.position.x, transform.position.y + npcHeight, transform.position.z);
+    //    Vector3 worldPosition = new Vector3(transform.position.x, transform.position.y + npcHeight, transform.position.z);
 
-        if (playerCamera == null)
-            playerCamera = Camera.main;
+    //    if (playerCamera == null)
+    //        playerCamera = Camera.main;
 
-        //根据NPC头顶的3D坐标换算成它在2D屏幕中的坐标
-        Vector2 uiposition = playerCamera.WorldToScreenPoint(worldPosition);
+    //    //根据NPC头顶的3D坐标换算成它在2D屏幕中的坐标
+    //    Vector2 uiposition = playerCamera.WorldToScreenPoint(worldPosition);
 
-        //得到真实NPC头顶的2D坐标
-        uiposition = new Vector2(uiposition.x, Screen.height - uiposition.y);
+    //    //得到真实NPC头顶的2D坐标
+    //    uiposition = new Vector2(uiposition.x, Screen.height - uiposition.y);
 
-        GUI.skin.label.fontSize = 24;
-        //计算NPC名称的宽高
-        Vector2 nameSize = GUI.skin.label.CalcSize(new GUIContent(entity_name));
+    //    GUI.skin.label.fontSize = 24;
+    //    //计算NPC名称的宽高
+    //    Vector2 nameSize = GUI.skin.label.CalcSize(new GUIContent(entity_name));
 
-        //设置显示颜色为黄色
-        GUI.color = Color.blue;
+    //    //设置显示颜色为黄色
+    //    GUI.color = Color.blue;
 
-        //绘制NPC名称
-        GUI.Label(new Rect(uiposition.x - (nameSize.x / 2), uiposition.y - nameSize.y - 5.0f, nameSize.x, nameSize.y), entity_name);
+    //    //绘制NPC名称
+    //    GUI.Label(new Rect(uiposition.x - (nameSize.x / 2), uiposition.y - nameSize.y - 5.0f, nameSize.x, nameSize.y), entity_name);
 
-        //计算NPC名称的宽高
-        Vector2 hpSize = GUI.skin.label.CalcSize(new GUIContent(hp));
+    //    //计算NPC名称的宽高
+    //    Vector2 hpSize = GUI.skin.label.CalcSize(new GUIContent(hp));
 
-        //设置显示颜色为红
-        GUI.color = Color.red;
+    //    //设置显示颜色为红
+    //    GUI.color = Color.red;
 
-        //绘制HP
-        if(entityEnabled)
-            GUI.Label(new Rect(uiposition.x - (hpSize.x / 2), uiposition.y - hpSize.y - 30.0f, hpSize.x, hpSize.y), hp);
-    }
+    //    //绘制HP
+    //    if(entityEnabled)
+    //        GUI.Label(new Rect(uiposition.x - (hpSize.x / 2), uiposition.y - hpSize.y - 30.0f, hpSize.x, hpSize.y), hp);
+    //}
 
     public Vector3 position
     {
@@ -200,6 +203,10 @@ public class GameEntity : MonoBehaviour
 
     void Update()
     {
+        //绘制头顶文字
+        if (headName != null)
+            headName.text = entity_name;
+
         if (!entityEnabled)
         {
             position = destPosition;

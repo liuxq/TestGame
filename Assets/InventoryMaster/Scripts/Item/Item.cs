@@ -18,6 +18,7 @@ public class Item
     public int maxStack = 1;
     public int indexItemInList = 999;    
     public int rarity;
+    public int itemIndex;
 
     [SerializeField]
     public List<ItemAttribute> itemAttributes = new List<ItemAttribute>();    

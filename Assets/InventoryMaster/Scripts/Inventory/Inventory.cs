@@ -670,6 +670,7 @@ public class Inventory : MonoBehaviour
         ItemOnObject itemOnObject = item.GetComponent<ItemOnObject>();
         itemOnObject.item = itemDatabase.getItemByID(itemId);
         itemOnObject.item.itemUUID = itemUUID;
+        itemOnObject.item.itemIndex = itemIndex;
         if (itemOnObject.item.itemValue <= itemOnObject.item.maxStack && value <= itemOnObject.item.maxStack)
             itemOnObject.item.itemValue = value;
         else
@@ -864,7 +865,15 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    
+    public void deleteItemByIndex(Int32 index)
+    {
+        ItemsInInventory.RemoveAt(index);
+        if (SlotContainer.transform.GetChild(index).childCount != 0)
+        {
+            GameObject itemGameObject = SlotContainer.transform.GetChild(index).GetChild(0).gameObject;
+            Destroy(itemGameObject);
+        }
+    }    
 
     public void deleteItemFromInventory(Item item)
     {

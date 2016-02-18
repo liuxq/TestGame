@@ -51,7 +51,6 @@ public class World : MonoBehaviour {
         KBEngine.Event.registerOut("set_state", this, "set_state");
         KBEngine.Event.registerOut("set_HP", this, "set_HP");
         KBEngine.Event.registerOut("recvDamage", this, "recvDamage");
-        KBEngine.Event.registerOut("pickUpResponse", this, "pickUpResponse");
         KBEngine.Event.registerOut("onReqItemList", this, "onReqItemList");
         KBEngine.Event.registerOut("set_equipWeapon", this, "set_equipWeapon");
 	}
@@ -372,22 +371,6 @@ public class World : MonoBehaviour {
                 renderEntity.transform.LookAt(new Vector3(renderEntity.transform.position.x + dir.x, renderEntity.transform.position.y, renderEntity.transform.position.z + dir.z));
                 
             }
-        }
-    }
-
-    public void pickUpResponse(byte success, Int32 itemId, UInt64 itemUUId, Int32 itemIndex)
-    {
-        UnityEngine.GameObject _player = UnityEngine.GameObject.FindGameObjectWithTag("Player");
-        Inventory _inventory = null;
-        if (_player != null)
-        {
-            _inventory = _player.GetComponent<PlayerInventory>().inventory.GetComponent<Inventory>();
-        }
-        if (_inventory != null)
-        {
-            _inventory.addItemToInventory(itemId, itemUUId, 1, itemIndex);
-            _inventory.updateItemList();
-            _inventory.stackableSettings();
         }
     }
 

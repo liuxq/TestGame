@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class ShowTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class ShowTooltip : MonoBehaviour, IPointerDownHandler
 {         //Tooltip
 
     public Tooltip tooltip;                                     //The tooltip script
@@ -15,22 +15,37 @@ public class ShowTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     void Start()
     {
-        if (GameObject.FindGameObjectWithTag("Tooltip") != null)
+        UnityEngine.GameObject canvas = UnityEngine.GameObject.FindGameObjectWithTag("Canvas");
+        if (canvas.transform.Find("Tooltip - Inventory(Clone)") != null)
         {
-            tooltip = GameObject.FindGameObjectWithTag("Tooltip").GetComponent<Tooltip>();
-            tooltipGameObject = GameObject.FindGameObjectWithTag("Tooltip");
+            tooltip = canvas.transform.Find("Tooltip - Inventory(Clone)").GetComponent<Tooltip>();
+            tooltipGameObject = canvas.transform.Find("Tooltip - Inventory(Clone)").gameObject;
             tooltipRectTransform = tooltipGameObject.GetComponent<RectTransform>() as RectTransform;
         }
         canvasRectTransform = GameObject.FindGameObjectWithTag("Canvas").GetComponent<RectTransform>() as RectTransform;
     }
 
 
-
-
-    public void OnPointerEnter(PointerEventData data)                               //if you hit a item in the slot
+    public void OnPointerDown(PointerEventData data)
     {
         if (tooltip != null)
         {
+            tooltip.tooltipType = TooltipType.Inventory;
+            Transform curTransform = this.transform;
+            while (curTransform.parent)
+            {
+                if (curTransform.tag == "MainInventory")
+                {
+                    tooltip.tooltipType = TooltipType.Inventory;
+                    break;
+                }
+                else if (curTransform.tag == "EquipmentSystem")
+                {
+                    tooltip.tooltipType = TooltipType.Equipment;
+                    break;
+                }
+                curTransform = curTransform.parent;
+            }
             item = GetComponent<ItemOnObject>().item;                   //we get the item
             tooltip.item = item;                                        //set the item in the tooltip
             tooltip.activateTooltip();                                  //set all informations of the item in the tooltip
@@ -54,10 +69,10 @@ public class ShowTooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     }
 
-    public void OnPointerExit(PointerEventData data)                //if we go out of the slot with the item
-    {
-        if (tooltip != null)
-            tooltip.deactivateTooltip();            //the tooltip getting deactivated
-    }
+    //public void OnPointerExit(PointerEventData data)                //if we go out of the slot with the item
+    //{
+    //    if (tooltip != null)
+    //        tooltip.deactivateTooltip();            //the tooltip getting deactivated
+    //}
 
 }

@@ -14,6 +14,7 @@
 
         private UInt64[] itemIndex2Uids = new UInt64[12];
         private UInt64[] equipIndex2Uids = new UInt64[4];
+
         public override void __init__()
         {
             combat = new Combat(this);
@@ -204,10 +205,16 @@
         }
 
         //-----------------------response-------------------------
-
-        public void pickUpResponse(byte success, Int32 itemId, UInt64 itemUUId, Int32 itemIndex)
+        public void dropItem_re(Int32 itemId, UInt64 itemUUId)
         {
-            Event.fireOut("pickUpResponse", new object[] { success, itemId, itemUUId, itemIndex });
+            Int32 itemIndex = (Int32)(itemDict[itemUUId]["itemIndex"]);
+            itemDict.Remove(itemUUId);
+            Event.fireOut("dropItem_re", new object[] { itemIndex });
+        }
+        public void pickUp_re(Dictionary<string, object> itemInfo)
+        {
+            Event.fireOut("pickUp_re", new object[] { itemInfo });
+            itemDict.Add((UInt64)itemInfo["UUID"], itemInfo);
         }
         public void onReqItemList(Dictionary<string, object> infos, Dictionary<string, object> equipInfos)
         {
