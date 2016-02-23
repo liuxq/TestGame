@@ -209,12 +209,36 @@
         {
             Int32 itemIndex = (Int32)(itemDict[itemUUId]["itemIndex"]);
             itemDict.Remove(itemUUId);
+            itemIndex2Uids[itemIndex] = 0;
             Event.fireOut("dropItem_re", new object[] { itemIndex });
         }
         public void pickUp_re(Dictionary<string, object> itemInfo)
         {
             Event.fireOut("pickUp_re", new object[] { itemInfo });
             itemDict.Add((UInt64)itemInfo["UUID"], itemInfo);
+        }
+        public void equipItemRequest_re(Dictionary<string, object> itemInfo, Dictionary<string, object> equipItemInfo)
+        {
+            Event.fireOut("equipItemRequest_re", new object[] { itemInfo, equipItemInfo });
+            UInt64 itemUUid = (UInt64)itemInfo["UUID"];
+            UInt64 equipItemUUid = (UInt64)equipItemInfo["UUID"];
+            if (itemUUid == 0 && equipItemUUid != 0)//带上装备
+            {
+                equipItemDict[equipItemUUid] = equipItemInfo;
+                itemDict.Remove(equipItemUUid);
+            }
+            else if (itemUUid != 0 && equipItemUUid != 0)//替换装备
+            {
+                itemDict.Remove(equipItemUUid);
+                equipItemDict[equipItemUUid] = equipItemInfo;
+                equipItemDict.Remove(itemUUid);
+                itemDict[itemUUid] = itemInfo;
+            }
+            else if (itemUUid != 0 && equipItemUUid == 0)//脱下装备
+            {
+                equipItemDict.Remove(itemUUid);
+                itemDict[itemUUid] = itemInfo;
+            }
         }
         public void onReqItemList(Dictionary<string, object> infos, Dictionary<string, object> equipInfos)
         {

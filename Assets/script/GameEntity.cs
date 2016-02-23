@@ -45,6 +45,8 @@ public class GameEntity : MonoBehaviour
     private float last_angleY;
     private Vector3 last_position;
 
+    public UnityEngine.GameObject UI_target;
+
     private int hashHit = Animator.StringToHash("Base Layer.Hit");
     private int hashDead = Animator.StringToHash("Base Layer.Dead");
     private int hashWalk = Animator.StringToHash("Base Layer.Walk");

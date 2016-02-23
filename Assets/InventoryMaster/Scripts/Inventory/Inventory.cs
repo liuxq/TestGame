@@ -663,7 +663,12 @@ public class Inventory : MonoBehaviour
     }
     public GameObject addItemToInventory(int itemId, UInt64 itemUUID, int value, int itemIndex)
     {
-        if (itemIndex < 0 || itemIndex >= SlotContainer.transform.childCount || SlotContainer.transform.GetChild(itemIndex).childCount != 0)
+        if (SlotContainer.transform.GetChild(itemIndex).childCount != 0)
+        {
+            GameObject itemGameObject = SlotContainer.transform.GetChild(itemIndex).GetChild(0).gameObject;
+            Destroy(itemGameObject);
+        }
+        if (itemIndex < 0 || itemIndex >= SlotContainer.transform.childCount)
             return null;
         
         GameObject item = (GameObject)Instantiate(prefabItem);
@@ -864,10 +869,9 @@ public class Inventory : MonoBehaviour
                 ItemsInInventory.RemoveAt(item.indexItemInList);
         }
     }
-
+    //按照位置删除物品
     public void deleteItemByIndex(Int32 index)
     {
-        ItemsInInventory.RemoveAt(index);
         if (SlotContainer.transform.GetChild(index).childCount != 0)
         {
             GameObject itemGameObject = SlotContainer.transform.GetChild(index).GetChild(0).gameObject;
@@ -946,6 +950,18 @@ public class Inventory : MonoBehaviour
         }
         stackableSettings();
         updateItemList();
+    }
+
+    public int getFirstEmptyItemIndex()
+    {
+        for (int i = 0; i < SlotContainer.transform.childCount; i++)
+        {
+            if (SlotContainer.transform.GetChild(i).childCount == 0)
+            {
+                return i;
+            }
+        }
+        return -1;
     }
 
 

@@ -54,15 +54,25 @@ public class ShowTooltip : MonoBehaviour, IPointerDownHandler
 
 
             Vector3[] slotCorners = new Vector3[4];                     //get the corners of the slot
-            GetComponent<RectTransform>().GetWorldCorners(slotCorners); //get the corners of the slot                
+            GetComponent<RectTransform>().GetWorldCorners(slotCorners); //get the corners of the slot   
 
-            Vector2 localPointerPosition;
-            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRectTransform, slotCorners[3], data.pressEventCamera, out localPointerPosition))   // and set the localposition of the tooltip...
+            Vector2 localPointerMinPosition;
+            Vector2 localPointerMaxPosition;
+            if (RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRectTransform, slotCorners[3], data.pressEventCamera, out localPointerMaxPosition) &&
+                RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRectTransform, slotCorners[1], data.pressEventCamera, out localPointerMinPosition))   // and set the localposition of the tooltip...
             {
-                if (transform.parent.parent.parent.GetComponent<Hotbar>() == null)
-                    tooltipRectTransform.localPosition = localPointerPosition;          //at the right bottom side of the slot
-                else
-                    tooltipRectTransform.localPosition = new Vector3(localPointerPosition.x, localPointerPosition.y + tooltip.tooltipHeight);
+                float x = localPointerMaxPosition.x;
+                float y = localPointerMinPosition.y;
+                if (x + tooltipRectTransform.rect.width > canvasRectTransform.rect.xMax)
+                {
+                    x = localPointerMinPosition.x - tooltipRectTransform.rect.width;
+                }
+                if (y - tooltipRectTransform.rect.height < canvasRectTransform.rect.yMin)
+                {
+                    y += canvasRectTransform.rect.yMin - y + tooltipRectTransform.rect.height;
+                }
+                
+                tooltipRectTransform.localPosition = new Vector3(x, y);
             }
 
         }

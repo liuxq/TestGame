@@ -71,13 +71,15 @@ public class UI_Game : MonoBehaviour {
                 sk.updateTimer(Time.deltaTime);//更新一号技能的冷却时间
             }
         }
-
+        //选中对象
         if(Input.GetMouseButton(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 100.0f, 1 << LayerMask.NameToLayer("CanAttack")))
             {
+                UnityEngine.GameObject target = UnityEngine.GameObject.FindGameObjectWithTag("Target");
+                hit.collider.GetComponent<GameEntity>().UI_target = target;
                 string name = hit.collider.GetComponent<GameEntity>().name;
                 Int32 entityId = Utility.getPostInt(name);
 

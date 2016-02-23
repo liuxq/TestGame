@@ -40,7 +40,12 @@ public class Item
     public Item getCopy()
     {
         return (Item)this.MemberwiseClone();        
-    }   
+    }
+    public bool isEquipItem()
+    {
+        return itemType == ItemType.Weapon || itemType == ItemType.Head ||
+                itemType == ItemType.Shoe || itemType == ItemType.Chest;
+    }
     
     
 }

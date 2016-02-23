@@ -16,8 +16,13 @@ public class Tooltip : MonoBehaviour
     
     public Item item;
     private EquipmentSystem eS;
-
+    private Inventory inventory;
     public TooltipType tooltipType;
+
+    public UnityEngine.GameObject btn_equip;
+    public UnityEngine.GameObject btn_unEquip;
+    public UnityEngine.GameObject btn_use;
+    public UnityEngine.GameObject btn_drop;
 
     //GUI
     public float tooltipHeight;
@@ -31,6 +36,11 @@ public class Tooltip : MonoBehaviour
         setVariables();
         deactivateTooltip();
         tooltipHeight = this.GetComponent<RectTransform>().rect.height;
+        //if (UnityEngine.GameObject.FindGameObjectWithTag("EquipmentSystem") != null)
+        if (UnityEngine.GameObject.FindGameObjectWithTag("Player"))
+            eS = UnityEngine.GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>().characterSystem.GetComponent<EquipmentSystem>();
+        if (UnityEngine.GameObject.FindGameObjectWithTag("Player"))
+            inventory = UnityEngine.GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>().inventory.GetComponent<Inventory>();
     }
     public void setVariables()
     {
@@ -42,10 +52,28 @@ public class Tooltip : MonoBehaviour
     public void activateTooltip()               //if you activate the tooltip through hovering over an item
     {
         this.transform.gameObject.SetActive(true);
+        setOperateByType(this.tooltipType);//设置显示的操作按钮
 
         tooltipImageIcon.sprite = item.itemIcon;         //and the itemIcon...
         tooltipNameText.text = item.itemName;            //,itemName...
         tooltipDescText.text = item.itemDesc;            //and itemDesc is getting set        
+    }
+    private void setOperateByType(TooltipType ttype)
+    {
+        btn_equip.SetActive(false);
+        btn_unEquip.SetActive(false);
+        btn_use.SetActive(false);
+        btn_drop.SetActive(false);
+        if (ttype == TooltipType.Inventory)
+        {
+            btn_drop.SetActive(true);
+            if (item.isEquipItem())
+                btn_equip.SetActive(true);
+        }
+        else if (ttype == TooltipType.Equipment)
+        {
+            btn_unEquip.SetActive(true);
+        }
     }
 
     public void deactivateTooltip()             //deactivating the tooltip after you went out of a slot
@@ -63,10 +91,13 @@ public class Tooltip : MonoBehaviour
         if (p != null)
         {
             p.dropRequest(item.itemUUID);
+            deactivateTooltip();
         }
     }
     public void equipItem()
     {
+        if (eS == null)
+            eS = UnityEngine.GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>().characterSystem.GetComponent<EquipmentSystem>();
         //验证是否可以装备
         if (eS != null)
         {
@@ -90,9 +121,26 @@ public class Tooltip : MonoBehaviour
                     if (p != null)
                     {
                         p.equipItemRequest(item.itemIndex, i);
+                        deactivateTooltip();
                     }
                     break;
                 }
+            }
+        }
+    }
+
+    public void unEquipItem()
+    {
+        if (inventory == null)
+            inventory = UnityEngine.GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerInventory>().inventory.GetComponent<Inventory>();
+        int emptyIndex = inventory.getFirstEmptyItemIndex();
+        if (emptyIndex >= 0)
+        {
+            KBEngine.Avatar p = (KBEngine.Avatar)KBEngineApp.app.player();
+            if (p != null)
+            {
+                p.equipItemRequest(emptyIndex, item.itemIndex);
+                deactivateTooltip();
             }
         }
     }
