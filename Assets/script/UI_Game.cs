@@ -10,7 +10,7 @@ public class UI_Game : MonoBehaviour {
     public Scrollbar sb_vertical;
     public Text text_pos;
     public Transform tran_relive;
-    public Text text_error;
+    public UnityEngine.GameObject text_error;
 
     private Text text_content;
 
@@ -64,7 +64,7 @@ public class UI_Game : MonoBehaviour {
         
         if (avatar != null)
         {
-            text_pos.text = "位置：" + avatar.position.x + "," + avatar.position.z;
+            text_pos.text = avatar.position.x.ToString("#.0") + "," + avatar.position.z.ToString("#.0");
             Skill sk = SkillBox.inst.get(1);
             if( sk != null )
             {
@@ -78,15 +78,18 @@ public class UI_Game : MonoBehaviour {
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, 100.0f, 1 << LayerMask.NameToLayer("CanAttack")))
             {
-                UnityEngine.GameObject target = UnityEngine.GameObject.FindGameObjectWithTag("Target");
-                hit.collider.GetComponent<GameEntity>().UI_target = target;
-                string name = hit.collider.GetComponent<GameEntity>().name;
-                Int32 entityId = Utility.getPostInt(name);
+                UI_Target ui_target = World.instance.getUITarget();
+                ui_target.GE_target = hit.collider.GetComponent<GameEntity>();
+                ui_target.UpdateTargetUI();
+                //hit.collider.GetComponent<GameEntity>().UI_target = target;
+                //hit.collider.GetComponent<GameEntity>().UpdateTargetUI();
+                //string name = hit.collider.GetComponent<GameEntity>().name;
+                //Int32 entityId = Utility.getPostInt(name);
 
-                if (avatar != null)
-                {
-                    avatar.useTargetSkill(1, entityId);
-                }
+                //if (avatar != null)
+                //{
+                //    avatar.useTargetSkill(1, entityId);
+                //}
             }
         }
         
@@ -169,14 +172,19 @@ public class UI_Game : MonoBehaviour {
     {
         Camera.main.GetComponent<SmoothFollow>().ResetView();
     }
-    public UnityEngine.GameObject TabSelected()
-    { 
+    public void OnTabSelected()
+    {
+        UI_Target ui_target = World.instance.getUITarget();
+        GameEntity ge = null;
+        if (ui_target != null && ui_target.GE_target != null)
+            ge = ui_target.GE_target;
+
         KBEngine.Entity entity = KBEngineApp.app.player();
         KBEngine.Avatar avatar = null;
         if (entity != null && entity.className == "Avatar")
             avatar = (KBEngine.Avatar)entity;
         if (avatar == null)
-            return null;
+            return;
 
         UnityEngine.GameObject[] objs = UnityEngine.GameObject.FindObjectsOfType<UnityEngine.GameObject>();
         float mindis = 10000;
@@ -186,15 +194,17 @@ public class UI_Game : MonoBehaviour {
             if (obj.layer != LayerMask.NameToLayer("CanAttack") || obj.GetComponent<GameEntity>() == null)
                 continue;
             float dis = Vector3.Distance(avatar.position, obj.transform.position);
-            if (mindis > dis)
+            if (mindis > dis && (ge == null || ge != null && ge != obj.GetComponent<GameEntity>()))
             {
                 mindis = dis;
                 minObj = obj;
             }
         }
-        return minObj;
-
-        
+        if (minObj != null)
+        {
+            ui_target.GE_target = minObj.GetComponent<GameEntity>();
+            ui_target.UpdateTargetUI();
+        }
     }
     public void OnAttackSkill1()
     {
@@ -205,16 +215,24 @@ public class UI_Game : MonoBehaviour {
         if (avatar == null)
             return;
 
-        UnityEngine.GameObject selectedObj = TabSelected();
-        if (selectedObj != null)
+        UI_Target ui_target = World.instance.getUITarget();
+        //UnityEngine.GameObject selectedObj = TabSelected();
+        if (ui_target != null && ui_target.GE_target != null)
         {
-            string name = selectedObj.GetComponent<GameEntity>().name;
+            string name = ui_target.GE_target.name;
             Int32 entityId = Utility.getPostInt(name);
 
             if (avatar != null)
             {
-                avatar.useTargetSkill(1, entityId);
+                if (!avatar.useTargetSkill(1, entityId))
+                {
+                    UI_ErrorHint._instance.errorShow("目标太远");
+                }
             }
+        }
+        else 
+        {
+            UI_ErrorHint._instance.errorShow("未选择目标");
         }
     }
 }

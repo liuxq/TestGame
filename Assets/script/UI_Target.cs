@@ -4,33 +4,25 @@ using UnityEngine.UI;
 
 public class UI_Target : MonoBehaviour {
 
-    public Image imget_hpContent;
+    public Slider slider_hp;
     public Text text_targetName;
     public GameObject GO_targetUI;
+    public GameEntity GE_target;
 
-    private Vector2 hpBar;
-    private float width;
-    private int hp;
-    private int hpmax;
 	// Use this for initialization
 	void Start () {
-        hpBar = new Vector2(imget_hpContent.rectTransform.sizeDelta.x, imget_hpContent.rectTransform.sizeDelta.y);
-        width = imget_hpContent.rectTransform.sizeDelta.x;
 	}
     public void setHPMax(int v)
     {
-        hpmax = v;
-        updateHP();
+        slider_hp.maxValue = v;
     }
     public void setHP(int v)
     {
-        hp = v;
-        updateHP();
+        slider_hp.value = v;
     }
-    private void updateHP()
+    public void setName(string v)
     {
-        hpBar.x = (float)hp / hpmax * width;
-        imget_hpContent.rectTransform.sizeDelta = hpBar;
+        text_targetName.text = v;
     }
     public void deactivate()
     {
@@ -40,5 +32,13 @@ public class UI_Target : MonoBehaviour {
     public void activate()
     {
         GO_targetUI.SetActive(true);
+    }
+
+    public void UpdateTargetUI()
+    {
+        activate();
+        setHP(GE_target.hp);
+        setHPMax(GE_target.hpMax);
+        setName(GE_target.entity_name);
     }
 }

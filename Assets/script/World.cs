@@ -21,6 +21,9 @@ public class World : MonoBehaviour {
     public UnityEngine.GameObject droppedItemPerfab;
 
     private bool isFirstPos = true;
+
+    private UI_Target ui_target = null;
+    private UI_Target ui_targetPlayer = null;
     
     static World()
     {
@@ -40,6 +43,13 @@ public class World : MonoBehaviour {
     }
 	// Use this for initialization
 	void Start () {
+
+        UnityEngine.GameObject target = UnityEngine.GameObject.FindGameObjectWithTag("Target");
+        if (target)
+        {
+            ui_target = target.GetComponent<UI_Target>();
+        }
+
         KBEngine.Event.registerOut("addSpaceGeometryMapping", this, "addSpaceGeometryMapping");
         KBEngine.Event.registerOut("onAvatarEnterWorld", this, "onAvatarEnterWorld");
         KBEngine.Event.registerOut("onEnterWorld", this, "onEnterWorld");
@@ -93,6 +103,19 @@ public class World : MonoBehaviour {
         if (hp != null)
             set_HP(avatar, hp);
 
+        //设置头像属性
+        UnityEngine.GameObject ptarget = UnityEngine.GameObject.FindGameObjectWithTag("TargetPlayer");
+        
+        if (ptarget)
+        {
+            ui_targetPlayer = ptarget.GetComponent<UI_Target>();
+        }
+        if (ui_targetPlayer)
+        {
+            ui_targetPlayer.GE_target = player.GetComponent<GameEntity>();
+            ui_targetPlayer.UpdateTargetUI();
+        }
+        //end
         UnityEngine.GameObject canvas = UnityEngine.GameObject.FindGameObjectWithTag("Canvas");
         UnityEngine.GameObject panel_state = null;
         if (canvas.transform.Find("Panel - State") != null)
@@ -211,6 +234,11 @@ public class World : MonoBehaviour {
         if (entity.renderObj == null)
             return;
 
+        //选择窗口消失
+        GameEntity ge = ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>();
+        if (getUITarget().GE_target == ge)
+            getUITarget().deactivate();
+
         UnityEngine.GameObject.Destroy((UnityEngine.GameObject)entity.renderObj);
         entity.renderObj = null;
     }
@@ -245,11 +273,33 @@ public class World : MonoBehaviour {
         ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().destDirection =
             new Vector3(entity.direction.y, entity.direction.z, entity.direction.x);
     }
+    public UI_Target getUITarget()
+    {
+        if (ui_target == null)
+        {
+            UnityEngine.GameObject target = UnityEngine.GameObject.FindGameObjectWithTag("Target");
+            if (target)
+            {
+                ui_target = target.GetComponent<UI_Target>();
+            }
+        }
+        
+        return ui_target;
+        
+    }
     public void set_HP(KBEngine.Entity entity, object v)
     {
         if (entity.renderObj != null)
         {
-            ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().hp = "" + (Int32)v + "/" + (Int32)entity.getDefinedPropterty("HP_Max");
+            GameEntity ge = ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>();
+            ge.hp = (Int32)v;
+            ge.hpMax = (Int32)entity.getDefinedPropterty("HP_Max");
+
+            if (getUITarget() && getUITarget().GE_target == ge)
+                getUITarget().UpdateTargetUI();
+            else if (ui_targetPlayer && ui_targetPlayer.GE_target == ge)
+                ui_targetPlayer.UpdateTargetUI();
+            
         }
     }
     public void set_state(KBEngine.Entity entity, object v)

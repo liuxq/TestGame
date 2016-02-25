@@ -27,7 +27,8 @@ public class GameEntity : MonoBehaviour
 
     public string entity_name;
 
-    public string hp = "100/100";
+    public Int32 hp = 0;
+    public Int32 hpMax = 0;
 
     float npcHeight = 3.0f;
 
@@ -44,8 +45,6 @@ public class GameEntity : MonoBehaviour
 
     private float last_angleY;
     private Vector3 last_position;
-
-    public UnityEngine.GameObject UI_target;
 
     private int hashHit = Animator.StringToHash("Base Layer.Hit");
     private int hashDead = Animator.StringToHash("Base Layer.Dead");
@@ -64,7 +63,7 @@ public class GameEntity : MonoBehaviour
         animator = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
     }
-
+   
     //void OnGUI()
     //{
     //    if (gameObject.transform.FindChild("rabbit") != null && 
