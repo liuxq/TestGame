@@ -415,6 +415,8 @@ public class World : MonoBehaviour {
 
             UnityEngine.GameObject renderEntity = (UnityEngine.GameObject)attacker.renderObj;
             renderEntity.GetComponent<Animator>().Play("Punch");
+            //显示技能效果
+            sk.displaySkill(attacker, entity);
 
             if (attacker.isPlayer())
             {

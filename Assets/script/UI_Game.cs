@@ -65,11 +65,12 @@ public class UI_Game : MonoBehaviour {
         if (avatar != null)
         {
             text_pos.text = avatar.position.x.ToString("#.0") + "," + avatar.position.z.ToString("#.0");
-            Skill sk = SkillBox.inst.get(1);
-            if( sk != null )
+            
+            foreach (Skill sk in SkillBox.inst.skills)
             {
-                sk.updateTimer(Time.deltaTime);//更新一号技能的冷却时间
+                sk.updateTimer(Time.deltaTime);//更新技能的冷却时间
             }
+            
         }
         //选中对象
         if(Input.GetMouseButton(0))
@@ -206,9 +207,9 @@ public class UI_Game : MonoBehaviour {
             ui_target.UpdateTargetUI();
         }
     }
-    public void OnAttackSkill1()
-    {
-        KBEngine.Entity entity = KBEngineApp.app.player();
+    void AttackSkill(int skillId)
+    { 
+           KBEngine.Entity entity = KBEngineApp.app.player();
         KBEngine.Avatar avatar = null;
         if (entity != null && entity.className == "Avatar")
             avatar = (KBEngine.Avatar)entity;
@@ -224,7 +225,7 @@ public class UI_Game : MonoBehaviour {
 
             if (avatar != null)
             {
-                if (!avatar.useTargetSkill(1, entityId))
+                if (!avatar.useTargetSkill(skillId, entityId))
                 {
                     UI_ErrorHint._instance.errorShow("目标太远");
                 }
@@ -234,5 +235,18 @@ public class UI_Game : MonoBehaviour {
         {
             UI_ErrorHint._instance.errorShow("未选择目标");
         }
+     
+    }
+    public void OnAttackSkill1()
+    {
+        AttackSkill(1);
+    }
+    public void OnAttackSkill2()
+    {
+        AttackSkill(2);
+    }
+    public void OnAttackSkill3()
+    {
+        AttackSkill(3);
     }
 }
