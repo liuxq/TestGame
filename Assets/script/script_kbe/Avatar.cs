@@ -96,6 +96,7 @@
             {
                 case 1:
                     skill.canUseDistMax = 50f;
+                    skill.skillEffect = "snow";
                     break;
                 case 1000101:
                     skill.canUseDistMax = 20f;

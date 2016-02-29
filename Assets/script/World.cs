@@ -36,6 +36,8 @@ public class World : MonoBehaviour {
         instance.avatarPerfab = (UnityEngine.GameObject)Resources.Load("player");
         instance.snowBallPerfab = (UnityEngine.GameObject)Resources.Load("snowBall");
         instance.droppedItemPerfab = (UnityEngine.GameObject)Resources.Load("droppedItem");
+
+        
     }
     //激活单例
     public void init()
@@ -163,6 +165,8 @@ public class World : MonoBehaviour {
         object equipWeapon = avatar.getDefinedPropterty("equipWeapon");
         if (equipWeapon != null)
             set_equipWeapon(avatar, (Int32)equipWeapon);
+
+        SkillBox.inst.initSkillDisplay();
 
     }
 
@@ -408,18 +412,13 @@ public class World : MonoBehaviour {
         if (sk != null)
         {
             Vector3 dir = entity.position - attacker.position;
-            object renderObj = Instantiate(snowBallPerfab, new Vector3(attacker.position.x, 2.0f, attacker.position.z),
-            Quaternion.LookRotation(dir)) as UnityEngine.GameObject;
-            sk.cast(renderObj, Vector3.Distance(entity.position, attacker.position));
 
             UnityEngine.GameObject renderEntity = (UnityEngine.GameObject)attacker.renderObj;
             renderEntity.GetComponent<Animator>().Play("Punch");
 
             if (attacker.isPlayer())
             {
-                
                 renderEntity.transform.LookAt(new Vector3(renderEntity.transform.position.x + dir.x, renderEntity.transform.position.y, renderEntity.transform.position.z + dir.z));
-                
             }
         }
     }
