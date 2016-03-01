@@ -100,11 +100,11 @@
                     break;
                 case 2:
                     skill.canUseDistMax = 50f;
-                    skill.skillEffect = "skill1";
+                    skill.skillEffect = "skill2";
                     break;
                 case 3:
                     skill.canUseDistMax = 50f;
-                    skill.skillEffect = "skill1";
+                    skill.skillEffect = "skill3";
                     break;
                 case 3000101:
                     skill.canUseDistMax = 20f;
