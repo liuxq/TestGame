@@ -56,12 +56,16 @@ public class ItemProcess : MonoBehaviour {
         Int32 equipItemIndex = (Int32)equipItemInfo["itemIndex"];
         UInt64 itemUUid = (UInt64)itemInfo["UUID"];
         UInt64 equipItemUUid = (UInt64)equipItemInfo["UUID"];
-        itemInventory.deleteItemByIndex(itemIndex);
-        equipInventory.deleteItemByIndex(equipItemIndex);
+
         if (itemUUid > 0)
             itemInventory.addItemToInventory((Int32)itemInfo["itemId"], (UInt64)itemInfo["UUID"], 1, (Int32)itemInfo["itemIndex"]);
+        else
+            itemInventory.deleteItemByIndex(itemIndex);
+
         if (equipItemUUid > 0)
             equipInventory.addItemToInventory((Int32)equipItemInfo["itemId"], (UInt64)equipItemInfo["UUID"], 1, (Int32)equipItemInfo["itemIndex"]);
+        else
+            equipInventory.deleteItemByIndex(equipItemIndex);
         
         itemInventory.updateItemList();
         itemInventory.stackableSettings();
