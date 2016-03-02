@@ -663,15 +663,15 @@ public class Inventory : MonoBehaviour
     }
     public GameObject addItemToInventory(int itemId, UInt64 itemUUID, int value, int itemIndex)
     {
-        if (SlotContainer.transform.GetChild(itemIndex).childCount != 0)
-        {
-            GameObject itemGameObject = SlotContainer.transform.GetChild(itemIndex).GetChild(0).gameObject;
-            Destroy(itemGameObject);
-        }
+        
         if (itemIndex < 0 || itemIndex >= SlotContainer.transform.childCount)
             return null;
-        
-        GameObject item = (GameObject)Instantiate(prefabItem);
+
+        GameObject item = null;
+        if (SlotContainer.transform.GetChild(itemIndex).childCount != 0)
+            item = SlotContainer.transform.GetChild(itemIndex).GetChild(0).gameObject;
+        else
+            item = (GameObject)Instantiate(prefabItem);
         ItemOnObject itemOnObject = item.GetComponent<ItemOnObject>();
         itemOnObject.item = itemDatabase.getItemByID(itemId);
         itemOnObject.item.itemUUID = itemUUID;

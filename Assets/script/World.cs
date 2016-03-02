@@ -443,7 +443,8 @@ public class World : MonoBehaviour {
                 Int32 id = (Int32)info["itemId"];
                 UInt64 uid = (UInt64)info["UUID"];
                 Int32 index = (Int32)info["itemIndex"];
-                _inventory.addItemToInventory(id, uid, 1, index);
+                UInt32 count = (UInt32)info["itemCount"];
+                _inventory.addItemToInventory(id, uid, (int)count, index);
                 _inventory.updateItemList();
                 _inventory.stackableSettings();
             }
@@ -456,10 +457,6 @@ public class World : MonoBehaviour {
                 Int32 id = (Int32)info["itemId"];
                 UInt64 uid = (UInt64)info["UUID"];
                 Int32 index = (Int32)info["itemIndex"];
-                if (index == 0)//如果是武器的话，做显示
-                { 
-                    
-                }
                 _equipInventory.addItemToInventory(id, uid, 1, index);
                 _equipInventory.updateItemList();
                 _equipInventory.stackableSettings();

@@ -13,7 +13,7 @@ public class ItemOnObject : MonoBehaviour                   //Saves the Item in 
     {
         text.text = "" + item.itemValue;                     //sets the itemValue         
         image.sprite = item.itemIcon;
-        GetComponent<ConsumeItem>().item = item;
+        //GetComponent<ConsumeItem>().item = item;
     }
 
     void Start()

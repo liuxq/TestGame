@@ -46,7 +46,10 @@ public class Item
         return itemType == ItemType.Weapon || itemType == ItemType.Head ||
                 itemType == ItemType.Shoe || itemType == ItemType.Chest;
     }
-    
+    public bool isConsumeItem()
+    {
+        return itemType == ItemType.Consumable;
+    }
     
 }
 

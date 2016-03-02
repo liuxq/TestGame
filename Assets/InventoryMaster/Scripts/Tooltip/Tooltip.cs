@@ -69,6 +69,8 @@ public class Tooltip : MonoBehaviour
             btn_drop.SetActive(true);
             if (item.isEquipItem())
                 btn_equip.SetActive(true);
+            if (item.isConsumeItem())
+                btn_use.SetActive(true);
         }
         else if (ttype == TooltipType.Equipment)
         {
@@ -143,6 +145,18 @@ public class Tooltip : MonoBehaviour
                 deactivateTooltip();
             }
         }
+    }
+
+    public void useItem()
+    {
+
+            KBEngine.Avatar p = (KBEngine.Avatar)KBEngineApp.app.player();
+            if (p != null)
+            {
+                p.useItemRequest(item.itemIndex);
+                deactivateTooltip();
+            }
+        
     }
 
 }

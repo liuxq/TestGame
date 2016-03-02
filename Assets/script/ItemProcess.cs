@@ -44,7 +44,7 @@ public class ItemProcess : MonoBehaviour {
             itemInventory = this.transform.GetComponent<PlayerInventory>().inventory.GetComponent<Inventory>();
         if (itemInventory != null)
         {
-            itemInventory.addItemToInventory((Int32)itemInfo["itemId"], (UInt64)itemInfo["UUID"], 1, (Int32)itemInfo["itemIndex"]);
+            itemInventory.addItemToInventory((Int32)itemInfo["itemId"], (UInt64)itemInfo["UUID"], (int)(UInt32)itemInfo["itemCount"], (Int32)itemInfo["itemIndex"]);
             itemInventory.updateItemList();
             itemInventory.stackableSettings();
         }

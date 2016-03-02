@@ -159,6 +159,10 @@
         {
             baseCall("equipItemRequest", new object[] { itemIndex, equipIndex });
         }
+        public void useItemRequest(Int32 itemIndex)
+        {
+            baseCall("useItemRequest", new object[] { itemIndex });
+        }
 
         //OWN_CLIENT
         public virtual void set_attack_Max(object old)
@@ -218,7 +222,7 @@
         public void pickUp_re(Dictionary<string, object> itemInfo)
         {
             Event.fireOut("pickUp_re", new object[] { itemInfo });
-            itemDict.Add((UInt64)itemInfo["UUID"], itemInfo);
+            itemDict[(UInt64)itemInfo["UUID"]] = itemInfo;
         }
         public void equipItemRequest_re(Dictionary<string, object> itemInfo, Dictionary<string, object> equipItemInfo)
         {
