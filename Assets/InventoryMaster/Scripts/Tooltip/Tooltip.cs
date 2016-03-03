@@ -23,13 +23,15 @@ public class Tooltip : MonoBehaviour
     public UnityEngine.GameObject btn_unEquip;
     public UnityEngine.GameObject btn_use;
     public UnityEngine.GameObject btn_drop;
+    public UnityEngine.GameObject btn_hotBar;
 
     //GUI
     public float tooltipHeight;
 
     private Image tooltipImageIcon;
     private Text tooltipNameText;
-    private Text tooltipDescText;    
+    private Text tooltipDescText;
+    private Text tooltipAttrText;  
 
     void Start()
     {
@@ -47,6 +49,7 @@ public class Tooltip : MonoBehaviour
         tooltipImageIcon = transform.GetChild(1).GetComponent<Image>();
         tooltipNameText = transform.GetChild(2).GetComponent<Text>();
         tooltipDescText = transform.GetChild(3).GetComponent<Text>();
+        tooltipAttrText = transform.GetChild(4).GetComponent<Text>();
     }
 
     public void activateTooltip()               //if you activate the tooltip through hovering over an item
@@ -56,7 +59,13 @@ public class Tooltip : MonoBehaviour
 
         tooltipImageIcon.sprite = item.itemIcon;         //and the itemIcon...
         tooltipNameText.text = item.itemName;            //,itemName...
-        tooltipDescText.text = item.itemDesc;            //and itemDesc is getting set        
+        tooltipDescText.text = item.itemDesc;            //and itemDesc is getting set
+
+        tooltipAttrText.text = "";
+        foreach(ItemAttribute attr in item.itemAttributes)
+        {
+            tooltipAttrText.text += attr.attributeName + ": " + attr.attributeValue + "\n";
+        }
     }
     private void setOperateByType(TooltipType ttype)
     {
@@ -64,13 +73,17 @@ public class Tooltip : MonoBehaviour
         btn_unEquip.SetActive(false);
         btn_use.SetActive(false);
         btn_drop.SetActive(false);
+        btn_hotBar.SetActive(false);
         if (ttype == TooltipType.Inventory)
         {
             btn_drop.SetActive(true);
             if (item.isEquipItem())
                 btn_equip.SetActive(true);
             if (item.isConsumeItem())
+            {
                 btn_use.SetActive(true);
+                btn_hotBar.SetActive(true);
+            }
         }
         else if (ttype == TooltipType.Equipment)
         {
@@ -82,7 +95,7 @@ public class Tooltip : MonoBehaviour
     {
         this.transform.gameObject.SetActive(false);
     }
-    public void equipTooltip()             //deactivating the tooltip after you went out of a slot
+    public void equipTooltip()
     {
         
     }
@@ -149,14 +162,17 @@ public class Tooltip : MonoBehaviour
 
     public void useItem()
     {
+        KBEngine.Avatar p = (KBEngine.Avatar)KBEngineApp.app.player();
+        if (p != null)
+        {
+            p.useItemRequest(item.itemIndex);
+            deactivateTooltip();
+        }
+    }
 
-            KBEngine.Avatar p = (KBEngine.Avatar)KBEngineApp.app.player();
-            if (p != null)
-            {
-                p.useItemRequest(item.itemIndex);
-                deactivateTooltip();
-            }
-        
+    public void hotBarItem()
+    {
+        HotBarProcess._instance.upItem(item.itemID);
     }
 
 }

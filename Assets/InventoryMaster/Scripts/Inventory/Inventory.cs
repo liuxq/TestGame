@@ -848,6 +848,24 @@ public class Inventory : MonoBehaviour
         }
         return null;
     }
+    public GameObject getItemGameObject(int itemId)
+    {
+        int itemIndex = -1;
+        foreach(Item item in ItemsInInventory)
+        {
+            if (item.itemID == itemId)
+            {
+                itemIndex = item.itemIndex;
+                break;
+            }
+        }
+        if (itemIndex != -1 && SlotContainer.transform.GetChild(itemIndex).childCount != 0)
+        {
+            return SlotContainer.transform.GetChild(itemIndex).GetChild(0).gameObject;
+        }
+        else
+            return null;
+    }
 
 
 
