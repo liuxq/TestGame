@@ -54,7 +54,7 @@ public class HotBarProcess : MonoBehaviour, IPointerDownHandler
         text.rectTransform.localPosition = itemobject.transform.GetChild(1).GetComponent<Text>().transform.localPosition;
         text.enabled = true;
         text.text = itemobject.transform.GetChild(1).GetComponent<Text>().text;
-        image_cool.sprite = itemobject.transform.GetChild(2).GetComponent<Image>().sprite;
+        image_cool.fillAmount = itemobject.transform.GetChild(2).GetComponent<Image>().fillAmount;
     }
     //放到快捷栏
     public void upItem(int itemId)
@@ -72,6 +72,7 @@ public class HotBarProcess : MonoBehaviour, IPointerDownHandler
             if (p != null)
             {
                 p.useItemRequest(itemobject.GetComponent<ItemOnObject>().item.itemIndex);
+                
             }
         }
     }

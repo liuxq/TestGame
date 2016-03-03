@@ -161,7 +161,15 @@
         }
         public void useItemRequest(Int32 itemIndex)
         {
-            baseCall("useItemRequest", new object[] { itemIndex });
+            if (!ConsumeLimitCD.instance.isWaiting())
+            {
+                baseCall("useItemRequest", new object[] { itemIndex });
+                ConsumeLimitCD.instance.Start(2);
+            }
+            else
+            {
+                UI_ErrorHint._instance.errorShow("物品使用冷却中");
+            }
         }
 
         //OWN_CLIENT

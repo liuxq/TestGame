@@ -93,6 +93,9 @@ public class UI_Game : MonoBehaviour {
                 //}
             }
         }
+
+        //更新消耗品计时器
+        ConsumeLimitCD.instance.Update(Time.deltaTime);
         
 	}
     public void ReceiveChatMessage(string msg)
@@ -192,7 +195,7 @@ public class UI_Game : MonoBehaviour {
         UnityEngine.GameObject minObj = null;
         foreach (UnityEngine.GameObject obj in objs)
         {
-            if (obj.layer != LayerMask.NameToLayer("CanAttack") || obj.GetComponent<GameEntity>() == null)
+            if (obj.layer != LayerMask.NameToLayer("CanAttack") || obj.GetComponent<GameEntity>() == null || obj.GetComponent<GameEntity>().hp == 0)
                 continue;
             float dis = Vector3.Distance(avatar.position, obj.transform.position);
             if (mindis > dis && (ge == null || ge != null && ge != obj.GetComponent<GameEntity>()))

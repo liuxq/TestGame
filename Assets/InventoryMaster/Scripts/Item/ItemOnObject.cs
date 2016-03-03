@@ -15,6 +15,14 @@ public class ItemOnObject : MonoBehaviour                   //Saves the Item in 
         text.text = "" + item.itemValue;                     //sets the itemValue         
         image_icon.sprite = item.itemIcon;
         //GetComponent<ConsumeItem>().item = item;
+
+        if (ConsumeLimitCD.instance.isWaiting())
+        {
+            image_cool.fillAmount = ConsumeLimitCD.instance.restTime / ConsumeLimitCD.instance.totalTime;
+        }
+        else {
+            image_cool.fillAmount = 0;
+        }
     }
 
     void Start()
