@@ -267,11 +267,14 @@ public class World : MonoBehaviour {
         ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().destPosition = v;
         ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().position = v;
 
-        if (isFirstPos && entity.isPlayer())//第一次主角获取位置时，调整摄像头
+        if (entity.isPlayer())//第一次主角获取位置时，调整摄像头
         {
             Camera.main.GetComponent<SmoothFollow>().FollowUpdate();
-            Camera.main.GetComponent<SmoothFollow>().ResetView();
-            isFirstPos = false;
+            if (isFirstPos)
+            {
+                Camera.main.GetComponent<SmoothFollow>().ResetView();
+                isFirstPos = false;
+            }
         }
     }
     public void set_direction(KBEngine.Entity entity)

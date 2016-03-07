@@ -29,16 +29,19 @@ public class DialogProcess : MonoBehaviour
             UInt32 dialogId = (UInt32)dialogIds[i];
             actions.Add(() => avatar.dialog(talkerId, dialogId));
         }
-        MenuBox.Show
-        (
-            titles,
-            actions,
-            title + "\n" + sayname + ": " + body
-        );
+        if (titles.Count > 0)
+        {
+            MenuBox.Show
+            (
+                titles,
+                actions,
+                sayname + ": " + body
+            );
+        }
     }
 
     public void dialog_close()
     {
-        MenuBox.Destroy();
+        //MenuBox.Destroy();
     }
 }

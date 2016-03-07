@@ -87,7 +87,7 @@ public class UI_Game : MonoBehaviour
                 ui_target.UpdateTargetUI();
 
                 string name = Utility.getPreString(ui_target.GE_target.name);
-                if (name == "NPC")
+                if (name == "NPC" && !MenuBox.hasMenu())
                 {
                     Int32 id = Utility.getPostInt(ui_target.GE_target.name);
                     NPC _npc = (NPC)KBEngineApp.app.findEntity(id);

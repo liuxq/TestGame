@@ -14,6 +14,10 @@ public class MenuBox : ModalBox
     [Tooltip("Set this to the name of the prefab that should be loaded when a menu box is shown.")]
     public static string PrefabResourceName = "Menu Box";
 
+    public static bool hasMenu()
+    {
+        return GameObject.Find("Menu Box(Clone)") != null;
+    }
     /// <summary>
     /// Display a menu box.
     /// </summary>
