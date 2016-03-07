@@ -54,7 +54,14 @@ public class HotBarProcess : MonoBehaviour, IPointerDownHandler
         text.rectTransform.localPosition = itemobject.transform.GetChild(1).GetComponent<Text>().transform.localPosition;
         text.enabled = true;
         text.text = itemobject.transform.GetChild(1).GetComponent<Text>().text;
-        image_cool.fillAmount = itemobject.transform.GetChild(2).GetComponent<Image>().fillAmount;
+        if (ConsumeLimitCD.instance.isWaiting())
+        {
+            image_cool.fillAmount = ConsumeLimitCD.instance.restTime / ConsumeLimitCD.instance.totalTime;
+        }
+        else
+        {
+            image_cool.fillAmount = 0;
+        }
     }
     //放到快捷栏
     public void upItem(int itemId)
