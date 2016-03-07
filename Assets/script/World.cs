@@ -201,6 +201,11 @@ public class World : MonoBehaviour {
             entity.renderObj = Instantiate(otherPlayerPerfab, new Vector3(entity.position.x, y, entity.position.z),
             Quaternion.Euler(new Vector3(entity.direction.y, entity.direction.z, entity.direction.x))) as UnityEngine.GameObject;
         }
+        else if (entity.className == "NPC")
+        {
+            entity.renderObj = Instantiate(otherPlayerPerfab, new Vector3(entity.position.x, y, entity.position.z),
+            Quaternion.Euler(new Vector3(entity.direction.y, entity.direction.z, entity.direction.x))) as UnityEngine.GameObject;
+        }
 
         ((UnityEngine.GameObject)entity.renderObj).name = entity.className + "_" + entity.id;
 
@@ -478,4 +483,5 @@ public class World : MonoBehaviour {
             ((UnityEngine.GameObject)dst.renderObj).GetComponent<EquipWeapon>().equipWeapon(itemId);
         }
     }
+
 }

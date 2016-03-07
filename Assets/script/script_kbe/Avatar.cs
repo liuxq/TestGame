@@ -219,6 +219,12 @@
             Event.fireOut("set_level", new object[] { v });
         }
 
+        //dialog
+        public void dialog(Int32 targetID, UInt32 dialogID)
+        {
+            cellCall("dialog", new object[] { targetID, dialogID });
+        }
+
         //-----------------------response-------------------------
         public void dropItem_re(Int32 itemId, UInt64 itemUUId)
         {
@@ -287,6 +293,16 @@
         {
             object v = getDefinedPropterty("equipWeapon");
             Event.fireOut("set_equipWeapon", new object[] { this,(Int32)v });
+        }
+
+        //dialog
+        public void dialog_setContent(Int32 talkerId, List<object> dialogs, List<object> dialogsTitles, string title, string body, string sayname)
+        {
+            Event.fireOut("dialog_setContent", new object[] { talkerId, dialogs, dialogsTitles, title, body, sayname });
+        }
+        public void dialog_close()
+        {
+            Event.fireOut("dialog_close");
         }
     }
 }

@@ -3,8 +3,11 @@ using System.Collections;
 using KBEngine;
 using UnityEngine.UI;
 using System;
+using UnityEngine.EventSystems;
+using UnityEngine.Events;
 
-public class UI_Game : MonoBehaviour {
+public class UI_Game : MonoBehaviour
+{
     public InputField input_content;
     public Transform tran_text;
     public Scrollbar sb_vertical;
@@ -71,9 +74,9 @@ public class UI_Game : MonoBehaviour {
                 sk.updateTimer(Time.deltaTime);//更新技能的冷却时间
             }
             
+            
         }
-        //选中对象
-        if(Input.GetMouseButton(0))
+        if (Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -82,22 +85,26 @@ public class UI_Game : MonoBehaviour {
                 UI_Target ui_target = World.instance.getUITarget();
                 ui_target.GE_target = hit.collider.GetComponent<GameEntity>();
                 ui_target.UpdateTargetUI();
-                //hit.collider.GetComponent<GameEntity>().UI_target = target;
-                //hit.collider.GetComponent<GameEntity>().UpdateTargetUI();
-                //string name = hit.collider.GetComponent<GameEntity>().name;
-                //Int32 entityId = Utility.getPostInt(name);
 
-                //if (avatar != null)
-                //{
-                //    avatar.useTargetSkill(1, entityId);
-                //}
+                string name = Utility.getPreString(ui_target.GE_target.name);
+                if (name == "NPC")
+                {
+                    Int32 id = Utility.getPostInt(ui_target.GE_target.name);
+                    NPC _npc = (NPC)KBEngineApp.app.findEntity(id);
+
+                    if (_npc != null)
+                    {
+                        UInt32 dialogID = (UInt32)_npc.getDefinedPropterty("dialogID");
+                        avatar.dialog(id, dialogID);
+                    }
+                }
             }
         }
-
         //更新消耗品计时器
         ConsumeLimitCD.instance.Update(Time.deltaTime);
         
 	}
+
     public void ReceiveChatMessage(string msg)
     {
         if (text_content.text.Length > 0)
@@ -212,7 +219,7 @@ public class UI_Game : MonoBehaviour {
     }
     void AttackSkill(int skillId)
     { 
-           KBEngine.Entity entity = KBEngineApp.app.player();
+        KBEngine.Entity entity = KBEngineApp.app.player();
         KBEngine.Avatar avatar = null;
         if (entity != null && entity.className == "Avatar")
             avatar = (KBEngine.Avatar)entity;

@@ -9,5 +9,9 @@ class Utility
     {
         return Int32.Parse(name.Substring(name.IndexOf('_')+1));
     }
+    static public string getPreString(string name)
+    {
+        return name.Substring(0,name.IndexOf('_'));
+    }
 }
 
