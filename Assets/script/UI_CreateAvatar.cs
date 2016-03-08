@@ -8,7 +8,6 @@ using System.Collections.Generic;
 public class UI_CreateAvatar : MonoBehaviour {
     public InputField if_createAvatarName;
     public Dropdown dd_createAvatarType;
-    public Button bt_createAvatar;
 	// Use this for initialization
 	void Start () {
         KBEngine.Event.registerOut("onCreateAvatarResult", this, "onCreateAvatarResult");

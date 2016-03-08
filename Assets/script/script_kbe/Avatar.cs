@@ -67,21 +67,22 @@
         }
 
         //技能
-        public bool useTargetSkill(Int32 skillID, Int32 targetID)
+        public int useTargetSkill(Int32 skillID, Int32 targetID)
         {
             Skill skill = SkillBox.inst.get(skillID);
             if (skill == null)
-                return false;
+                return 4;
 
             SCEntityObject scobject = new SCEntityObject(targetID);
-            if (skill.validCast(this, scobject))
+            int errorCode = skill.validCast(this, scobject);
+            if (errorCode == 0)
             {
                 skill.use(this, scobject);
-                return true;
+                return errorCode;
             }
 
             //Dbg.DEBUG_MSG(className + "::useTargetSkill: skillID=" + skillID + ", targetID=" + targetID + ". is failed!");
-            return false;
+            return errorCode;
         }
 
         public virtual void onAddSkill(Int32 skillID)
@@ -95,34 +96,55 @@
             switch (skillID)
             {
                 case 1:
-                    skill.canUseDistMax = 50f;
+                    skill.displayType = Skill_DisplayType.SkillDisplay_Event_Bullet;
+                    skill.canUseDistMax = 30f;
                     skill.skillEffect = "skill1";
+                    skill.name = "魔法球";
                     break;
                 case 2:
-                    skill.canUseDistMax = 50f;
+                    skill.displayType = Skill_DisplayType.SkillDisplay_Event_Bullet;
+                    skill.canUseDistMax = 30f;
                     skill.skillEffect = "skill2";
+                    skill.name = "火球";
                     break;
                 case 3:
-                    skill.canUseDistMax = 50f;
+                    skill.displayType = Skill_DisplayType.SkillDisplay_Event_Bullet;
+                    skill.canUseDistMax = 20f;
                     skill.skillEffect = "skill3";
+                    skill.name = "治疗";
                     break;
-                case 3000101:
-                    skill.canUseDistMax = 20f;
+                case 4:
+                    skill.displayType = Skill_DisplayType.SkillDisplay_Event_Effect;
+                    skill.canUseDistMax = 5f;
+                    skill.skillEffect = "skill4";
+                    skill.name = "斩击";
                     break;
-                case 4000101:
-                    skill.canUseDistMax = 20f;
+                case 5:
+                    skill.displayType = Skill_DisplayType.SkillDisplay_Event_Effect;
+                    skill.canUseDistMax = 5f;
+                    skill.skillEffect = "skill5";
+                    skill.name = "挥击";
                     break;
-                case 5000101:
-                    skill.canUseDistMax = 20f;
+                case 6:
+                    skill.displayType = Skill_DisplayType.SkillDisplay_Event_Effect;
+                    skill.canUseDistMax = 5f;
+                    skill.skillEffect = "skill6";
+                    skill.name = "吸血";
                     break;
                 case 6000101:
                     skill.canUseDistMax = 20f;
+                    skill.skillEffect = "skill3";
                     break;
                 default:
                     break;
             };
 
             SkillBox.inst.add(skill);
+
+            if (SkillBox.inst.skills.Count == 3)
+            {
+                Event.fireOut("setSkillButton");
+            }
         }
 
         public virtual void onRemoveSkill(Int32 skillID)
@@ -217,6 +239,11 @@
         {
             object v = getDefinedPropterty("level");
             Event.fireOut("set_level", new object[] { v });
+        }
+        public virtual void set_money(object old)
+        {
+            object v = getDefinedPropterty("money");
+            Event.fireOut("set_money", new object[] { v });
         }
 
         //dialog

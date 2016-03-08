@@ -65,6 +65,7 @@ public class World : MonoBehaviour {
         KBEngine.Event.registerOut("recvDamage", this, "recvDamage");
         KBEngine.Event.registerOut("onReqItemList", this, "onReqItemList");
         KBEngine.Event.registerOut("set_equipWeapon", this, "set_equipWeapon");
+        KBEngine.Event.registerOut("setSkillButton", this, "setSkillButton");
 	}
     void OnDestroy()
     {
@@ -486,5 +487,10 @@ public class World : MonoBehaviour {
             ((UnityEngine.GameObject)dst.renderObj).GetComponent<EquipWeapon>().equipWeapon(itemId);
         }
     }
-
+    public void setSkillButton()
+    {
+        UI_MainUI.inst.setSkill1(SkillBox.inst.skills[0].name);
+        UI_MainUI.inst.setSkill2(SkillBox.inst.skills[1].name);
+        UI_MainUI.inst.setSkill3(SkillBox.inst.skills[2].name);
+    }
 }

@@ -217,7 +217,7 @@ public class UI_Game : MonoBehaviour
             ui_target.UpdateTargetUI();
         }
     }
-    void AttackSkill(int skillId)
+    public void AttackSkill(int skillId)
     { 
         KBEngine.Entity entity = KBEngineApp.app.player();
         KBEngine.Avatar avatar = null;
@@ -227,7 +227,6 @@ public class UI_Game : MonoBehaviour
             return;
 
         UI_Target ui_target = World.instance.getUITarget();
-        //UnityEngine.GameObject selectedObj = TabSelected();
         if (ui_target != null && ui_target.GE_target != null)
         {
             string name = ui_target.GE_target.name;
@@ -235,28 +234,48 @@ public class UI_Game : MonoBehaviour
 
             if (avatar != null)
             {
-                if (!avatar.useTargetSkill(skillId, entityId))
+                int errorCode = avatar.useTargetSkill(skillId, entityId);
+                if (errorCode == 1)
                 {
                     UI_ErrorHint._instance.errorShow("目标太远");
+                    //逼近目标
+                    UnityEngine.GameObject renderEntity = (UnityEngine.GameObject)entity.renderObj;
+                    renderEntity.GetComponent<MoveController>().moveTo(ui_target.GE_target.transform, SkillBox.inst.get(skillId).canUseDistMax-1, skillId);
+                }
+                if (errorCode == 2)
+                {
+                    UI_ErrorHint._instance.errorShow("技能冷却");
+                }
+                if (errorCode == 3)
+                {
+                    UI_ErrorHint._instance.errorShow("目标已死亡");
                 }
             }
         }
         else 
         {
-            UI_ErrorHint._instance.errorShow("未选择目标");
+            if (skillId == 3)//治疗自己
+            {
+                if (avatar != null)
+                {
+                    int errorCode = avatar.useTargetSkill(skillId, avatar.id);
+                }
+            }
+            else
+                UI_ErrorHint._instance.errorShow("未选择目标");
         }
      
     }
     public void OnAttackSkill1()
     {
-        AttackSkill(1);
+        AttackSkill(SkillBox.inst.skills[0].id);
     }
     public void OnAttackSkill2()
     {
-        AttackSkill(2);
+        AttackSkill(SkillBox.inst.skills[1].id);
     }
     public void OnAttackSkill3()
     {
-        AttackSkill(3);
+        AttackSkill(SkillBox.inst.skills[2].id);
     }
 }

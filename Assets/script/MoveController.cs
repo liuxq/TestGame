@@ -6,10 +6,18 @@ public class MoveController : MonoBehaviour {
     private Animator animator;
     private SmoothFollow sf;
 
+    private Transform moveDes;
+    private bool hasDes = false;
+    private float minLen = 0f;
+    private int skillId = 1;
+    private UnityEngine.GameObject UIGame;
     void Start()
     {
         animator = GetComponent<Animator>();
         sf = Camera.main.GetComponent<SmoothFollow>();
+        hasDes = false;
+
+        UIGame = UnityEngine.GameObject.FindGameObjectWithTag("UIGame");
     }
 
     void OnEnable()
@@ -46,6 +54,7 @@ public class MoveController : MonoBehaviour {
     }
     void OnJoystickMove(MovingJoystick move)
     {
+        hasDes = false;
         float joyPositionX = move.joystickAxis.x;
         float joyPositionY = move.joystickAxis.y;
 
@@ -86,5 +95,36 @@ public class MoveController : MonoBehaviour {
                
         //    }
         //}
+    }
+    void Update()
+    {
+        if (hasDes)
+        {
+            if (Vector3.Distance(transform.position, moveDes.position) < minLen)
+            {
+                hasDes = false;
+                animator.speed = 1.0f;
+                animator.SetFloat("Speed", 0.0f);
+                UIGame.GetComponent<UI_Game>().AttackSkill(skillId);
+            }
+            else
+            {
+                transform.LookAt(moveDes);
+                transform.Translate(Vector3.forward * Time.deltaTime * 5);
+                //移动摄像机
+                sf.FollowUpdate();
+                //播放奔跑动画
+                animator.speed = 2.0f;
+                animator.SetFloat("Speed", 1.0f);
+            }
+        }
+    }
+    //移动，直到操作或者到达指定距离，然后释放技能
+    public void moveTo(Transform des, float minLen, int skillId)
+    {
+        hasDes = true;
+        moveDes = des;
+        this.minLen = minLen;
+        this.skillId = skillId;
     }
 }

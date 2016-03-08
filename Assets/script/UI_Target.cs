@@ -1,8 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class UI_Target : MonoBehaviour {
+public class UI_Target : MonoBehaviour, IPointerDownHandler
+{
     public bool bShowDetail = false;
     public Slider slider_hp;
     public Text text_targetName;
@@ -46,5 +48,15 @@ public class UI_Target : MonoBehaviour {
         setHP(GE_target.hp);
         setHPMax(GE_target.hpMax);
         setName(GE_target.entity_name);
+    }
+
+    //点击使用
+    public void OnPointerDown(PointerEventData data)
+    {
+        if (bShowDetail)//点击主角自己，选择
+        {
+            World.instance.getUITarget().GE_target = null;
+            World.instance.getUITarget().deactivate();
+        }
     }
 }

@@ -7,7 +7,6 @@ using System;
 public class UI_LoginSystem : MonoBehaviour {
     public InputField if_userName;
     public InputField if_passWord;
-    public Button bt_login;
     public Text text_status;
 
 	// Use this for initialization

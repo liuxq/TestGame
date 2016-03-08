@@ -16,6 +16,7 @@ public class UI_AvatarState : MonoBehaviour
     public Text text_dexterity;
     public Text text_exp;
     public Text text_level;
+    public Text text_money;
 
     private int attack_max;
     private int attack_min;
@@ -32,6 +33,9 @@ public class UI_AvatarState : MonoBehaviour
         KBEngine.Event.registerOut("set_dexterity", this, "setDexterity");
         KBEngine.Event.registerOut("set_exp", this, "setExp");
         KBEngine.Event.registerOut("set_level", this, "setLevel");
+        KBEngine.Event.registerOut("set_money", this, "setMoney");
+
+        this.gameObject.SetActive(false);
     }
 
     public void closeInventory()
@@ -82,6 +86,10 @@ public class UI_AvatarState : MonoBehaviour
     public void setLevel(UInt16 v)
     {
         text_level.text = v + "";
+    }
+    public void setMoney(UInt16 v)
+    {
+        text_money.text = v + "";
     }
 }
 
