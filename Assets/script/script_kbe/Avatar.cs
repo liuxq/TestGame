@@ -240,10 +240,15 @@
             object v = getDefinedPropterty("level");
             Event.fireOut("set_level", new object[] { v });
         }
-        public virtual void set_money(object old)
+        //public virtual void set_money(object old)
+        //{
+        //    object v = getDefinedPropterty("money");
+        //    Event.fireOut("set_money", new object[] { v });
+        //}
+        public virtual void set_stamina(object old)
         {
-            object v = getDefinedPropterty("money");
-            Event.fireOut("set_money", new object[] { v });
+            object v = getDefinedPropterty("stamina");
+            Event.fireOut("set_stamina", new object[] { v });
         }
 
         //dialog

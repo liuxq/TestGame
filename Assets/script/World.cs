@@ -62,6 +62,7 @@ public class World : MonoBehaviour {
         KBEngine.Event.registerOut("set_name", this, "set_entityName");
         KBEngine.Event.registerOut("set_state", this, "set_state");
         KBEngine.Event.registerOut("set_HP", this, "set_HP");
+        KBEngine.Event.registerOut("set_HP_Max", this, "set_HP_Max");
         KBEngine.Event.registerOut("recvDamage", this, "recvDamage");
         KBEngine.Event.registerOut("onReqItemList", this, "onReqItemList");
         KBEngine.Event.registerOut("set_equipWeapon", this, "set_equipWeapon");
@@ -105,6 +106,10 @@ public class World : MonoBehaviour {
         object hp = avatar.getDefinedPropterty("HP");
         if (hp != null)
             set_HP(avatar, hp);
+
+        object hpMax = avatar.getDefinedPropterty("HP_Max");
+        if (hpMax != null)
+            set_HP_Max(avatar, hpMax);
 
         //设置头像属性
         UnityEngine.GameObject ptarget = UnityEngine.GameObject.FindGameObjectWithTag("TargetPlayer");
@@ -153,6 +158,10 @@ public class World : MonoBehaviour {
             object dexterity = avatar.getDefinedPropterty("dexterity");
             if (dexterity != null)
                 avaterState.setDexterity((Int32)dexterity);
+
+            object stamina = avatar.getDefinedPropterty("stamina");
+            if (stamina != null)
+                avaterState.setStamina((Int32)stamina);
 
             object exp = avatar.getDefinedPropterty("exp");
             if (exp != null)
@@ -232,6 +241,10 @@ public class World : MonoBehaviour {
         object hp = entity.getDefinedPropterty("HP");
         if (hp != null)
             set_HP(entity, hp);
+
+        object hpMax = entity.getDefinedPropterty("HP_Max");
+        if (hpMax != null)
+            set_HP_Max(entity, hpMax);
 
         object equipWeapon = entity.getDefinedPropterty("equipWeapon");
         if (equipWeapon != null)
@@ -315,6 +328,21 @@ public class World : MonoBehaviour {
             
         }
     }
+    public void set_HP_Max(KBEngine.Entity entity, object v)
+    {
+        if (entity.renderObj != null)
+        {
+            GameEntity ge = ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>();
+            ge.hpMax = (Int32)v;
+            ge.hp = (Int32)entity.getDefinedPropterty("HP");
+
+            if (getUITarget() && getUITarget().GE_target == ge)
+                getUITarget().UpdateTargetUI();
+            else if (ui_targetPlayer && ui_targetPlayer.GE_target == ge)
+                ui_targetPlayer.UpdateTargetUI();
+        }
+    }
+    
     public void set_state(KBEngine.Entity entity, object v)
     {
         if (entity.renderObj != null)
