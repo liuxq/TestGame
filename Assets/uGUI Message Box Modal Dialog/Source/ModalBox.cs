@@ -32,6 +32,23 @@ public abstract class ModalBox : MonoBehaviour
     Transform buttonParent;
     bool isSetup;
 
+    int stringHeight(string str)
+    {
+        int row = 0;
+        int colomn = 0;
+        for (int i = 0; i < str.Length; i++ )
+        {
+            colomn ++;
+            if (str[i] == '\n' || colomn == 20)
+            {
+                colomn = 0;
+                row++;
+            }
+        }
+        row++;
+        return row * 17 + 15;
+
+    }
     // This code has to be run here so that layout has already happened and preferredHeights have been calculated.
     void FixedUpdate()
     {
@@ -42,7 +59,7 @@ public abstract class ModalBox : MonoBehaviour
             if (Title != null)
             {
                 var layoutElement = Title.GetComponent<LayoutElement>();
-                layoutElement.minHeight = Title.preferredHeight; // Set the min height to the preferred height so that the parent dialog box vertical layout can resize correctly.
+                layoutElement.minHeight = stringHeight(Title.text); // Set the min height to the preferred height so that the parent dialog box vertical layout can resize correctly.
             }
 
             if (Message != null)
@@ -63,17 +80,17 @@ public abstract class ModalBox : MonoBehaviour
                     {
                         var buttonLayoutElement = button.GetComponent<LayoutElement>();
                         if (buttonLayoutElement != null)
-                            buttonLayoutElement.minHeight = text.preferredHeight + 10;
+                            buttonLayoutElement.minHeight = stringHeight(text.text);
                     }
                 }
             }
 
-            if (Panel != null)
-            {
-                // Center the panel to it's new height
-                var group = Panel.GetComponent<VerticalLayoutGroup>();
-                Panel.sizeDelta = new Vector2(Panel.sizeDelta.x, group.preferredHeight);
-            }
+            //if (Panel != null)
+            //{
+            //    // Center the panel to it's new height
+            //    var group = Panel.GetComponent<VerticalLayoutGroup>();
+            //    Panel.sizeDelta = new Vector2(Panel.sizeDelta.x, group.preferredHeight);
+            //}
         }
     }
 
@@ -94,7 +111,7 @@ public abstract class ModalBox : MonoBehaviour
         {
             if (!String.IsNullOrEmpty(title))
             {
-                Title.text = MessageBox.LocalizeTitleAndMessage ? MessageBox.Localize(title) : title;
+                Title.text = /*MessageBox.LocalizeTitleAndMessage ? MessageBox.Localize(title) : */title;
             }
             else
             {

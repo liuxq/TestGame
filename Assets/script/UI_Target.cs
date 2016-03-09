@@ -45,8 +45,8 @@ public class UI_Target : MonoBehaviour, IPointerDownHandler
     public void UpdateTargetUI()
     {
         activate();
-        setHP(GE_target.hp);
         setHPMax(GE_target.hpMax);
+        setHP(GE_target.hp);
         setName(GE_target.entity_name);
     }
 
