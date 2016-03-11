@@ -87,27 +87,27 @@ public class World : MonoBehaviour {
         //UI.inst.info("loading scene...(加载场景中...)");
         Debug.Log("loading scene...");
 
-        //object speed = avatar.getDefinedPropterty("moveSpeed");
+        //object speed = avatar.getDefinedProperty("moveSpeed");
         //if (speed != null)
         //    set_moveSpeed(avatar, speed);
 
-        object state = avatar.getDefinedPropterty("state");
+        object state = avatar.getDefinedProperty("state");
         if (state != null)
             set_state(avatar, state);
 
-        //object modelScale = avatar.getDefinedPropterty("modelScale");
+        //object modelScale = avatar.getDefinedProperty("modelScale");
         //if (modelScale != null)
         //    set_modelScale(avatar, modelScale);
 
-        object name = avatar.getDefinedPropterty("name");
+        object name = avatar.getDefinedProperty("name");
         if (name != null)
             set_entityName(avatar, (string)name);
 
-        object hp = avatar.getDefinedPropterty("HP");
+        object hp = avatar.getDefinedProperty("HP");
         if (hp != null)
             set_HP(avatar, hp);
 
-        object hpMax = avatar.getDefinedPropterty("HP_Max");
+        object hpMax = avatar.getDefinedProperty("HP_Max");
         if (hpMax != null)
             set_HP_Max(avatar, hpMax);
 
@@ -131,48 +131,48 @@ public class World : MonoBehaviour {
         if (panel_state != null)
         {
             UI_AvatarState avaterState = panel_state.GetComponent<UI_AvatarState>();
-            object attack_max = avatar.getDefinedPropterty("attack_Max");
+            object attack_max = avatar.getDefinedProperty("attack_Max");
             if (attack_max != null)
                 avaterState.setAttackMax((Int32)attack_max);
 
-            object attack_min = avatar.getDefinedPropterty("attack_Min");
+            object attack_min = avatar.getDefinedProperty("attack_Min");
             if (attack_min != null)
                 avaterState.setAttackMin((Int32)attack_min);
 
-            object defence = avatar.getDefinedPropterty("defence");
+            object defence = avatar.getDefinedProperty("defence");
             if (defence != null)
                 avaterState.setDefence((Int32)defence);
 
-            object rating = avatar.getDefinedPropterty("rating");
+            object rating = avatar.getDefinedProperty("rating");
             if (rating != null)
                 avaterState.setRating((Int32)rating);
 
-            object dodge = avatar.getDefinedPropterty("dodge");
+            object dodge = avatar.getDefinedProperty("dodge");
             if (dodge != null)
                 avaterState.setDodge((Int32)dodge);
 
-            object strength = avatar.getDefinedPropterty("strength");
+            object strength = avatar.getDefinedProperty("strength");
             if (strength != null)
                 avaterState.setStrength((Int32)strength);
 
-            object dexterity = avatar.getDefinedPropterty("dexterity");
+            object dexterity = avatar.getDefinedProperty("dexterity");
             if (dexterity != null)
                 avaterState.setDexterity((Int32)dexterity);
 
-            object stamina = avatar.getDefinedPropterty("stamina");
+            object stamina = avatar.getDefinedProperty("stamina");
             if (stamina != null)
                 avaterState.setStamina((Int32)stamina);
 
-            object exp = avatar.getDefinedPropterty("exp");
+            object exp = avatar.getDefinedProperty("exp");
             if (exp != null)
                 avaterState.setExp((UInt64)exp);
 
-            object level = avatar.getDefinedPropterty("level");
+            object level = avatar.getDefinedProperty("level");
             if (level != null)
                 avaterState.setLevel((UInt16)level);
         }
 
-        object equipWeapon = avatar.getDefinedPropterty("equipWeapon");
+        object equipWeapon = avatar.getDefinedProperty("equipWeapon");
         if (equipWeapon != null)
             set_equipWeapon(avatar, (Int32)equipWeapon);
 
@@ -222,31 +222,31 @@ public class World : MonoBehaviour {
         set_position(entity);
         set_direction(entity);
 
-        //object speed = entity.getDefinedPropterty("moveSpeed");
+        //object speed = entity.getDefinedProperty("moveSpeed");
         //if (speed != null)
         //    set_moveSpeed(entity, speed);
 
-        object state = entity.getDefinedPropterty("state");
+        object state = entity.getDefinedProperty("state");
         if (state != null)
             set_state(entity, state);
 
-        //object modelScale = entity.getDefinedPropterty("modelScale");
+        //object modelScale = entity.getDefinedProperty("modelScale");
         //if (modelScale != null)
         //    set_modelScale(entity, modelScale);
 
-        object name = entity.getDefinedPropterty("name");
+        object name = entity.getDefinedProperty("name");
         if (name != null)
             set_entityName(entity, (string)name);
 
-        object hp = entity.getDefinedPropterty("HP");
+        object hp = entity.getDefinedProperty("HP");
         if (hp != null)
             set_HP(entity, hp);
 
-        object hpMax = entity.getDefinedPropterty("HP_Max");
+        object hpMax = entity.getDefinedProperty("HP_Max");
         if (hpMax != null)
             set_HP_Max(entity, hpMax);
 
-        object equipWeapon = entity.getDefinedPropterty("equipWeapon");
+        object equipWeapon = entity.getDefinedProperty("equipWeapon");
         if (equipWeapon != null)
             set_equipWeapon(entity, (Int32)equipWeapon);
 
@@ -277,7 +277,7 @@ public class World : MonoBehaviour {
         if (entity.renderObj == null)
             return;
 
-        Vector3 v = (Vector3)entity.getDefinedPropterty("position");
+        Vector3 v = (Vector3)entity.getDefinedProperty("position");
         ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().destPosition = v;
         ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>().position = v;
 
@@ -319,7 +319,7 @@ public class World : MonoBehaviour {
         {
             GameEntity ge = ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>();
             ge.hp = (Int32)v;
-            ge.hpMax = (Int32)entity.getDefinedPropterty("HP_Max");
+            ge.hpMax = (Int32)entity.getDefinedProperty("HP_Max");
 
             if (getUITarget() && getUITarget().GE_target == ge)
                 getUITarget().UpdateTargetUI();
@@ -334,7 +334,7 @@ public class World : MonoBehaviour {
         {
             GameEntity ge = ((UnityEngine.GameObject)entity.renderObj).GetComponent<GameEntity>();
             ge.hpMax = (Int32)v;
-            ge.hp = (Int32)entity.getDefinedPropterty("HP");
+            ge.hp = (Int32)entity.getDefinedProperty("HP");
 
             if (getUITarget() && getUITarget().GE_target == ge)
                 getUITarget().UpdateTargetUI();

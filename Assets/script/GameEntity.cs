@@ -46,13 +46,6 @@ public class GameEntity : MonoBehaviour
     private float last_angleY;
     private Vector3 last_position;
 
-    private int hashHit = Animator.StringToHash("Base Layer.Hit");
-    private int hashDead = Animator.StringToHash("Base Layer.Dead");
-    private int hashWalk = Animator.StringToHash("Base Layer.Walk");
-    private int hashJump = Animator.StringToHash("Base Layer.Jump");
-    private int hashPick = Animator.StringToHash("Base Layer.Pick");
-    private int hashPunch = Animator.StringToHash("Base Layer.Punch");
-
     void Awake()
     {
     }

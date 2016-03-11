@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 public class UI_CreateAvatar : MonoBehaviour {
     public InputField if_createAvatarName;
-    public Dropdown dd_createAvatarType;
+    public Toggle[] tg_profs = new Toggle[2];
 	// Use this for initialization
 	void Start () {
         KBEngine.Event.registerOut("onCreateAvatarResult", this, "onCreateAvatarResult");
@@ -26,10 +26,15 @@ public class UI_CreateAvatar : MonoBehaviour {
         if (account != null)
         {
             byte roleType = 1;
-            if(dd_createAvatarType.value == 0)
-                roleType = 1;
-            else
-                roleType = 2;
+
+            for (int i = 0; i < tg_profs.Length; i++)
+            {
+                if (tg_profs[i].isOn)
+                {
+                    roleType = (byte)(i + 1);
+                }
+            }
+            
             account.reqCreateAvatar(if_createAvatarName.text, roleType);
         }
     }

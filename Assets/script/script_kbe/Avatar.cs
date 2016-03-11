@@ -54,7 +54,7 @@
         }
         public void sendChatMessage(string msg)
         {
-            object name = getDefinedPropterty("name");
+            object name = getDefinedProperty("name");
             baseCall("sendChatMessage", (string)name + ": " + msg);
         }
         public void ReceiveChatMessage(string msg)
@@ -197,57 +197,57 @@
         //OWN_CLIENT
         public virtual void set_attack_Max(object old)
         {
-            object v = getDefinedPropterty("attack_Max"); 
+            object v = getDefinedProperty("attack_Max"); 
             Event.fireOut("set_attack_Max", new object[] { v });
         }
         public virtual void set_attack_Min(object old)
         {
-            object v = getDefinedPropterty("attack_Min");
+            object v = getDefinedProperty("attack_Min");
             Event.fireOut("set_attack_Min", new object[] { v });
         }
         public virtual void set_defence(object old)
         {
-            object v = getDefinedPropterty("defence");
+            object v = getDefinedProperty("defence");
             Event.fireOut("set_defence", new object[] { v });
         }
         public virtual void set_rating(object old)
         {
-            object v = getDefinedPropterty("rating");
+            object v = getDefinedProperty("rating");
             Event.fireOut("set_rating", new object[] { v });
         }
         public virtual void set_dodge(object old)
         {
-            object v = getDefinedPropterty("dodge");
+            object v = getDefinedProperty("dodge");
             Event.fireOut("set_dodge", new object[] { v });
         }
         public virtual void set_strength(object old)
         {
-            object v = getDefinedPropterty("strength");
+            object v = getDefinedProperty("strength");
             Event.fireOut("set_strength", new object[] { v });
         }
         public virtual void set_dexterity(object old)
         {
-            object v = getDefinedPropterty("dexterity");
+            object v = getDefinedProperty("dexterity");
             Event.fireOut("set_dexterity", new object[] { v });
         }
         public virtual void set_exp(object old)
         {
-            object v = getDefinedPropterty("exp");
+            object v = getDefinedProperty("exp");
             Event.fireOut("set_exp", new object[] { v });
         }
         public virtual void set_level(object old)
         {
-            object v = getDefinedPropterty("level");
+            object v = getDefinedProperty("level");
             Event.fireOut("set_level", new object[] { v });
         }
         //public virtual void set_money(object old)
         //{
-        //    object v = getDefinedPropterty("money");
+        //    object v = getDefinedProperty("money");
         //    Event.fireOut("set_money", new object[] { v });
         //}
         public virtual void set_stamina(object old)
         {
-            object v = getDefinedPropterty("stamina");
+            object v = getDefinedProperty("stamina");
             Event.fireOut("set_stamina", new object[] { v });
         }
 
@@ -323,7 +323,7 @@
         //ALL_CLIENTS
         public virtual void set_equipWeapon(object old)
         {
-            object v = getDefinedPropterty("equipWeapon");
+            object v = getDefinedProperty("equipWeapon");
             Event.fireOut("set_equipWeapon", new object[] { this,(Int32)v });
         }
 

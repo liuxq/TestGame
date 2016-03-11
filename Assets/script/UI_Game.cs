@@ -94,7 +94,7 @@ public class UI_Game : MonoBehaviour
 
                     if (_npc != null)
                     {
-                        UInt32 dialogID = (UInt32)_npc.getDefinedPropterty("dialogID");
+                        UInt32 dialogID = (UInt32)_npc.getDefinedProperty("dialogID");
                         avatar.dialog(id, dialogID);
                     }
                 }
@@ -259,6 +259,14 @@ public class UI_Game : MonoBehaviour
                 if (avatar != null)
                 {
                     int errorCode = avatar.useTargetSkill(skillId, avatar.id);
+                    if (errorCode == 2)
+                    {
+                        UI_ErrorHint._instance.errorShow("技能冷却");
+                    }
+                    if (errorCode == 3)
+                    {
+                        UI_ErrorHint._instance.errorShow("目标已死亡");
+                    }
                 }
             }
             else
