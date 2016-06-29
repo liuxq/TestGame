@@ -1062,10 +1062,6 @@
 				MessageID msgid = stream.readUint16();
 				Int16 msglen = stream.readInt16();
 
-                if (msgid == 1033)
-                {
-                    int a = 0;
-                }
 				string msgname = stream.readString();
 				sbyte argstype = stream.readInt8();
 				Byte argsize = stream.readUint8();
