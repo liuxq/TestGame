@@ -2234,7 +2234,7 @@
 		{
 			Int32 eid = getAoiEntityIDFromStream(stream);
 			
-			float y = stream.readPackY();
+			float y = stream.readInt8();
 			
 			_updateVolatileData(eid, 0.0f, 0.0f, 0.0f, y, KBEDATATYPE_BASE.KBE_FLT_MAX, KBEDATATYPE_BASE.KBE_FLT_MAX, -1);
 		}
