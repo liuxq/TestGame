@@ -13,16 +13,16 @@ namespace KBEngine
 	/// <typeparam name="T">对象类型</typeparam>
 	public class ObjectPool<T> where T : new()
 	{
-		private static LinkedList<T> _objects = new LinkedList<T>();
-
+		private static Stack<T> _objects = new Stack<T>();
+		private static T v;
+		
 		public static T createObject()
 		{
 			lock (_objects)
 			{
-				if (_objects.First != null)
+				if (_objects.Count > 0)
 				{
-					T v = _objects.First.Value;
-					_objects.RemoveFirst();
+					v = _objects.Pop();
 					return v;
 				}
 				else
@@ -36,7 +36,7 @@ namespace KBEngine
 		{
 			lock (_objects)
 			{
-				_objects.AddLast(item);
+				_objects.Push(item);
 			}
 		}
 	}
