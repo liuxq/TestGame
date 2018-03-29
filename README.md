@@ -7,7 +7,7 @@
 
 v1.0版，目前有物品系统，装备系统，战斗系统，聊天系统完成
 
-* 使用kbengine-1.0.0版本，服务器脚本在：https://github.com/liuxq/MyGameServerAssets.git
+* 服务器脚本在：https://github.com/liuxq/MyGameServerAssets.git
 * 目前已出第二版（lua版本）：https://github.com/liuxq/StriveGame
 
 //-------------2018-3-29-------------
