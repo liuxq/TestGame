@@ -163,7 +163,7 @@ public class HTEditorToolKit{
 	
 	private static Texture2D GetColorTexture(Color color){
 		Texture2D myTexture = new Texture2D(1, 16);
-		myTexture.set_name("Color Texture by Hedgehog Team");
+		myTexture.name = "Color Texture by Hedgehog Team";
 		myTexture.hideFlags = HideFlags.HideInInspector;
 		myTexture.filterMode = FilterMode.Bilinear;
 		myTexture.hideFlags = HideFlags.DontSave;		
@@ -188,7 +188,7 @@ public class HTEditorToolKit{
 	private static Texture2D CreateGradientTexture( )
 	{
 		Texture2D myTexture = new Texture2D(1, 16);
-		myTexture.set_name("Gradient Texture by Hedgehog Team");
+		myTexture.name = "Gradient Texture by Hedgehog Team";
 		myTexture.hideFlags = HideFlags.HideInInspector;
 		myTexture.filterMode = FilterMode.Bilinear;
 		myTexture.hideFlags = HideFlags.DontSave;
@@ -219,7 +219,7 @@ public class HTEditorToolKit{
 	private static Texture2D CreateChildGradientTexture( )
 	{
 		Texture2D myTexture = new Texture2D(1, 16);
-		myTexture.set_name("Gradient Texture by Hedgehog Team");
+		myTexture.name = "Gradient Texture by Hedgehog Team";
 		myTexture.hideFlags = HideFlags.HideInInspector;
 		myTexture.filterMode = FilterMode.Bilinear;
 		myTexture.hideFlags = HideFlags.DontSave;
