@@ -98,37 +98,37 @@
                 case 1:
                     skill.displayType = Skill_DisplayType.SkillDisplay_Event_Bullet;
                     skill.canUseDistMax = 30f;
-                    skill.skillEffect = "skill1";
+                    skill.skillEffect = "Ice1";
                     skill.name = "魔法球";
                     break;
                 case 2:
                     skill.displayType = Skill_DisplayType.SkillDisplay_Event_Bullet;
                     skill.canUseDistMax = 30f;
-                    skill.skillEffect = "skill2";
+                    skill.skillEffect = "Fire1";
                     skill.name = "火球";
                     break;
                 case 3:
                     skill.displayType = Skill_DisplayType.SkillDisplay_Event_Bullet;
                     skill.canUseDistMax = 20f;
-                    skill.skillEffect = "skill3";
+                    skill.skillEffect = "Medical1";
                     skill.name = "治疗";
                     break;
                 case 4:
                     skill.displayType = Skill_DisplayType.SkillDisplay_Event_Effect;
                     skill.canUseDistMax = 5f;
-                    skill.skillEffect = "skill4";
+                    skill.skillEffect = "MagicEffect1";
                     skill.name = "斩击";
                     break;
                 case 5:
                     skill.displayType = Skill_DisplayType.SkillDisplay_Event_Effect;
                     skill.canUseDistMax = 5f;
-                    skill.skillEffect = "skill5";
+                    skill.skillEffect = "LightningEffect1";
                     skill.name = "挥击";
                     break;
                 case 6:
                     skill.displayType = Skill_DisplayType.SkillDisplay_Event_Effect;
                     skill.canUseDistMax = 5f;
-                    skill.skillEffect = "skill6";
+                    skill.skillEffect = "BloodEffect1";
                     skill.name = "吸血";
                     break;
                 case 6000101:
