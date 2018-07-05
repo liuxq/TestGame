@@ -5,10 +5,16 @@ using System.Text;
 
 namespace KBEngine
 {
-    public class Gate : KBEngine.GameObject
+    public class Gate : GateBase
 	{
-        public override void __init__()
+        public Gate() : base()
         {
         }
-	}
+
+        public override void onNameChanged(string oldValue)
+        {
+            // Dbg.DEBUG_MSG(className + "::set_name: " + old + " => " + v); 
+            Event.fireOut("set_name", new object[] { this, name });
+        }
+    }
 }

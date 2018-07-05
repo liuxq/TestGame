@@ -94,7 +94,7 @@ public class UI_Game : MonoBehaviour
 
                     if (_npc != null)
                     {
-                        UInt32 dialogID = (UInt32)_npc.getDefinedProperty("dialogID");
+                        UInt32 dialogID = _npc.dialogID;
                         avatar.dialog(id, dialogID);
                     }
                 }

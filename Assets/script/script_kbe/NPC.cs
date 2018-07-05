@@ -3,11 +3,17 @@
     using UnityEngine;
     using System.Collections;
     using System;
-    public class NPC : KBEngine.GameObject
+    public class NPC : NPCBase
     {
-        public override void __init__()
+        public NPC() : base()
         {
         }
-        
+
+        public override void onNameChanged(string oldValue)
+        {
+            // Dbg.DEBUG_MSG(className + "::set_name: " + old + " => " + v); 
+            Event.fireOut("set_name", new object[] { this, name });
+        }
+
     }
 }

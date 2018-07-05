@@ -10,7 +10,7 @@ public class UI_SelectAvatar : MonoBehaviour {
     public Button bt_removeAvatar;
     public Toggle[] tg_avatars = new Toggle[3];
 
-    private Dictionary<UInt64, Dictionary<string, object>> ui_avatarList = null;
+    private Dictionary<ulong, AVATAR_INFO> ui_avatarList = null;
     private Dictionary<string, UInt64> dic_name_to_dbid = new Dictionary<string,ulong>();
 	// Use this for initialization
 	void Start () {
@@ -60,7 +60,7 @@ public class UI_SelectAvatar : MonoBehaviour {
             //}
         }
     }
-    public void onRemoveAvatar(UInt64 dbid, Dictionary<UInt64, Dictionary<string, object>> avatarList)
+    public void onRemoveAvatar(UInt64 dbid, Dictionary<ulong, AVATAR_INFO> avatarList)
     {
         if (dbid == 0)
         {
@@ -70,7 +70,7 @@ public class UI_SelectAvatar : MonoBehaviour {
 
         onReqAvatarList(avatarList);
     }
-    public void onReqAvatarList(Dictionary<UInt64, Dictionary<string, object>> avatarList)
+    public void onReqAvatarList(Dictionary<ulong, AVATAR_INFO> avatarList)
     {
         ui_avatarList = avatarList;
         foreach (Toggle bt_Avatar in tg_avatars)
@@ -83,9 +83,9 @@ public class UI_SelectAvatar : MonoBehaviour {
             int idx = 0;
             foreach (UInt64 dbid in ui_avatarList.Keys)
             {
-                Dictionary<string, object> info = ui_avatarList[dbid];
+                AVATAR_INFO info = ui_avatarList[dbid];
                 //	Byte roleType = (Byte)info["roleType"];
-                string name = (string)info["name"];
+                string name = info.name;
                 //	UInt16 level = (UInt16)info["level"];
                 //UInt64 idbid = (UInt64)info["dbid"];
                 tg_avatars[idx].GetComponentInChildren<Text>().text = name;

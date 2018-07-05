@@ -2,6 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using KBEngine;
 
 public class ItemProcess : MonoBehaviour {
 
@@ -38,32 +39,32 @@ public class ItemProcess : MonoBehaviour {
         }
     }
 
-    public void pickUp_re(Dictionary<string, object> itemInfo)
+    public void pickUp_re(ITEM_INFO itemInfo)
     {
         if (itemInventory == null)
             itemInventory = this.transform.GetComponent<PlayerInventory>().inventory.GetComponent<Inventory>();
         if (itemInventory != null)
         {
-            itemInventory.addItemToInventory((Int32)itemInfo["itemId"], (UInt64)itemInfo["UUID"], (int)(UInt32)itemInfo["itemCount"], (Int32)itemInfo["itemIndex"]);
+            itemInventory.addItemToInventory(itemInfo.itemId, itemInfo.UUID, (int)itemInfo.itemCount, itemInfo.itemIndex);
             itemInventory.updateItemList();
             itemInventory.stackableSettings();
         }
     }
 
-    public void equipItemRequest_re(Dictionary<string, object> itemInfo, Dictionary<string, object> equipItemInfo)
+    public void equipItemRequest_re(ITEM_INFO itemInfo, ITEM_INFO equipItemInfo)
     {
-        Int32 itemIndex = (Int32)itemInfo["itemIndex"];
-        Int32 equipItemIndex = (Int32)equipItemInfo["itemIndex"];
-        UInt64 itemUUid = (UInt64)itemInfo["UUID"];
-        UInt64 equipItemUUid = (UInt64)equipItemInfo["UUID"];
+        Int32 itemIndex = itemInfo.itemIndex;
+        Int32 equipItemIndex = equipItemInfo.itemIndex;
+        UInt64 itemUUid = itemInfo.UUID;
+        UInt64 equipItemUUid = equipItemInfo.UUID;
 
         if (itemUUid > 0)
-            itemInventory.addItemToInventory((Int32)itemInfo["itemId"], (UInt64)itemInfo["UUID"], 1, (Int32)itemInfo["itemIndex"]);
+            itemInventory.addItemToInventory(itemInfo.itemId, itemInfo.UUID, 1, itemInfo.itemIndex);
         else
             itemInventory.deleteItemByIndex(itemIndex);
 
         if (equipItemUUid > 0)
-            equipInventory.addItemToInventory((Int32)equipItemInfo["itemId"], (UInt64)equipItemInfo["UUID"], 1, (Int32)equipItemInfo["itemIndex"]);
+            equipInventory.addItemToInventory(equipItemInfo.itemId, equipItemInfo.UUID, 1, equipItemInfo.itemIndex);
         else
             equipInventory.deleteItemByIndex(equipItemIndex);
         

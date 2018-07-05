@@ -1,23 +1,27 @@
 ﻿namespace KBEngine
 {
-    //using UnityEngine;
     using System;
     using System.Collections;
     using System.Collections.Generic;
 
-    public class Avatar : KBEngine.GameObject
+    public class Avatar : AvatarBase
     {
-        public Combat combat = null;
         public static SkillBox skillbox = new SkillBox();
-        public Dictionary<UInt64, Dictionary<string, object>> itemDict = new Dictionary<UInt64, Dictionary<string, object>>();
-        public Dictionary<UInt64, Dictionary<string, object>> equipItemDict = new Dictionary<UInt64, Dictionary<string, object>>();
+        public Dictionary<UInt64, ITEM_INFO> itemDict = new Dictionary<UInt64, ITEM_INFO>();
+        public Dictionary<UInt64, ITEM_INFO> equipItemDict = new Dictionary<UInt64, ITEM_INFO>();
 
         private UInt64[] itemIndex2Uids = new UInt64[12];
         private UInt64[] equipIndex2Uids = new UInt64[4];
 
+        public Avatar()
+            : base()
+        {
+        }
+
+        // 由于任何玩家被同步到该客户端都会使用这个模块创建，因此客户端可能存在很多这样的实体
+        // 但只有一个是自己的玩家实体，所以需要判断一下
         public override void __init__()
         {
-            combat = new Combat(this);
             if (isPlayer())
             {
                 Event.registerIn("relive", this, "relive");
@@ -54,10 +58,9 @@
         }
         public void sendChatMessage(string msg)
         {
-            object name = getDefinedProperty("name");
-            baseCall("sendChatMessage", (string)name + ": " + msg);
+            baseCall("sendChatMessage", name + ": " + msg);
         }
-        public void ReceiveChatMessage(string msg)
+        public override void ReceiveChatMessage(string msg)
         {
             Event.fireOut("ReceiveChatMessage", msg);
         }
@@ -85,7 +88,7 @@
             return errorCode;
         }
 
-        public virtual void onAddSkill(Int32 skillID)
+        public override void onAddSkill(Int32 skillID)
         {
             Dbg.DEBUG_MSG(className + "::onAddSkill(" + skillID + ")");
             //Event.fireOut("onAddSkill", new object[] { this });
@@ -147,7 +150,7 @@
             }
         }
 
-        public virtual void onRemoveSkill(Int32 skillID)
+        public override void onRemoveSkill(Int32 skillID)
         {
             Dbg.DEBUG_MSG(className + "::onRemoveSkill(" + skillID + ")");
             Event.fireOut("onRemoveSkill", new object[] { this });
@@ -170,10 +173,10 @@
 		
 		    itemIndex2Uids[srcIndex] = dstUid;
 		    if (dstUid != 0)
-			    itemDict[dstUid]["itemIndex"] = srcIndex;
+			    itemDict[dstUid].itemIndex = srcIndex;
 		    itemIndex2Uids[dstIndex] = srcUid;
             if (srcUid != 0)
-                itemDict[srcUid]["itemIndex"] = dstIndex;
+                itemDict[srcUid].itemIndex = dstIndex;
 
             baseCall("swapItemRequest", new object[] { srcIndex, dstIndex });
         }
@@ -195,61 +198,83 @@
         }
 
         //OWN_CLIENT
-        public virtual void set_attack_Max(object old)
+        public override void onHPChanged(Int32 oldValue)
         {
-            object v = getDefinedProperty("attack_Max"); 
-            Event.fireOut("set_attack_Max", new object[] { v });
+            // Dbg.DEBUG_MSG(className + "::set_HP: " + old + " => " + v); 
+            Event.fireOut("set_HP", new object[] { this, HP, HP_Max });
         }
-        public virtual void set_attack_Min(object old)
+
+        public override void onMPChanged(Int32 oldValue)
         {
-            object v = getDefinedProperty("attack_Min");
-            Event.fireOut("set_attack_Min", new object[] { v });
+            // Dbg.DEBUG_MSG(className + "::set_MP: " + old + " => " + v); 
+            Event.fireOut("set_MP", new object[] { this, MP, MP_Max });
         }
-        public virtual void set_defence(object old)
+
+        public override void onHP_MaxChanged(Int32 oldValue)
         {
-            object v = getDefinedProperty("defence");
-            Event.fireOut("set_defence", new object[] { v });
+            // Dbg.DEBUG_MSG(className + "::set_HP_Max: " + old + " => " + v); 
+            Event.fireOut("set_HP_Max", new object[] { this, HP_Max, HP });
         }
-        public virtual void set_rating(object old)
+
+        public override void onMP_MaxChanged(Int32 oldValue)
         {
-            object v = getDefinedProperty("rating");
-            Event.fireOut("set_rating", new object[] { v });
+            // Dbg.DEBUG_MSG(className + "::set_MP_Max: " + old + " => " + v); 
+            Event.fireOut("set_MP_Max", new object[] { this, MP_Max, MP });
         }
-        public virtual void set_dodge(object old)
+
+        public override void onStateChanged(SByte oldValue)
         {
-            object v = getDefinedProperty("dodge");
-            Event.fireOut("set_dodge", new object[] { v });
+            Event.fireOut("set_state", new object[] { this, state });
         }
-        public virtual void set_strength(object old)
+
+
+        public override void onAttack_MaxChanged(Int32 old)
+        { 
+            Event.fireOut("set_attack_Max", new object[] { attack_Max });
+        }
+
+        public override void onAttack_MinChanged(Int32 old)
         {
-            object v = getDefinedProperty("strength");
-            Event.fireOut("set_strength", new object[] { v });
+            Event.fireOut("set_attack_Min", new object[] { attack_Min });
         }
-        public virtual void set_dexterity(object old)
+        public override void onDefenceChanged(Int32 old)
         {
-            object v = getDefinedProperty("dexterity");
-            Event.fireOut("set_dexterity", new object[] { v });
+            Event.fireOut("set_defence", new object[] { defence });
         }
-        public virtual void set_exp(object old)
+        public override void onRatingChanged(Int32 old)
         {
-            object v = getDefinedProperty("exp");
-            Event.fireOut("set_exp", new object[] { v });
+            Event.fireOut("set_rating", new object[] { rating });
         }
-        public virtual void set_level(object old)
+        public override void onDodgeChanged(Int32 old)
         {
-            object v = getDefinedProperty("level");
-            Event.fireOut("set_level", new object[] { v });
+            Event.fireOut("set_dodge", new object[] { dodge });
         }
-        //public virtual void set_money(object old)
-        //{
-        //    object v = getDefinedProperty("money");
-        //    Event.fireOut("set_money", new object[] { v });
-        //}
-        public virtual void set_stamina(object old)
+        public override void onStrengthChanged(Int32 old)
         {
-            object v = getDefinedProperty("stamina");
-            Event.fireOut("set_stamina", new object[] { v });
+            Event.fireOut("set_strength", new object[] { strength });
         }
+        public override void onDexterityChanged(Int32 old)
+        {
+            Event.fireOut("set_dexterity", new object[] { dexterity });
+        }
+        public override void onExpChanged(UInt64 old)
+        {
+            Event.fireOut("set_exp", new object[] { exp });
+        }
+        public override void onLevelChanged(UInt16 old)
+        {
+            Event.fireOut("set_level", new object[] { level });
+        }
+        public override void onStaminaChanged(Int32 old)
+        {
+            Event.fireOut("set_stamina", new object[] { stamina });
+        }
+
+        public override void onEquipWeaponChanged(Int32 old)
+        {
+            Event.fireOut("set_equipWeapon", new object[] { this, equipWeapon });
+        }
+
 
         //dialog
         public void dialog(Int32 targetID, UInt32 dialogID)
@@ -258,23 +283,23 @@
         }
 
         //-----------------------response-------------------------
-        public void dropItem_re(Int32 itemId, UInt64 itemUUId)
+        public override void dropItem_re(Int32 itemId, UInt64 itemUUId)
         {
-            Int32 itemIndex = (Int32)(itemDict[itemUUId]["itemIndex"]);
+            Int32 itemIndex = itemDict[itemUUId].itemIndex;
             itemDict.Remove(itemUUId);
             itemIndex2Uids[itemIndex] = 0;
             Event.fireOut("dropItem_re", new object[] { itemIndex });
         }
-        public void pickUp_re(Dictionary<string, object> itemInfo)
+        public override void pickUp_re(ITEM_INFO itemInfo)
         {
             Event.fireOut("pickUp_re", new object[] { itemInfo });
-            itemDict[(UInt64)itemInfo["UUID"]] = itemInfo;
+            itemDict[itemInfo.UUID] = itemInfo;
         }
-        public void equipItemRequest_re(Dictionary<string, object> itemInfo, Dictionary<string, object> equipItemInfo)
+        public override void equipItemRequest_re(ITEM_INFO itemInfo, ITEM_INFO equipItemInfo)
         {
             Event.fireOut("equipItemRequest_re", new object[] { itemInfo, equipItemInfo });
-            UInt64 itemUUid = (UInt64)itemInfo["UUID"];
-            UInt64 equipItemUUid = (UInt64)equipItemInfo["UUID"];
+            UInt64 itemUUid = itemInfo.UUID;
+            UInt64 equipItemUUid = equipItemInfo.UUID;
             if (itemUUid == 0 && equipItemUUid != 0)//带上装备
             {
                 equipItemDict[equipItemUUid] = equipItemInfo;
@@ -293,48 +318,49 @@
                 itemDict[itemUUid] = itemInfo;
             }
         }
-        public void onReqItemList(Dictionary<string, object> infos, Dictionary<string, object> equipInfos)
+        public override void onReqItemList(ITEM_INFO_LIST infos, ITEM_INFO_LIST equipInfos)
         {
             itemDict.Clear();
-            List<object> listinfos = (List<object>)infos["values"];
+            List<ITEM_INFO> listinfos = infos.values;
             for (int i = 0; i < listinfos.Count; i++)
             {
-                Dictionary<string, object> info = (Dictionary<string, object>)listinfos[i];
-                itemDict.Add((UInt64)info["UUID"], info);
-                itemIndex2Uids[(Int32)info["itemIndex"]] = (UInt64)info["UUID"];
+                ITEM_INFO info = listinfos[i];
+                itemDict.Add(info.UUID, info);
+                itemIndex2Uids[info.itemIndex] = info.UUID;
             }
             equipItemDict.Clear();
-            List<object> elistinfos = (List<object>)equipInfos["values"];
+            List<ITEM_INFO> elistinfos = equipInfos.values;
             for (int i = 0; i < elistinfos.Count; i++)
             {
-                Dictionary<string, object> info = (Dictionary<string, object>)elistinfos[i];
-                equipItemDict.Add((UInt64)info["UUID"], info);
-                equipIndex2Uids[(Int32)info["itemIndex"]] = (UInt64)info["UUID"];
+                ITEM_INFO info = elistinfos[i];
+                equipItemDict.Add(info.UUID, info);
+                equipIndex2Uids[info.itemIndex] = info.UUID;
             }
             // ui event
-            //Dictionary<UInt64, Dictionary<string, object>> itemDicttmp = new Dictionary<ulong, Dictionary<string, object>>(itemDict);
             Event.fireOut("onReqItemList", new object[] { itemDict, equipItemDict });
         }
-        public void errorInfo(Int32 errorCode)
+        public override void errorInfo(Int32 errorCode)
         {
             Dbg.DEBUG_MSG("errorInfo(" + errorCode + ")");
         }
 
-        //ALL_CLIENTS
-        public virtual void set_equipWeapon(object old)
-        {
-            object v = getDefinedProperty("equipWeapon");
-            Event.fireOut("set_equipWeapon", new object[] { this,(Int32)v });
-        }
+        
 
         //dialog
-        public void dialog_setContent(Int32 talkerId, List<object> dialogs, List<object> dialogsTitles, string title, string body, string sayname)
+        public override void dialog_setContent(Int32 talkerId, List<UInt32> dialogs, List<string> dialogsTitles, string title, string body, string sayname)
         {
             Event.fireOut("dialog_setContent", new object[] { talkerId, dialogs, dialogsTitles, title, body, sayname });
         }
-        public void dialog_close()
+        public override void dialog_close()
         {
             Event.fireOut("dialog_close");
+        }
+
+        public override void recvDamage(Int32 attackerID, Int32 skillID, Int32 damageType, Int32 damage)
+        {
+            //Dbg.DEBUG_MSG(className + "::recvDamage: attackerID=" + attackerID + ", skillID=" + skillID + ", damageType=" + damageType + ", damage=" + damage);
+            Entity entity = KBEngineApp.app.findEntity(attackerID);
+            Event.fireOut("recvDamage", new object[] { this, entity, skillID, damageType, damage });
         }
     }
 }

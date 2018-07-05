@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using KBEngine;
 using System;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class UI_CreateAvatar : MonoBehaviour {
     public InputField if_createAvatarName;
@@ -39,19 +40,19 @@ public class UI_CreateAvatar : MonoBehaviour {
         }
     }
 
-    public void onCreateAvatarResult(Byte retcode, object info, Dictionary<UInt64, Dictionary<string, object>> avatarList)
+    public void onCreateAvatarResult(Byte retcode, AVATAR_INFO info, Dictionary<UInt64, AVATAR_INFO> avatarList)
     {
         if (retcode != 0)
         {
             print("创建失败！" + retcode);
             return;
         }
-        Application.LoadLevel("selectAvatar");
+        SceneManager.LoadScene("selectAvatar");
         //onReqAvatarList(avatarList);
 
     }
     public void onCancel()
     {
-        Application.LoadLevel("selectAvatar");
+        SceneManager.LoadScene("selectAvatar");
     }
 }

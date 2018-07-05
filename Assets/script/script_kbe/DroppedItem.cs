@@ -5,7 +5,7 @@ using System.Text;
 
 namespace KBEngine
 {
-    public class DroppedItem : KBEngine.GameObject
+    public class DroppedItem : DroppedItemBase
     {
         public override void __init__()
         {

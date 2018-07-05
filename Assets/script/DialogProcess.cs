@@ -14,7 +14,7 @@ public class DialogProcess : MonoBehaviour
         KBEngine.Event.registerOut("dialog_setContent", this, "dialog_setContent");
     }
 
-    public void dialog_setContent(Int32 talkerId, List<object> dialogIds, List<object> dialogsTitles, string title, string body, string sayname)
+    public void dialog_setContent(Int32 talkerId, List<UInt32> dialogIds, List<string> dialogsTitles, string title, string body, string sayname)
     {
         KBEngine.Entity entity = KBEngineApp.app.player();
         KBEngine.Avatar avatar = null;
@@ -26,7 +26,7 @@ public class DialogProcess : MonoBehaviour
         for (int i = 0; i < dialogsTitles.Count; i++ )
         {
             titles.Add((string)dialogsTitles[i]);
-            UInt32 dialogId = (UInt32)dialogIds[i];
+            UInt32 dialogId = dialogIds[i];
             actions.Add(() => avatar.dialog(talkerId, dialogId));
         }
         if (titles.Count > 0)
