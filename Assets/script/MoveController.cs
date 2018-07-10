@@ -72,9 +72,7 @@ public class MoveController : MonoBehaviour {
 
                 //移动玩家的位置（按朝向位置移动）
                 //transform.Translate(Vector3.forward * Time.deltaTime * 5);
-                cc.Move(transform.forward * Time.deltaTime * 5);
-
-                Shader.SetGlobalVector("_Player1Pos", transform.position + new Vector3(500,1,500));
+                Move();
 
                 //移动摄像机
                 sf.FollowUpdate();
@@ -84,6 +82,20 @@ public class MoveController : MonoBehaviour {
             }
         }
     }
+
+    private void Move()
+    {
+        cc.Move(transform.forward * Time.deltaTime * 5);
+        Vector3 pos = transform.position;
+
+        if(pos.y != 0)
+        {
+            pos.y = 0;
+            transform.position = pos;
+        }
+        Shader.SetGlobalVector("_Player1Pos", pos + new Vector3(500, 1, 500));
+    }
+
     void Update()
     {
         if (hasDes)
@@ -99,8 +111,7 @@ public class MoveController : MonoBehaviour {
             {
                 transform.LookAt(moveDes);
                 //transform.Translate(Vector3.forward * Time.deltaTime * 5);
-                cc.Move(transform.forward * Time.deltaTime * 5);
-                Shader.SetGlobalVector("_Player1Pos", transform.position + new Vector3(500, 1, 500));
+                Move();
                 //移动摄像机
                 sf.FollowUpdate();
                 //播放奔跑动画
